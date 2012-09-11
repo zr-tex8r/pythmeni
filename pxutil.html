@@ -1,0 +1,1147 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXutil パッケージ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="TFM,VF,JFM,和文VF,JPL,フォント,vftovp,vptovf,TeX,upTeX,LaTeX,pTeX,pLaTeX,upLaTeX">
+<meta name="description" content="pxutil は和文の仮想フォント（VF と JFM の組）を VPL 類似のテキスト形式である「ZVP 形式」に変換/逆変換するツールで、vftovp/vptovf の和文版にあたる。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxutil"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXutil パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/pxutil.html">http://zrbabbler.sp.land.to/pxutil.html</a>
+</div>
+<div id="maintext">
+<h1>PXutil パッケージ</h1>
+
+<Div id="abstract">
+pxutil は和文の仮想フォント（VF と JFM の組）を VPL 類似のテキスト形式である
+「ZVP 形式」に変換/逆変換するツール（Perl スクリプト）である。
+TeX 標準のツールである vftovp/vptovf の「和文版」といえる。
+VF ファイルのみをテキスト形式に変換する機能もある。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/06/06： 
+<a href="#sec-ext-subtype">「サブタイプ毎のメトリックの指定」</a>を追加。
+ZRTeXtor 1.3.0 版の追加機能の説明である。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<p>このパッケージ中のソフトウェアを利用するには
+以下のものが必要である。
+</p>
+<ul>
+<li>Perl 5.8.1 版以降
+</li>
+<li><a href="./toolbox.html">ZRTeXtor</a> 1.2.2 版以降
+</li>
+<li>TeX の kpsewhich コマンド
+</li>
+<li>pTeX の pltotf, tftopl コマンド
+</li>
+</ul>
+<div class="alert">
+<span class="lbl">注意：</span> ZRTeXtor 1.2.1 版には
+「タイプ 0 のサブタイプが認識されない」というバグがあったので、
+必ず 1.2.2 版以降を使うようにされたい。
+</div>
+
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/pxutil.zip"><!--
+-->圧縮ファイル pxutil.zip (v0.6.2)のダウンロード（10KB）</a>
+</li>
+<li><a href="data/zrtextor.zip"><!--
+-->圧縮ファイル zrtextor.zip (v1.3.0)のダウンロード（32KB）</a>
+（ZRTeXtor パッケージ）
+</li>
+</ul>
+
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-install">
+<h3>インストール</h3>
+<ul>
+<li>pxutil.zip に含まれる pxutil.pl を実行パスの通った
+ディレクトリに置く。
+</li>
+<li>ZRTeXtor パッケージに含まれる ZRTeXtor.pm と ZRTeXtor.cfg を Perl の
+ライブラリ検索パス（<code>@INC</code>）または pxutil.pl と
+同じディレクトリに置く。
+</li>
+<li>ZRTeXtor.cfg を自分の環境に合うように編集する。
+最近の W32TeX だと以下のようにする必要がある。
+<pre>
+pltotf = ppltotf
+tftopl = ptftopl
+</pre>
+</li>
+<li>pxutil.pl を pxutil のコマンド名で実行できるようにする。
+UNIX 系 OS なら周知の通り。
+Windows なら pl2bat を使うなり、W32TeX の runscr.exe を
+使う（pxutil.exe という名前のコピーを作る）なりする。
+</li>
+</ul>
+
+</div><!--ssec-install-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-usage">
+<h2>使用法</h2>
+
+<div class="subsection" id="ssec-zvp2vf">
+<h3>ZVP 形式と仮想フォント(VF+JFM)との間の変換</h3>
+
+<pre>
+  # ZVP → VF + JFM の変換
+pxutil zvp2vf &lt;オプション&gt; &lt;入力.zvp&gt; &lt;出力.vf&gt; &lt;出力.tfm&gt;
+  # VF + JFM → ZVP の変換
+pxutil vf2zvp &lt;オプション&gt; &lt;入力.vf&gt; &lt;入力.tfm&gt; &lt;出力.zvp&gt;
+</pre>
+<p>2 つ目以降のファイル名は省略できて、その場合は 1 つ目のファイルの
+拡張子を変えたものになる。
+オプションは次のものが使える（一部省略）。
+</p>
+<dl>
+<dt><code>--kanji=&lt;値&gt;</code>
+  （<code>&lt;値&gt;</code> は <code>jis</code>, <code>euc</code>, <code>sjis</code>,
+    <code>utf8</code>, <code>none</code> のいずれか）</dt>
+<dd>外部文字コード（テキスト形式のファイルの文字コード）の指定。</dd>
+<dt><code>--kanji-internal=&lt;値&gt;</code>
+  （<code>&lt;値&gt;</code> は <code>jis</code>, <code>unicode</code>,
+    <code>none</code> のいずれか）</dt>
+<dd>内部文字コード（仮想ファイル中で用いられる文字コード）の指定。</dd>
+<dt><code>-j</code>
+<dd><code>--kanji=jis --kanji-internal=jis</code> と等価。</dd>
+<dt><code>-u</code>
+<dd><code>--kanji=utf8 --kanji-internal=unicode</code> と等価。</dd>
+<dt><code>-E</code>
+<dd><code>--kanji=none --kanji-internal=none</code> と等価。</dd>
+</dl>
+<p><code>--kanji</code> と <code>--kanji-internal</code> の既定値は ZRTeXtor.cfg
+で指定したものになる。
+<code>-E</code> は仮想ファイルで使われる文字コードが何であるかを意識せず、
+常に符号値そのものを扱いたい場合の設定である。
+符号値を文字で指定（CHARSINTYPE とか整数の <code>K</code> 形式とか）したい
+のでなければ、<code>-E</code> を指定することを推奨する。
+</p>
+
+</div><!--ssec-zvp2vf-->
+
+<div class="subsection" id="ssec-zpl2tfm">
+<h3>その他の変換</h3>
+
+<pre>
+  # ZVP0 → VF の変換
+pxutil zvp02vf &lt;オプション&gt; &lt;入力.zvp0&gt; &lt;出力.vf&gt;
+  # VF → ZVP0 の変換
+pxutil vf2zvp0 &lt;オプション&gt; &lt;入力.vf&gt; &lt;出力.zvp0&gt;
+  # ZPL → JFM の変換
+pxutil zpl2tfm &lt;オプション&gt; &lt;入力.zpl&gt; &lt;出力.tfm&gt;
+  # JFM → ZPL の変換
+pxutil tfm2zpl &lt;オプション&gt; &lt;入力.tfm&gt; &lt;出力.zpl&gt;
+</pre>
+
+<p>ZVP0 形式は ZVP （あるいは VPL）の中の VF に直接対応する要素だけを
+抜き出したもので、VF 単体と相互変換できる。
+ZPL 形式は逆に ZVP の中の JFM に直接対応する要素を
+抜き出したもので、要するに JPL 形式を少しだけ拡張したものである。
+</p>
+
+</div><!--ssec-zpl2tfm-->
+
+</div><!--sec-usage-->
+
+<div class="section" id="sec-tryit">
+<h2>とにかく使ってみる</h2>
+
+<p>テストケースとして次のようなことを実現してみる。
+</p>
+<blockquote>
+「縦書きの JIS メトリック和文フォント」である jis-v は
+ダブルクオーテーション〈“”〉がそのまま出力される
+（勿論この出力は使い物にならない）。
+これをダブルミニュート〈&#x301D;&#x301F;〉に置き換えられる
+ようにする。
+ダブルミニュートは upTeX のフォント uprml-v から持ってくる。
+</blockquote>
+
+<div class="bend">
+<p><span class="lbl">参考：</span> pLaTeX2e の標準の縦書クラス
+（tarticle 等）で使われる和文フォント tmin10 では、
+ダブルクオーテーションはダブルミニュートに置き換えられる。
+新ドキュメントクラス（jsarticle 等）では既定で JIS メトリック
+の横書フォント jis が使われるが、縦書きに切り替えた時に
+使われるのは jis-v ではなくやはり tmin10 である。
+従って、普通に使われる設定では jis-v は使われない。
+</p>
+<p>以下に jis-v を用いた例を示す。
+当然、縦書きで使われないダブルクオーテーションは
+横書き用の字形がそのまま出力されるので
+奇妙な出力になってしまう。
+</p>
+<div><em>（正しく出力されない例）</em>
+</div>
+<div style="float:right;padding-top:1em">
+<img src="sample/pxutil-sample01.png" width="38" height="179">
+</div>
+<pre style="margin-right:60px">
+\documentclass[a4paper]{tarticle}
+% 明朝フォントに jis / jis-v を指定
+\DeclareFontFamily{JY1}{jmc}{}
+\DeclareFontFamily{JT1}{jmc}{}
+\DeclareFontShape{JY1}{jmc}{m}{n}{<->jis}{}
+\DeclareFontShape{JT1}{jmc}{m}{n}{<->jis-v}{}
+\renewcommand\mcdefault{jmc}
+\normalfont
+\begin{document}
+本日は“豚天”なり。 %“ ”がそのまま出力される
+\end{document}
+</pre>
+<div style="clear:right"></div>
+<p>なお、tmin10 で出力されるダブルミニュートは
+秒記号〈″〉から合成されたものである。
+従って、PDF 出力でのテキスト情報が正しくならない
+という短所をもつ。
+ダブルミニュートのグリフはほぼ全ての日本語用 TrueType／OpenType フォント
+がもっているので、なるべくこれを使用したい。
+</p>
+</div>
+
+<p>手順の概略は次のようになる。
+</p>
+<ul>
+<li><code>pxutil vf2zvp</code> で jis-v の VF+JFM をテキスト形式
+である ZVP 形式に変換。
+</li>
+<li>変換後の jis-v.zvp を目的に適うように
+改変した mod-jis-v.zvp を作る。
+</li>
+<li><code>pxutil zvp2vf</code> で ZVP 形式を VF+JFM 形式に変換。
+</ul>
+<p>以下で、その手順を追っていくのに併せて、
+pxutil コマンドの使い方や ZVP 形式の仕様の概要を説明していく
+ことにする。
+</p>
+
+<div class="subsection" id="ssec-to-zvp">
+<h3>ZVP 形式への変換</h3>
+
+<p>ZVP 形式は私が独自に定義した、和文用の仮想フォントを
+表現するテキスト形式である。
+欧文の VPL 形式の和文版に相当するもので、VF と JFM（和文TFM）の
+組との相互変換が可能である。
+この ZVP 形式を扱うコマンドが pxutil である。
+</p>
+
+<p>適当な作業用ディレクトリで以下のコマンドを実行すると、
+jis-v.vf と jis-v.tfm から jis-v.zvp が生成される。
+</p>
+<pre>
+pxutil vf2zvp -E jis-v
+</pre>
+<div class="bend">
+<span class="lbl">参考：</span> TFM と VF ファイル
+の読込については Kpathsearch の検索の対象となる。
+独自の形式（ZVP 等）は対象とならないので、読込の際には
+パスを指定（またはカレントに置く）必要がある。
+</div>
+
+</div><!--ssec-to-zvp-->
+
+<div class="subsection" id="ssec-spec-zvp">
+<h3>ZVP 形式の仕様の概説</h3>
+
+<p>出力された jis-v.zvp を例にとって、
+ZVP 形式の仕様の概説を行う。
+ただし、
+<a href="http://ascii.asciimw.jp/pb/ptex/pl/pl-ex.html">PL 形式</a>と
+<a href="http://ascii.asciimw.jp/pb/ptex/pl/jpl-ex.html">JPL 形式</a>の
+仕様、および「そもそも VF は何なのか」については既知であることを想定する。
+VPL 形式も知っていることが望ましいが、そうでなくても理解できるように
+適宜補足していく。
+</p>
+<p>以下、先頭から順を追って内容を解説していく。
+</p>
+<pre>
+(DIRECTION TATE)
+(VTITLE )
+(FAMILY JIS KANJI)
+(FACE F MRR)
+(CODINGSCHEME TEX KANJI TEXT)
+(DESIGNSIZE R 10.0)
+(CHECKSUM O 0)
+(SEVENBITSAFEFLAG TRUE)
+</pre>
+<p>先頭の種々の設定については JPL 形式と同じである。
+この中で、VTITLE は VF に記録された名前
+（TeX システムの中では無意味）でこちらは VPL 形式と同じ。
+</p>
+<pre>
+(FONTDIMEN
+   (SLANT R 0.0)
+   (SPACE R 0.0)
+   (STRETCH R 0.091641)
+   (SHRINK R 0.0)
+   (XHEIGHT R 0.916443)
+   (QUAD R 0.962216)
+   (EXTRASPACE R 0.229101)
+   (EXTRASTRETCH R 0.183283)
+   (EXTRASHRINK R 0.114551)
+   )
+</pre>
+<p>JPL 形式と同じ FONTDIMEN 要素。
+jis-v は min10 と同じく 0.962216 倍のスケールをもつ。
+</p>
+<pre>
+(MAPFONT D 1
+   (FONTNAME rmlv)
+   (FONTCHECKSUM O 0)
+   (FONTAT R 0.962216)
+   (FONTDSIZE R 10.0)
+   )
+</pre>
+<p>MAPFONT 要素で仮想フォントが参照するフォントを指定する
+（VPL と同じ）。
+ここでは rmlv を 0.962216 倍に縮小したものを指定している
+（FONTNAME, FONTAT）。
+FONTCHECKSUM と FONTDSIZE は参照先の CHECKSUM と DESIGNSIZE
+と同じにする。
+（チェックサムは参照元と参照先のどちらかの値が 0 ならば
+異なっていてもよい。）
+</p>
+<p>なお、後述するように、参照フォントは複数利用することができる。
+従って、MAPFONT には参照フォントの番号を表す整数（ここでは 1）
+が指定される。
+</p>
+<pre>
+(GLUEKERN
+   (LABEL D 0)
+   (GLUE D 1 R 0.481108 R 0.0 R 0.481108)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (STOP)
+   (LABEL D 1)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (STOP)
+   (LABEL D 2)
+   (GLUE D 0 R 0.481108 R 0.0 R 0.481108)
+   (GLUE D 1 R 0.481108 R 0.0 R 0.481108)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (GLUE D 5 R 0.481108 R 0.0 R 0.481108)
+   (STOP)
+   (LABEL D 3)
+   (GLUE D 0 R 0.240554 R 0.0 R 0.240554)
+   (GLUE D 1 R 0.240554 R 0.0 R 0.240554)
+   (GLUE D 2 R 0.240554 R 0.0 R 0.240554)
+   (GLUE D 3 R 0.481108 R 0.0 R 0.240554)
+   (GLUE D 4 R 0.240554 R 0.0 R 0.240554)
+   (GLUE D 5 R 0.240554 R 0.0 R 0.240554)
+   (STOP)
+   (LABEL D 4)
+   (GLUE D 0 R 0.481108 R 0.0 R 0.0)
+   (GLUE D 1 R 0.481108 R 0.0 R 0.0)
+   (GLUE D 3 R 0.721662 R 0.0 R 0.240554)
+   (GLUE D 5 R 0.481108 R 0.0 R 0.0)
+   (STOP)
+   (LABEL D 5)
+   (GLUE D 1 R 0.481108 R 0.0 R 0.481108)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (KRN D 5 R 0.0)
+   (STOP)
+   )
+</pre>
+<p>JPL 形式と同じ GLUEKERN 要素。
+</p>
+<pre>
+(CODESPACE GL94DB)
+</pre>
+<p>CODESPACE 要素は ZVP に特有のものである。
+JFM では有効な符号位置として全ての 2 バイト値(0～0xFFFF)が
+仮定されている（ただし pTeX がこの全てを使えるわけではない）のに対し、
+VF では有効な符号位置は「文字パケット」（VPL の CHARACTER 要素）が
+あるものに限られる。
+ZVP では有効な符号位置の集合（これを「符号空間」と呼ぶ）を
+予め指定する方式をとっていて、これを指定するのが CODESPACE 要素である。
+CODESPACE の引数は CHARSINTYPE のそれと同じ形式で指定する
+（後述の<a href="#ssec-charlist">「文字リストの書式」</a>を参照）
+が、次の 2 つの集合は名前が与えられていて、それで指定
+することができる。
+</p>
+<ul>
+<li><code>GL94DB</code>： 上位バイト、下位バイトが 0x21～0x7E の
+範囲にある 2 バイト値全体。
+（ISO 2022 の 94&sup2; 文字集合を GL に呼び出した時の符号位置の集合。）
+</li>
+<li><code>UNICODE-BMP</code>： 0～0xFFFF の範囲の値。
+Unicode の BMP 内のスカラー値全体。
+</li>
+</ul>
+<pre>
+(CHARSINTYPE D 1
+   X2146 X2148 X214A X214C X214E X2150 X2152 X2154 X2156 X2158 X215A
+   )
+(CHARSINTYPE D 2
+   X2122 X2124 X2147 X2149 X214B X214D X214F X2151 X2153 X2155 X2157
+   X2159 X215B
+   )
+(CHARSINTYPE D 3
+   X2126 X2127 X2128
+   )
+(CHARSINTYPE D 4
+   X2123 X2125
+   )
+(CHARSINTYPE D 5
+   X213D X2144 X2145
+   )
+</pre>
+<p>JPL 形式と同様の CHARSINTYPE 要素の指定である。
+ここで <code>Xxxxx</code> （<code>xxxx</code> は 16 進数）
+は <code>Jxxxx</code> 形式
+（あるいは upTeX 用のツールで使える <code>Uxxxx</code> 形式）と
+同様に符号値の数値指定を表すが、これらと異なり
+「外部・内部の文字コード設定に依存せずその数値自体を表す」
+という規定である
+（<a href="#ssec-charlist">「文字リストの書式」</a>を参照）。
+
+<pre>
+(TYPE D 0
+   (CHARWD R 0.962216)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (SETCHAR)
+      )
+   )
+</pre>
+<p>JPL 形式と同様の TYPE 要素だが、中に MAP 要素をもっている。
+これは VPL の MAP と同じく、仮想フォントの文字が呼び出されたときに、
+それをどのように出力するかを DVI 命令で表したものである。
+VPL の SETCHAR は <code>(SETCHAR &lt;整数&gt;)</code> の
+書式をもち、参照フォント中の <code>&lt;整数&gt;</code> の符号位置の
+文字を出力することを意味する。
+ZVP ではここで引数なしの <code>(SETCHAR)</code> の形式が使え、
+これは仮想フォントで呼び出された符号位置と同じ値を用いる
+ことを表す。
+</p>
+<p>従って、この指定の下でたとえば jis-v の位置 0x3021 の文字を
+出力するには、rmlv （参照フォント）の位置 0x3021 の文字を
+出力すればよいことになる
+（JIS 符号なので 0x3021 は〈亜〉）。
+</p>
+<pre>
+(TYPE D 1
+   (CHARWD R 0.481108)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (MOVERIGHT R -0.481109)
+      (SETCHAR)
+      )
+   )
+</pre>
+<p>続いて、タイプ 1 に対応する TYPE 要素である。
+<code>(MOVERIGHT &lt;実数&gt;)</code> は <code>&lt;実数&gt;</code>
+だけ出力位置を「右」に移動することを示す。
+（縦書きの場合は「右」は実際には下方向になる。）
+単位は DESIGNSIZE である（ここでは 10pt）。
+このフォントの全角幅（FONTDIMEN 中の QUAD の値）が 0,962216 である
+から、「半角幅戻ってから呼び出された符号位置の文字を出力」
+することになる。
+タイプ 1 に属するのは〈（〉のような開き括弧の類である。
+jis-v ではこれは半角幅の文字と規定されるが、
+等幅のフォント（参照先の rmlv）では「<code>&nbsp;(</code>」の
+ように「左」に半角分の空きを込めた形にデザインされている。
+従って、出力する前に「左」に戻ることで目的の字形と合わせている。
+</p>
+<p>
+<pre>
+(TYPE D 2
+   (CHARWD R 0.481108)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (SETCHAR)
+      )
+   )
+(TYPE D 3
+   (CHARWD R 0.481108)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (MOVERIGHT R -0.240554)
+      (SETCHAR)
+      )
+   )
+(TYPE D 4
+   (CHARWD R 0.481108)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (SETCHAR)
+      )
+   )
+(TYPE D 5
+   (CHARWD R 0.962216)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (SETCHAR)
+      )
+   )
+</pre>
+<p>以降、同様の TYPE 要素の記述が続いている。
+</p>
+
+
+</div><!--ssec-to-zvp-->
+
+<div class="subsection" id="ssec-modify">
+<h3>仮想フォントの改変</h3>
+
+<p>さて、目標はダブルクオーテーション〈“”〉
+（JIS符号位置 0x2148／0x2149）を
+ダブルミニュート〈&#x301d;&#x301f;〉
+（Unicode位置 0x301D／0x301F）に置き換えることである。
+まずは、〈“〉（JIS 0x2148）について考えることにする。
+これはタイプ 1 （開き括弧類）に属しているので、
+次のような MAP が指定されていることになる。
+</p>
+<pre>
+(MAP
+   (MOVERIGHT R -0.481109)     半角幅「左」に移動
+   (SETCHAR H 2148)            rmlv の〈“〉を出力
+   )
+</pre>
+<p>ダブルミニュートは JIS X 0208 にはないので、Unicode フォント
+から借りてくることにする。
+前述のようにここでは upTeX の標準の縦書き和文フォントの uprml-v を
+用いることにする。
+</p>
+<div class="bend">
+<span class="lbl">参考：</span> 他の選択としては、
+OTF パッケージの otf-ujmr-v、
+UTF パッケージの unijmin-v 等が考えられる。
+名前の違いを除けば後の作業内容に違いはない。
+</div>
+<p>ダブルミニュートも「開き括弧類」なので、等幅フォントでの
+デザインの仕方については元のダブルクオーテーションと同じである。
+従って、「rmlv の位置 0x2148 の文字」の代わりに
+「uprml-v の位置 0x301D の文字」を出せばいいことになる。
+</p>
+<div class="bend">
+<span class="lbl">参考：</span> フォントの文字コードが何で
+あるかは特に ZVP 中に記述することはない。
+rmlv は JIS 符号のフォントなので rmlv の 0x2148 には
+「JIS の 0x2148 の文字」があるはずであり、
+同様に、uprml-v の 0x301D には「Unicode 0x301D の文字」が
+あるはずである。
+</div>
+<p></p>
+
+<h4>参照フォントの追加</h4>
+
+<p>今まで、参照フォントとして rmlv だけを用いていたが、これに
+uprml-v が加わるので、次のような MAPFONT 要素を
+既存の rmlv に対する MAPFONT より後に追加する。
+（実際には追加する場所は既存の要素の外側ならどこでもよい
+のだが、後述の理由があるため。）
+</p>
+<pre>
+(MAPFONT D 2
+   (FONTNAME uprml-v)
+   (FONTDSIZE R 10.0)
+   (FONTAT R 0.962216)
+   )
+</pre>
+<p>uprml-v は rmlv と同じく、DESIGNSIZE = 10pt、QUAD = 1.0 となって
+いるので、rmlv と全く同じ設定になる。
+参照フォントの番号は既に使われているもの（rmlv = 1）と
+重ならなければよい（可能な値は 0～255）。
+ここでは 2 とする。
+</p>
+
+<h4>MAP 中の参照フォントの切替</h4>
+
+<p>MAP 要素中で参照フォントを切り替えるには、SELECTFONT 要素を用いる。
+<code>(SELECTFONT &lt;整数&gt;)</code> で番号が <code>&lt;整数&gt;</code>
+のフォントに切り替える。
+従って、開きダブルミニュートを出力する MAP は次のようになる。
+</p>
+<pre>
+(MAP
+   (MOVERIGHT R -0.481109)     半角幅「左」に移動
+   (SELECTFONT D 2)            uprml-v に切り替える
+   (SETCHAR H 301D)            〈&#x301D;〉を出力
+   )
+</pre>
+<div class="bend">
+<span class="lbl">参照：</span> MAP 内での初期の参照フォントは
+「ZVP で最初に現れた MAPFONT」である。
+（「1 番」とか「0 番」という規定ではないことに注意。）
+従って、新規の MAPFONT を追加する際には
+先頭の MAPFONT さえ変更しなければ、
+既存の MAP には影響がないことになる。
+</div>
+<p></p>
+
+<h4>サブタイプの指定</h4>
+
+<p>ではこの MAP をどこに記述するかを考える。
+今までの解説に従うと、MAP は TYPE の中に書くことになるので、
+0x2148 のタイプを従来の 1 から新規のもの（6 とする）に
+変更すればよいことになる。
+</p>
+<pre>
+(…タイプ 1 から X2148 を除去…)
+(CHARSINTYPE D 6          0x2148 をタイプ 6 にする
+   X2148
+   )
+(TYPE D 6                 タイプ 6 の規定
+   (CHARWD R 0.481108)
+   (CHARHT R 0.458222)
+   (CHARDP R 0.458222)
+   (MAP
+      (MOVERIGHT R -0.481109)
+      (SELECTFONT D 2)
+      (SETCHAR H 301D)
+      )
+   )
+</pre>
+<p>ただ、このように新しいタイプを設定すると、
+それに対して GLUEKERN を指定する必要が生じる。
+このタイプ 6 は MAP 指定を除けばメトリックも GLUEKERN も
+タイプ 1 と全く同じ振る舞いをするはずなので、
+これはいかにも面倒である。
+</p>
+<p>そこで、ZVP では 1 つのタイプの中で異なる MAP を
+もつことを認めて、タイプの中で同じ MAP をもつ文字の集合
+として「サブタイプ」という概念を導入している。
+すなわち、ここでは 0x2148 を「サブタイプ 1」とし、
+それ以外のタイプ 1 の文字（元々の <code>TYPE D 1</code> の MAP
+をもつ）を「サブタイプ 0」とすればよい。
+</p>
+<p>サブタイプの指定は
+<code>(CHARSINSUBTYPE &lt;タイプ値&gt; &lt;サブタイプ値&gt; &lt;文字リスト&gt;)</code>
+の書式で行う。
+つまり、「サブタイプ 1」の文字の指定は次のようになる。
+</p>
+<pre>
+(CHARSINSUBTYPE D 1 D 1
+   X2148
+   )
+</pre>
+<p>そして、CHARSINSUBTYPE 要素に現れなかった文字は
+自動的に「サブタイプ 0」になるので、
+サブタイプ 0 のリストは書かなくてよい。
+（CHARSINTYPE にない文字がタイプ 0 になるのと同様。）
+</p>
+<p>サブタイプに対する MAP を指定するには、SUBTYPE 要素を
+使用する。
+</p>
+<pre>
+(SUBTYPE D 1 D 1
+   (MAP
+      (MOVERIGHT R -0.481109)
+      (SELECTFONT D 2)
+      (SETCHAR H 301D)
+      )
+   )
+</pre>
+<p>ここでも、「TYPE 要素の中の MAP はサブタイプ 0 に対するもの」
+というルールがあるので、サブタイプ 0 に対する SUBTYPE 要素は
+書かなくてよい。
+また、サブタイプ毎に異なるのは MAP だけなので、
+SUBTYPE の中に書けるのは MAP だけであることにも注意してほしい。
+（<em>補足：</em> ZRTeXtor 1.3.0 版への改版で、
+メトリックが異なるサブタイプが作れるようになった。
+詳しくは<a href="#sec-ext-subtype">「サブタイプ毎のメトリックの指定」</a>を参照。）
+</p>
+
+<h4>まとめ</h4>
+
+<p>以上をまとめて、また閉じのダブルミニュートに対する設定も
+加えると、以下の記述を追加すれば所望の改変が実現できることになる。
+</p>
+<pre>
+(MAPFONT D 2
+   (FONTNAME uprml-v)
+   (FONTDSIZE R 10.0)
+   (FONTAT R 0.962216)
+   )
+(CHARSINSUBTYPE D 1 D 1
+   X2148
+   )
+(SUBTYPE D 1 D 1
+   (MAP
+      (MOVERIGHT R -0.481109)
+      (SELECTFONT D 2)
+      (SETCHAR H 301D)
+      )
+   )
+(CHARSINSUBTYPE D 2 D 1
+   X2149
+   )
+(SUBTYPE D 2 D 1
+   (MAP
+      (SELECTFONT D 2)
+      (SETCHAR H 301F)
+      )
+   )
+</pre>
+
+</div><!--ssec-modify-->
+
+<div class="subsection" id="ssec-to-vf">
+<h3>ZVP 形式から仮想フォントを生成する</h3>
+
+<p>改変したものが元のフォント名のままではまずいので、
+上記の改変を加えた ZVP のファイル名を mod-jis-v.zvp とする。
+ここで再び pxutil を使って、仮想フォント、すなわち VF と JFM
+の組を生成することができる。
+</p>
+<pre>
+pxutil zvp2vf mod-jis-v.zvp
+# (mod-jis-v.tfm と mod-jis-v.vf が生成される)
+</pre>
+<p>生成された mod-jis-v が望み通り機能するかをチェックする
+ために以下の文書を組版してみる。
+</p>
+<div style="float:right;padding-top:1em">
+<img src="sample/pxutil-sample02.png" width="38" height="179">
+</div>
+<pre style="margin-right:60px">
+\documentclass[a4paper]{tarticle}
+\DeclareFontFamily{JY1}{jmc}{}
+\DeclareFontFamily{JT1}{jmc}{}
+\DeclareFontShape{JY1}{jmc}{m}{n}{<->jis}{}
+\DeclareFontShape{JT1}{jmc}{m}{n}{<->mod-jis-v}{} % mod-jis-v を指定
+\renewcommand\mcdefault{jmc}
+\normalfont
+\begin{document}
+本日は“豚天”なり。
+\end{document}
+</pre>
+<p>きちんとダブルミニュートが出力されていることがわかる。
+</p>
+<div class="bend">
+<span class="lbl">参照：</span> DVI ウェアは仮想フォント
+を参照フォントで置き換えるので、DVI ウェアのフォント設定は
+仮想フォントには必要がない。
+つまり、この場合、rmlv と uprml-v に対して適切な設定が
+行われていれば、DVI ウェアは新しくできた mod-jis-v も扱うことが
+できるはずである。
+</div>
+
+</div><!--ssec-to-vf-->
+
+<div class="subsection" id="ssec-character">
+<h3>CHARACTER 要素</h3>
+
+<p>ZVP の説明をするために、以上では MAP を変更する文字に
+対してサブタイプを設定したが、
+実は ZVP では CHARACTER 要素を用いて、特定の文字の MAP 設定を
+変えることができる。
+CHARACTER 要素を用いた場合、mod-jis-v を作る為の改変部分は
+以下のようになる。
+</p>
+<pre>
+(MAPFONT D 2
+   (FONTNAME uprml-v)
+   (FONTDSIZE R 10.0)
+   (FONTAT R 0.962216)
+   )
+(CHARACTER H 2148
+   (MAP
+      (MOVERIGHT R -0.481109)
+      (SELECTFONT D 2)
+      (SETCHAR H 301D)
+      )
+   )
+(CHARACTER H 2149
+   (MAP
+      (SELECTFONT D 2)
+      (SETCHAR H 301F)
+      )
+   )
+</pre>
+<p>CHARACTER 要素の中に含められるのは MAP だけで、
+タイプは指定する前と変わらない（つまり 0x2148 はタイプ 1）。
+「1 文字だけのサブタイプ」を作ったのと同じ動作になる。
+</p>
+
+</div><!--ssec-character-->
+
+</div><!--sec-sample-->
+
+<div class="section" id="sec-ext-subtype">
+<h2>サブタイプ毎のメトリックの指定</h2>
+
+<p>ZRTeXtor 1.3.0 版以降を用いている場合は、
+サブタイプの指定（SUBTYPE 要素）で MAP の他に
+メトリック（CHARWD／CHARHT／CHARDP／CHARIC）が（仮想的に）
+指定できるようになった。
+すなわち、「タイプ」で共通しているのは GLUEKERN 指定だけとなり、
+1 つのタイプの中で共通の MAP とメトリックをもつ文字の集合が
+「サブタイプ」となる。
+ただし、和文 TFM の仕様として「1 つのタイプは 1 つのメトリックをもつ」
+と決められているので、メトリックの異なるサブタイプについては、
+ZRTeXtor 内部において、共通の GLUEKERN をもつ別の新しいタイプに
+分離させている。
+その関係で、この機能は ZVP → VF/TFM の変換の時のみ働き、
+逆方向への変換では考慮されない
+（分離されてできたタイプがそのまま現れる）。
+</p>
+
+<p>異なるメトリックのサブタイプを利用する例として次のケースを考える。
+</p>
+<blockquote>
+従来の jis.tfm のメトリックでは和文のハイフン〈‐〉
+（JIS X 0208 の 1-30）は全角幅で出力されるが、
+これを四分幅で出力されるように変更する。
+ただし、元の（VF 参照先の）等幅フォントでは
+ハイフンは四分幅の横棒が全角幅の中央に配置されるような
+デザインであることを想定する。
+</blockquote>
+<div align="center" class="display">
+<div class="imagebox" style="width:621px">
+<img src="sample/pxutil-sample03.png" width="621" height="110"
+     alt="谷山‐志村予想の完全な証明が成されたのはその6年後のことであった。
+従来のjisではハイフンが全角幅、修正後は四分幅。">
+</div></div>
+<div class="bend"><p><span class="lbl">参考：</span> 
+ここで問題にしているのは「和文のハイフン」
+のことである。
+和文におけるハイフンの使用は欧文のそれに比べて
+かなり少ない。
+「谷山‐志村予想」のようなものを書く場合でも、
+実際には和文ハイフンでなく中黒〈・〉や
+二重二分ハイフン〈&#x30a0;〉（JIS X 0208 にない）
+を用いることの方が多い。
+（ただし、外国人の名前の場合、後者は複姓の間の区切りと解釈されうる。）
+</p>
+<p>欧文ハイフンは LaTeX では ASCII の HYPHEN-MINUS〈<code>-</code>〉
+により入力される（少なくとも 8 ビット欧文 TeX の場合）。
+その字幅は欧文フォントにより異なる。
+</p>
+</div>
+<p><a href="http://www.w3.org/TR/jlreq/ja/">「日本語組版処理の要件」</a>に従うと、
+行組版における空き調整に関する限りはハイフンは普通の和文文字
+（漢字・かな）と同じ振る舞いになる
+（勿論ハイフンは禁則の対象ではある）。
+加えて、jis.tfm では字幅を全角幅として扱うので、結果的に、
+ハイフンは普通の文字と同じタイプ 0 となっている。
+そこで、次のような修正を行えばよいことになる。
+</p>
+<ul>
+<li>タイプ 0 についてサブタイプ 1 を新設し、ハイフンをそこに所属させる
+（<code>CHARSINSUBTYPE</code>）。
+</li>
+<li>サブタイプ 1 の <code>SUBTYPE</code> 要素にハイフンのための
+記述を行う。
+字幅を四分にし、従来のハイフンを移動して出力する <code>MAP</code>
+を置く。
+</li>
+</ul>
+<p>では以下で実際にその修正を行う。
+まず、jis.tfm を ZVP 形式に変換する。
+</p>
+<pre>
+pxutil vf2zvp -E jis
+</pre>
+<p>生成された jis.zvp に以下の記述を追加したものを
+jis-hyph.zvp として保存する。
+</p>
+<pre>
+(CHARSINSUBTYPE D 0 H 1
+   X213E
+   )
+(SUBTYPE D 0 H 1
+   (CHARWD R 0.240554)
+   (MAP
+      (MOVERIGHT R -0.360831)
+      (SETCHAR)
+      )
+   )
+</pre>
+<p>CHARSINSUBTYPE 要素では、ハイフン（JIS の符号位置 0x213E）
+をタイプ 0 のサブタイプ 1 に所属させている。
+そのサブタイプに対する設定が次の SUBTYPE 要素に書かれている。
+字幅を四分（= 0.240554 単位；QUAD の 1/4）とする。
+全角幅の中央に四分幅の横棒がある場合、左側の空きは
+全角の 3/8（= 0.360831 単位）なので、
+まずこの幅だけ左に移動したあと、元の（全角幅の）字形を
+出力している（入力と同じ文字なので SETCHAR の引数を省略）。
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+SUBTYPE 要素でメトリック指定（CHARWD／CHARHT／CHARDP／CHARIC）
+を省略した場合は元のタイプにおける値が使われる。
+メトリックが完全に一致するサブタイプが複数あった場合は、
+その間では内部でのタイプ分離処理は行われない。
+従って、サブタイプでのメトリック変更を伴わない場合は、
+ZRTeXtor 1.3.0 版以前の場合と同じ結果が得られることになる。
+（ただし他にも細かな修正点があるので全く同一のファイル
+が得られるとは限らない。）
+</div>
+<p>jis-hyph.zvp を VF+TFM の組に変換する。
+</p>
+<pre>
+pxutil zvp2vf jis-hyph
+</pre>
+<p>テスト用の文書。
+</p>
+<pre>
+\documentclass[a4paper]{jarticle}
+\DeclareFontFamily{JY1}{jmc}{}
+\DeclareFontFamily{JT1}{jmc}{}
+\DeclareFontShape{JY1}{jmc}{m}{n}{<->jis-hyph}{}
+\DeclareFontShape{JT1}{jmc}{m}{n}{<->jis-v}{}
+\renewcommand\mcdefault{jmc}
+\normalfont
+\begin{document}
+谷山‐志村予想の完全な証明が成されたのはその6年後のことであった。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:630px">
+<img src="sample/pxutil-sample04.png" width="630" height="19"
+     alt="「谷山‐志村予想の完全な証明が成されたのはその6年後のことであった。」
+ハイフンが四分幅に組まれている。">
+</div></div>
+<div class="bend"><p><span class="lbl">参考：</span> 
+生成された jis-hyph.vf/.tfm をもう一度
+<code>pxutil vf2zvp -E</code> で ZVP に戻してみると
+以下のようになる。
+これを見ると、「タイプ 6」が新しくできていて、
+タイプ 0 のサブタイプ 1 がタイプ 6 に移動していることが判る。
+</p>
+<pre>
+……（略）……
+(GLUEKERN
+   (LABEL D 0)
+   <span style="color:#CF4">(LABEL D 6)</span>
+   (GLUE D 1 R 0.481108 R 0.0 R 0.481108)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (STOP)
+   (LABEL D 1)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (STOP)
+   (LABEL D 2)
+   (GLUE D 0 R 0.481108 R 0.0 R 0.481108)
+   <span style="color:#CF4">(GLUE D 6 R 0.481108 R 0.0 R 0.481108)</span>
+   (GLUE D 1 R 0.481108 R 0.0 R 0.481108)
+   (GLUE D 3 R 0.240554 R 0.0 R 0.240554)
+   (GLUE D 5 R 0.481108 R 0.0 R 0.481108)
+   (STOP)
+……（略）……
+<span style="color:#CF4">(CHARSINTYPE D 6
+   J213E
+   )</span>
+……（略）……
+<span style="color:#CF4">(TYPE D 6
+   (CHARWD R 0.240554)
+   (CHARHT R 0.777588)
+   (CHARDP R 0.138855)
+   (MAP
+      (MOVERIGHT R -0.360831)
+      (SETCHAR)
+      )
+   )</span>
+</pre>
+</div>
+
+</div><!--sec-ext-subtype-->
+
+<div class="section" id="sec-appendix">
+<h2>付録</h2>
+
+<div class="subsection" id="ssec-charlist">
+<h3>文字リストの書式</h3>
+<p>文字集合を指定する要素、すなわち
+</p>
+<pre>
+(CODESPACE &lt;文字リスト&gt;)
+(CHARSINTYPE &lt;タイプ&gt; &lt;文字リスト&gt;)
+(CHARSINSUBTYPE &lt;タイプ&gt; &lt;サブタイプ&gt; &lt;文字リスト&gt;)
+</pre>
+<p>の <code>&lt;文字リスト&gt;</code> の部分には
+以下の書式に従う符号位置指定を空白区切りで複数並べて書く。
+</p>
+<ol>
+<li>文字そのもの：
+その文字の内部符号位置。非 ASCII 文字に限る。
+</li>
+<li><code>Jxxxx</code> 形式：
+JIS コード値が <code>xxxx</code> である文字の内部符号位置。
+</li>
+<li><code>Uxxxx</code> 形式：
+Unicode 値が <code>xxxx</code> である文字の内部符号位置。
+</li>
+<li><code>Xxxxx</code> 形式：
+整数 <code>xxxx</code> 自身を表す。
+</li>
+<li>PL の整数表現：
+例えば <code>H 1234</code> など。その値を表す。
+</li>
+<li><code>(CTRANGE &lt;値1&gt; &lt;値2&gt;)</code>：
+<code>&lt;値1&gt;</code> 以上 <code>&lt;値2&gt;</code> 以下
+の整数値全部の指定。
+</li>
+</ol>
+<p>ここで、「内部符号位置」とは内部文字コード
+（<code>-kanji-internal</code>）における符号位置
+のことである。
+また、<code>xxxx</code> は 1～6 桁の 16 進数を表す。
+なお、従来の JPL の場合、pTeX の pltotf では 1 と 2 が、
+upTeXの pltotf では加えて 3 が使用できる。
+4～6 は ZVP の独自仕様となる。
+</p>
+<p>1～3 は内部文字コードに依存する。
+さらに、1 は文字を読む必然性から外部文字コードにも依存する。
+これらの形式に関しては、場合によっては JIS と Unicode の
+間のコード変換が行われていることになる。
+例えば、内部文字コードが unicode の時、<code>J2228</code>
+は「JIS 0x2228 = 〈※〉 = Unicode 0x203B」より 0x203B と
+解釈される。
+これを利用して、
+1 つの ZVP から JIS と Unicode の 2 種類の仮想フォントを
+得るという使い方が考えられるが、
+これには「JIS と Unicode の間の変換は不安定である
+（複数の方式が混在している）」という問題がつきまとう。
+pxutil は JIS が定めるものを基礎とするマッピングに
+従っているが、DVI ウェアの中には異なるマッピングを用いる
+ものもある。
+この理由により、私は JIS と Unicode の間の変換を
+利用することを推奨していない。
+符号系を関知しない <code>-E</code> オプションを
+勧めているのも同じ理由である。
+</p>
+
+</div><!--ssec-charlist-->
+
+<div class="subsection" id="ssec-map-commands">
+<h3>MAP 内で使用する要素</h3>
+
+<p>「ZVP 独自仕様」と断っているもの以外は VPL と共通である。
+</p>
+<dl>
+<dt><code>(SETCHAR &lt;符号位置&gt;)</code></dt>
+<dd>文字を出力。<em>ZVP 独自仕様</em>として、符号位置を省略した場合は
+仮想フォントで呼び出された符号位置を使う。</dd>
+<dt><code>(MOVEUP &lt;長さ&gt;)</code></dt>
+<dt><code>(MOVEDOWN &lt;長さ&gt;)</code></dt>
+<dt><code>(MOVELEFT &lt;長さ&gt;)</code></dt>
+<dt><code>(MOVERIGHT &lt;長さ&gt;)</code></dt>
+<dd>出力位置を「上」／「下」／「左」／「右」に移動。
+（縦書きでは時計回り90度分ずれる。）
+<dt><code>(PUSH)</code></dt>
+<dd>現在の出力位置を保存（スタックにプッシュ）。</dd>
+<dt><code>(POP)</code></dt>
+<dd>現在の出力位置を復帰（スタックからポップ）。
+PUSH と POP は対である必要がある。
+フォント指定は保存されないことに注意。</dd>
+<dt><code>(SELECTFONT &lt;フォント番号&gt;)</code></dt>
+<dd>参照フォントの切替。</dd>
+<dt><code>(DIR &lt;整数&gt;)</code></dt>
+<dd><em>ZVP 独自仕様</em>。
+書字方向の切替で、1 が縦書、0 が横書。
+pTeX DVI の dir 命令に対応する。</dd>
+<dt><code>(SPECIAL &lt;文字列&gt;)</code></dt>
+<dt><code>(SPECIALHEX &lt;16進数字列&gt;)</code></dt>
+<dd>special 命令。</dd>
+</dl>
+</div><!--ssec-map-commands-->
+
+
+</div><!--sec-appendix-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXutil パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008, 2009 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-06-06
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

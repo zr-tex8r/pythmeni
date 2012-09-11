@@ -1,0 +1,52 @@
+\documentclass[a4paper,uplatex]{jsarticle}
+\pagestyle{empty}
+\usepackage{color}
+\usepackage{amssymb}
+\definecolor{zBlue}{rgb}{0,0,1}
+\definecolor{zGreen}{rgb}{0,0.5,0}
+\definecolor{zCyan}{rgb}{0.6,1,1}
+\definecolor{zYellow}{rgb}{1,1,0.7}
+\definecolor{zRed}{rgb}{1,0,0}
+\newcommand{\ul}{\unitlength}
+\newcommand{\filledrect}[7]
+ {{\color{#6}\put(#1,#2){\rule{#3\ul}{#4\ul}}%
+   \color{#5}\thinlines
+   \put(#1,#2){\framebox(#3,#4)[l]{\color{black}\strut\hspace{.5em}#7}}}%
+  \ignorespaces}
+\newcommand{\fname}[1]{{\bfseries\sffamily#1}}
+\newcommand{\fid}[1]{{\mdseries\sffamily\footnotesize#1}}
+\begin{document}
+
+\begin{picture}(180,70)
+\color{zBlue}\thicklines
+\filledrect{10}{50}{65}{20}{zBlue}{zCyan}{\fname{upjisr-h.tfm}}
+\filledrect{10}{30}{65}{20}{zBlue}{zYellow}{\fname{upjisr-h.vf}}
+\put(75,40){\vector(1,0){25}}
+\put(95,46){\makebox(0,0)[b]{\fid{0}}}
+\put(95,16){\makebox(0,0)[b]{\fid{2}}}
+\put(85,10){\vector(1,0){15}}
+\put(85,40){\line(0,-1){30}}
+\filledrect{100}{30}{70}{20}{zBlue}{zCyan}{\fname{uprml-h.tfm}}
+\filledrect{100}{00}{70}{20}{zBlue}{zCyan}{\fname{upjisr-hq.tfm}}
+\end{picture}%
+\begin{picture}(50,70)
+\color{zRed}
+\put(55,35){\makebox(0,0)[r]%
+ {\fontsize{36\ul}{0}\selectfont$\blacktriangleright$}}
+\put(0,30){\rule{35\ul}{10\ul}}
+%\put(20,50){\makebox(0,0)[b]{\sffamily コピー}}
+\end{picture}%
+\begin{picture}(205,70)
+\color{zGreen}\thicklines
+\filledrect{10}{50}{75}{20}{zGreen}{zCyan}{\fname{foo-r-jy2.tfm}}
+\filledrect{10}{30}{75}{20}{zGreen}{zYellow}{\fname{foo-r-jy2.vf}}
+\put(85,40){\vector(1,0){25}}
+\put(105,46){\makebox(0,0)[b]{\fid{0}}}
+\put(105,16){\makebox(0,0)[b]{\fid{2}}}
+\put(95,10){\vector(1,0){15}}
+\put(95,40){\line(0,-1){30}}
+\filledrect{110}{30}{85}{20}{zGreen}{zCyan}{\fname{r-foo-r-jy2.tfm}}
+\filledrect{110}{00}{85}{20}{zGreen}{zCyan}{\fname{r-foo-r-jy2x.tfm}}
+\end{picture}
+
+\end{document}

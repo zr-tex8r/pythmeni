@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXgtfont パッケージ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="GTフォント,GT書体,GT明朝,TeX,dvipdfmx,upTeX,dviout,LaTeX,pTeX,pLaTeX,upLaTeX">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxgtfont"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXgtfont パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/pxgtfont.html">http://zrbabbler.sp.land.to/pxgtfont.html</a>
+</div>
+<div id="maintext">
+<h1>PXgtfont パッケージ</h1>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2009/12/10：PXgtfont パッケージを v0.3 版に更新。
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>7万字を超える漢字集合を含む「GT書体フォント」
+（諸権利は日本学術振興会と東京大学多国語処理研究会に帰属する）
+を pLaTeX2e／upLaTeX2e で使用する為のパッケージである。
+現在の GT 漢字の全て（78774 番まで）を使うことができるが、
+GT 番号で指定できるのは 69263 番までである。
+dviout、dvips、dvipdfmx の為の設定を含んでいる。
+</p>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<ul>
+<li>TeX 処理系： pLaTeX2e ／ upLaTeX2e
+</li>
+<li>DVI ウェア： dviout ／ dvips ／ dvipdfmx
+</li>
+<li>GT 書体フォント Windows 版<br>
+GT2000{01,09}.TTF … 1.10版<br>
+GT2000{02,03,04,05,06,07,08,10}.TTF … 1.02版<br>
+GT2000011.TTF … 2.41版<br>
+GT2000012.TTF … 1.04版<br>
+GT2000013.TTF … 1.10版<br>
+GT20000K1.TTF … 1.20版<br>
+GT20000K2.TTF … 2.30版<br>
+※ 2009 年 6 月現在の最新で最終更新は 2005 年 1 月 27 日。
+</ul>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/pxgtfont.zip"><!--
+-->圧縮ファイル pxgtfont.zip (v0.3)のダウンロード</a>
+</li>
+</ul>
+
+<p>インストール方法については、パッケージ付属の説明書
+（README）を参照してほしい。
+例によって、多少複雑であるが、dvipdfmx だけの設定ならば
+それほど困難ではないと思う。
+</p>
+
+</div><!--ssec-download-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-gtkanji">
+<h2>GTフォント特有の漢字を出力する</h2>
+
+
+<p><img src="image/GT57123s.png" align="right">
+すなわち右の文字（読みは「たいと」等）のような JIS 基本漢字外の文字を
+出力する方法を解説する。
+</p>
+
+<div class="subsection" id="ssec-specify">
+<h3>GT フォント中の漢字の指定方法</h3>
+
+<p>GT フォント中の指定するのには次のいずれかの方式を使う。
+</p>
+<ul>
+<li>GT 番号表現：
+GT フォントの漢字の各々に振られた番号（GT 書体整理番号）で指定する方式。
+値の範囲は 1～78774 だが所々に欠番がある。
+</li>
+<li>SJIS 符号値表現：
+TTF 版の GT フォントは複数の TTF ファイルからなるが、
+目的の字が収められたフォントとその符号位置で指定する方式。
+符号位置はシフト JIS で与えられる（たぶん歴史的事情から）。
+フォントの名前は「GT2000-08」のような形式をもつが、
+このパッケージでは特にハイフン以降の「08」を
+「フォント番号」と呼ぶ。
+フォント番号の可能な値は
+01～13（漢字用）、k1、k2（エレメント用）のいずれかである。
+</li>
+</ul>
+<p>例えば、本節の最初に挙げた「たいと」については、
+GT 番号は「57123」、SJIS 符号値表現では
+「GT2000-09 の 94C4」となる。
+</p>
+
+<div class="alert">
+<span class="lbl">注意：</span>
+現在の Pxgtfont パッケージでは GT 番号表現は 69263 番まで
+にしか対応していない。
+</div>
+
+</div><!--ssec-specify-->
+
+<div class="subsection" id="ssec-gi">
+<h3><code>\GI</code> 命令</h3>
+
+<p>pxgtfont パッケージで GT フォントの漢字を出力する
+基本的な命令が <code>\GI</code> であり、以下のように使う。
+</p>
+<ul>
+<li><code>\GI{&#x2039;GT番号&#x203A;}</code> ： GT 番号表現
+</li>
+<li><code>\GI{&#x2039;フォント番号&#x203A;-&#x2039;SJIS符号値&#x203A;}</code> ： SJIS
+符号値表現
+</li>
+</ul>
+<p>以下で「たいと」を出力する例を示す。
+</p>
+<pre>
+\documentclass[a4paper]{jarticle}
+\usepackage{pxgtfont}
+\begin{document}
+\GI{57123}、\GI{09-94C4}。
+\end{document}
+</pre>
+<div class="bend">
+<span class="lbl">参考：</span>
+SJIS 符号値表現では、pTeX／upTeX の漢字コード設定に関わらず
+必ずシフト JIS の符号値を用いる。
+</div>
+
+</div><!--ssec-gi-->
+
+<div class="subsection" id="ssec-gtftex">
+<h3>gtftex パッケージ互換の命令</h3>
+
+<p><a href="ftp://akagi.ms.u-tokyo.ac.jp/pub/TeX/win32/gtftex.lzh">gtftex パッケージ</a>
+（<a href="http://w32tex.org/index-ja.html">W32TeX</a>
+のページで配布されている；作者: 本田知亮 氏、稲垣淳 氏、角藤亮 氏）と
+互換の <code>\GT</code> 命令も使用可能である。
+</p>
+<ul>
+<li><code>\GT{&#x2039;GT番号&#x203A;}</code> ： GT 番号表現
+</li>
+<li><code>\GT{GT2000-&#x2039;フォント番号&#x203A; &#x2039;SJIS符号値&#x203A;}</code> ： SJIS
+符号値表現
+</li>
+<li><code>\GT{GT2000-&#x2039;フォント番号&#x203A; &#x2039;代理文字&#x203A;}</code> ：  代理
+文字表現。&#x2039;代理文字&#x203A; には SJIS 符号値表現における「SJIS符号値」を符号値
+とする JIS X 0208 の漢字を表す。
+</li>
+</ul>
+<p>以下で「たいと」を出力する例を示す。
+</p>
+<pre>
+\documentclass[a4paper]{jarticle}
+\usepackage{pxgtfont}
+\begin{document}
+\GT{57123}、\GT{GT2000-09 94C4}、\GT{GT2000-09 汎}。
+\end{document}
+</pre>
+<div class="bend">
+<span class="lbl">参考：</span>
+上の例で「汎」は JIS X 0208 のシフト JIS 符号値が 94C4 の文字である。
+この場合は、pTeX／upTeX の漢字コード設定に関わらず「汎」の文字
+を書くことになる。
+</div>
+
+</div><!--ssec-gtftex-->
+
+<div class="subsection" id="ssec-gtfonts">
+<h3>gtfonts パッケージ互換の命令</h3>
+
+<p>pxgtfont を <code>gtfonts</code> オプション付で読み込むと、
+<a href="http://auemath.aichi-edu.ac.jp/~khotta/ghost/gt/gtfonts2.lzh">gtfonts パッケージ</a>
+（<a href="http://auemath.aichi-edu.ac.jp/~khotta/ghost/package.html#5-5">配布元</a>；
+作者: Kohsaku HOTTA 氏）と
+互換の <code>\GT</code> 命令が使用可能である。
+（<code>gtfonts</code> 無指定の場合は、<code>\GT</code> は 
+<a href="#ssec-gtftex">gtftex パッケージ互換の動作</a>になる。）
+</p>
+<ul>
+<li><code>\GT{&#x2039;フォント番号&#x203A;}{&#x2039;SJIS符号値&#x203A;}</code> ： SJIS
+符号値表現
+</li>
+</ul>
+<p>以下で「たいと」を出力する例を示す。
+</p>
+<pre>
+\documentclass[a4paper]{jarticle}
+\usepackage[gtfonts]{pxgtfont}
+\begin{document}
+\GT{09}{94C4}。
+\end{document}
+</pre>
+
+</div><!--ssec-gtftex-->
+
+</div><!--sec-gtkanji-->
+
+<div class="section" id="sec-direct">
+<h2>普通の文字を GT フォントで出力する</h2>
+
+<p>ここでは、直接に文字として入力した和文文字を GT フォントで
+出力する方法を述べる。
+この用途のために 2 つの命令が用意されている。
+</p>
+<ul>
+<li><code>\gtmcfamily</code> : 使用フォント（ファミリ）を GT フォント
+に切り替える。
+</li>
+<li><code>\textgtmc{&#x2039;テキスト&#x203A;}</code> : 中のテキスト
+を GT フォントで出力する。
+</li>
+</ul>
+<p>それぞれ LaTeX 標準の <code>\sffamily</code> と <code>\textsf</code>
+の用法と同じである。
+</p>
+<pre>
+\documentclass[a4paper]{jarticle}
+\usepackage{pxgtfont}
+\begin{document}
+「\textgtmc{素}」や「\textgtmc{比}」の字形に注意。
+\begin{center}
+  % 既定の明朝体のフォントで出力
+\fbox{\LARGE 素人の作とは比較にならない。}\par
+  % GT フォントで出力
+\fbox{\gtmcfamily\LARGE 素人の作とは比較にならない。}\par
+\end{center}
+\end{document}
+</pre>
+<p>また、pxgtfont パッケージ読込時に <code>mainfont</code> オプションを
+指定すると、本文の既定の明朝体フォントが GT フォントになる。
+</p>
+<pre>
+\documentclass[a4paper]{jarticle}
+\usepackage[mainfont]{pxgtfont}
+\begin{document}
+「\GI{57123}」（たいと）は「\GI{57117}」（タイ）と
+「\GI{66699}」（ト）からなる合字で、
+苗字であるとされている。
+（ただしこの苗字の存在は確認されていない。）
+\end{document}
+</pre>
+
+</div><!--sec-irect-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXgtfont パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2009-12-10
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

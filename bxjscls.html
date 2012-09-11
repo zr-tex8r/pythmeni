@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>BXjscls パッケージ ～XeLaTeX でまともな日本語文書レイアウトを～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="XeLaTeX,XeTeX,LuaLaTeX,LuaTeX,jsクラス,jsarticle,jsclasses,新ドキュメントクラス,LaTeX,TeX">
+<meta name="description" content="奥村氏製作の「pLaTeX2e新ドキュメントクラス」をpLaTeX以外の「日本語が通るLaTeX」で使えるように改造したもの。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=bxjscls"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXjscls パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>BXjscls パッケージ<br>
+<span class="subtitle">～XeLaTeX でまともな日本語文書レイアウトを～</span></h1>
+
+<div class="abstract">
+奥村晴彦氏製作の「pLaTeX2e新ドキュメントクラス」を
+pLaTeX 以外の「日本語が通るLaTeX」―例えば XeLaTeX―で使えるように改造したもの。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2012/05/01： BXjscls 0.3a 版。
+</li>
+<li>2010/08/16： <a href="./xelatex.html">「XeLaTeX で日本語する件について」</a>の一部を分離してこのページを作成。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>横書き日本語用の文書クラスとして定評のある奥村晴彦氏の
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/jsclasses/">pLaTeX2e 新ドキュメントクラス</a>
+（以下これを js クラスと呼ぶ）
+を pLaTeX 以外の「日本語が処理できる」LaTeX で使えるようにすることを目標として
+日本語処理部分を取り除いたものである。
+すなわち、
+</p>
+<ol>
+<li>日本語が扱える LaTeX
+</li>
+<li>BXjscls の文書クラス
+</li>
+<li>1 と 2 を連携させるための TeX コード
+</li>
+</ol>
+<p>の 3 つで pLaTeX + js クラスと同じ役割を果たす。
+無論、3 を実装するのは開発者の仕事になる。
+XeLaTeX 上での日本語組版用パッケージとして私が開発している
+<a href="./xzjatype.html">zxjatype パッケージ</a>については
+既に 3 の作業が行われている。
+</p>
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<p>github のページから ZIP アーカイブがダウンロードできる。
+<ul>
+<li><a href="https://github.com/zr-tex8r/BXjscls">zr-tex8r/BXjscls</a>
+ページ左上にある「ZIP」のボタンを押す。
+</li>
+</ul>
+<p><a href="archive.html">「奥底の倉庫」</a>に旧版が置いてある。</p>
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+
+<ul>
+<li>TeX 処理系： <br>
+上述のとおり、LaTeX2e で UTF-8 で書かれた日本語が直接処理できるもの
+であれば、連携コードを開発することでこのパッケージ中の
+文書クラスを利用できる可能性がある。
+現状では、次の環境に対して連携コードが用意されていて、
+すぐに使用可能な状態になっている。
+<ul>
+<li>XeLaTeX 0.997 版以降 + zxjatype 0.3 版以降
+</li>
+<li>pLaTeX（ptexenc 拡張版）
+</li>
+<li>upLaTeX
+</li>
+</ul>
+</li>
+<li>前提パッケージ： geometry 4.2 版以降<br>
+※ BXjscls 0.2/0.3 版と geometry 4.2/5.2 版の組み合わせで動作確認した。
+</li>
+</ul>
+
+</div><!--ssec-environ-->
+
+</div><!--ssec-overview-->
+
+<div class="subsection" id="sec-basic">
+<h2>基本的な使用法</h2>
+
+<p>ここでは、
+文書作成者向けに BXjscls の文書クラス（以下 bxjs クラスと呼ぶ）の使用法を解説する。
+</p>
+
+<div class="subsection" id="ssec-preamble">
+<h3>プレアンブルの書き方</h3>
+
+<h4 id="sssec-xelatex">XeLaTeX + zxjatype と組み合わせる場合</h3>
+
+<p>bxjs クラスと <a href="zxjatype.html">zxjatype パッケージ</a>を
+組み合わせる場合、必要最低限のプレアンブルの記述は以下のようになる。
+</p>
+<pre>
+\documentclass[&lt;オプション,...&gt;]{bxjsarticle} % または bxjsreport
+\usepackage{zxjatype}
+\setjamainfont{&lt;ファミリ名&gt;}
+\setjasansfont{&lt;ファミリ名&gt;}
+\setjamonofont{&lt;ファミリ名&gt;}
+\usepackage{xltxtra}
+\begin{document}
+</pre>
+<p>さらに <a href="zxjafont.html">zxjafont パッケージ</a>を
+併用するとプレアンブルの記述を以下のようにできる。
+</p>
+<pre>
+\documentclass[&lt;オプション,...&gt;]{bxjsarticle} % または bxjsreport
+\usepackage{zxjatype}
+\usepackage{&lt;設定&gt;}{zxjafont} %「設定」は ipa, kozuka6, hiragino 等
+\usepackage{xltxtra}
+\begin{document}
+</pre>
+
+<h4 id="sssec-platex">pLaTeX または upLaTeX と組み合わせる場合</h3>
+
+<p>pLaTeX の場合はクラスオプションとして <code>platex</code> を指定する。
+フォント指定は js クラスの標準（<code>mingoth</code> 等が非指定）
+の場合と同じになる。
+</p>
+<pre>
+\documentclass[platex,&lt;オプション,...&gt;]{bxjsarticle} % または bxjsreport
+\begin{document}
+</pre>
+
+<p>upLaTeX の場合はクラスオプションとして <code>uplatex</code> を指定する。
+フォント指定は js クラスの <code>uplatex</code> 指定の場合と
+同じになる。
+</p>
+<pre>
+\documentclass[uplatex,&lt;オプション,...&gt;]{bxjsarticle} % または bxjsreport
+\begin{document}
+</pre>
+<p>もちろん、OTF パッケージ等の他のパッケージと組み合わせることも
+可能である。
+</p>
+
+<h4>クラスオプション</h4>
+
+<p>クラスオプション（<code>&lt;オプション,...&gt;</code> の部分に書くもの）
+は基本的に js クラスのものを踏襲しているが、
+中には追加・削除されたものもある。
+詳しくは<a href="#sec-guide">付録</a>を参照。
+特に基底フォントサイズの指定として、
+js クラスの <code>8pt</code>、<code>9pt</code>、<code>10pt</code>、
+……の代替として、<code>base=4mm</code> として任意の長さが
+指定できる。
+これの変種として、<code>jbase=10.5bp</code> は「和文の」
+<code>\normalsize</code> が 10.5bp になるようにする。
+</p>
+
+</div><!--ssec-preamble-->
+
+<div class="subsection" id="ssec-notice">
+<h3>補足事項</h3>
+<ul>
+<li>bxjs クラスでは内部で geometry パッケージを読み込んで
+その機能を利用してページレイアウトを設定している。
+geometry のパラメタ設定を利用してレイアウトを変更することも可能
+（<code>\setpagelayout</code> 命令；
+<a href="#sec-guide">付録</a>を参照）である。
+geometry を再度読み込むことはできないことに注意。
+</li>
+<li>pTeX の zw（現在の全角幅）に相当するものとして、
+<code>\jsZw</code> という長さ変数を用意している。
+例えば、全角 3 文字分の空白を空ける場合は <code>\hspace{3\jsZw}</code>
+とする。
+</li>
+</ul>
+
+</div><!--ssec-notice-->
+
+</div><!--sec-basic-->
+
+<div class="section" id="sec-guide">
+<h2>付録：bxjs クラスマニュアル</h2>
+
+<div class="subsection" id="ssec-g-option">
+<h3>クラスオプション</h3>
+
+<h4>bxjs クラスに特有のオプション</h4>
+
+<ul>
+<li><code>base=&lt;長さ&gt;</code>：
+基底フォントサイズ（<code>\normalsize</code> のフォントのサイズ）を指定する。
+js クラスの <code>10pt</code>、<code>11pt</code>、…等と同じ役割で、
+任意の値を指定できる。
+<div class="bend"><span class="lbl">参考：</span>
+<code>##pt</code> の形のオプションには名前と実際に設定される値が
+ずれているものが多く、例えば <code>11pt</code> は 10.95pt、<code>14pt</code>
+は 14.4pt が実際の設定値である（LaTeX の “magstep” の習慣による）。
+これに対して <code>base=14pt</code> は文字通り 14pt を設定する
+</div>
+</li>
+<li><code>jbase=&lt;長さ&gt;</code>：
+和文を基準にして基底フォントサイズを指定する。
+すなわち和文フォントの <code>\normalsize</code> のサイズ
+を指定の長さとする。
+</li>
+<li><code>scale=&lt;値&gt;</code>：
+和文フォントに対するスケール値。
+既定値は 0.924715 （= 13Q/10pt、js クラスの設定とほぼ同じ。）
+日本語処理の機構がこの値を適切に処理する必要がある。
+XeLaTeX + zxjatype の場合は、<code>\setjafontscale</code> の既定値をこの値に設定する。
+</li>
+<li><code>paper={&lt;幅&gt;}{&lt;高さ&gt;}</code>：
+用紙サイズを指定する。
+js クラスの <code>a4paper</code>、<code>b5paper</code>、…等と同じ役割で、
+任意の値を指定できる。
+</li>
+<li><code>mag=&lt;値&gt;</code>：
+<code>\mag</code> 値の直接指定。
+</li>
+</ul>
+
+<h4>js クラスのオプションで使用可能なもの</h4>
+<ul>
+<li>用紙サイズ指定：
+<code>a4paper</code>，
+<code>a3paper</code>，
+<code>a5paper</code>，
+<code>a6paper</code>，
+<code>b4paper</code>，
+<code>b5paper</code>，
+<code>b6paper</code>，
+<code>a4j</code>，
+<code>a5j</code>，
+<code>b4j</code>，
+<code>b5j</code>，
+<code>a4var</code>，
+<code>b5var</code>，
+<code>letterpaper</code>，
+<code>legalpaper</code>，
+<code>executivepaper</code>
+</li>
+<li>横置き：
+<code>landscape</code>
+</li>
+<li>基底フォントサイズ：
+<code>10pt</code>，
+<code>8pt</code>，
+<code>9pt</code>，
+<code>11pt</code>，
+<code>12pt</code>，
+<code>14pt</code>，
+<code>17pt</code>，
+<code>20pt</code>，
+<code>21pt</code>，
+<code>25pt</code>，
+<code>30pt</code>，
+<code>36pt</code>，
+<code>43pt</code>，
+<code>12Q</code>，
+<code>14Q</code>
+</li>
+<li>両面用レイアウト：
+<code>oneside</code>，
+<code>twoside</code>，
+<code>vartwoside</code>
+</li>
+<li>段組み：
+<code>onecolumn</code>，
+<code>twocolumn</code>
+</li>
+<li>表題ページ：
+<code>notitlepage</code>，
+<code>titlepage</code>
+</li>
+<li>起こし：
+<code>openright</code>，
+<code>openany</code>
+（まだ bxjsbook が未完成なので無意味）
+</li>
+<li>オーバーフル警告：
+<code>final</code>，
+<code>draft</code>
+</li>
+<li>英語化：
+<code>english</code>
+</li>
+</ul>
+
+<h4>js クラスのオプションで使用不可能なもの</h4>
+<ul>
+<li>クラス変種指定：
+<code>report</code>，
+<code>slide</code>
+―― report 相当は bxjsreport、slide 相当は bxjsslide（未完成）
+と別クラスになっている。
+</li>
+<li>トンボ出力：
+<code>tombow</code>，
+<code>tombo</code>，
+<code>mentuke</code>
+―― これは pLaTeX のカーネル命令を利用しているので
+とりあえず除外。
+</li>
+<li>和文フォントメトリック指定：
+<code>jis</code>，
+<code>winjis</code>，
+<code>mingoth</code>，
+<code>uplatex</code>
+―― 和文フォントの管理は文書クラスでは行わない。
+（<code>uplatex</code> は bxjs では別の意味になる。）
+</li>
+<li>和文数式フォントの登録の制御：
+<code>disablejfam</code>
+―― 同上。（なお、現在のところ数式中の和文使用は全く考慮していない。）
+</li>
+<li>papersize スペシャル：
+<code>papersize</code>
+―― これは geometry 側で設定する。
+XeLaTeX を使う場合は、既定で適切な処理がされて正しい用紙サイズの
+PDF が出力されるはずである。
+</li>
+</ul>
+
+</div><!--ssec-g-option-->
+
+<div class="subsection" id="ssec-g-layout">
+<h3>ページレイアウトの設定</h3>
+
+<p>bxjs クラスではページレイアウトの設定に geometry パッケージを
+用いて次の手順で行っている。
+</p>
+<ol type="1">
+<li>（基底フォントサイズにより決定された mag 値を実際に設定する。）
+</li>
+<li>geometry で次のパラメタを設定する。
+<ol type="a">
+<li>クラスオプションで指定された用紙サイズ、および <code>truedimen</code>。
+</li>
+<li>bxjsarticle／bxjsreport の場合、次の設定値。
+<pre>
+headheight=10pt, footskip=0.03367\paperheight,
+headsep=\footskip-\topskip, includeheadfoot,
+hscale=0.76, hmarginratio=1:1, vscale=0.83, vmarginratio=1:1
+</pre>
+</li>
+</ol>
+<li>後処理を行う。以下の処理が含まれる。
+<ul>
+<li><code>textwidth</code> を全角幅の整数倍に、
+<code>textheight</code> を整数行分の自然長になるように丸める。
+</li>
+<li>marginpar 関連の設定を行う。
+（将来はこれも geometry で設定するように変更する予定。）
+</li>
+</ul>
+</li>
+</ol>
+<p>ページレイアウトの再設定のために次の命令が用意されている。
+</p>
+<ul>
+<li><code>\setpagelayout{&lt;設定&gt;}</code>：
+    現在のページレイアウトの設定の一部を修正する。
+    <code>&lt;設定&gt;</code> は geometry のパラメタの記述であり、
+    現在の設定に追記して geometry が再設定を行った後、
+    再び 3 の後処理が行われる。
+</li>
+<li><code>\setpagelayout*{&lt;設定&gt;}</code>：
+用紙以外の設定をリセットして改めてページレイアウトの設定を行う。
+具体的には、2a と <code>&lt;設定&gt;</code> の内容を用いて
+geometry が再設定を行った後、再び 3 の後処理が行われる。
+</li>
+</ul>
+<p>なお、<code>\geometry</code> 命令を直接呼び出すことも可能である。
+当然この場合は 3 の後処理は行われない。
+</p>
+
+
+</div><!--ssec-g-option-->
+
+<div class="subsection" id="ssec-g-other">
+<h3>その他の機能</h3>
+
+<ul>
+<li><code>\jsZw</code> ［長さ変数］： 
+現在の全角幅。
+これは単純に現在のフォントサイズに <code>scale</code> クラスオプション
+で設定された値を乗じたものである。
+つまり、bxjs クラスでは「和文フォント」の「1em」が
+この長さに等しいことが要請されている。
+</li>
+</ul>
+
+
+</div><!--ssec-g-other-->
+
+</div><!--sec-guide-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXjscls パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-08-16
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

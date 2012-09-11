@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>dvipdfmx のフォント設定 [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=dvipdfmx"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">dvipdfmx のフォント設定</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>dvipdfmx のフォント設定</h1>
+
+<div class="abstract hdn">
+dvipdfmx のフォントマップの設定、すなわちマップファイルの書き方と
+その配置方法について概説する。
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-prelim">
+<h2>準備</h2>
+
+<p>フォントマップの設定の際に必要になる知識を
+必要最低限の範囲でまとめておく。
+</p>
+
+<div class="subsection" id="ssec-fonttype">
+<h3>フォントファイル形式</h3>
+<ul>
+<li>PK フォント（拡張子 <code>.###pk</code>／<code>.pk</code>；
+<code>###</code> は dpi 値）：TeX システムで広範的に用いられる
+ビットマップフォント形式。
+次のディレクトリに置く（または自動生成される）。<br>
+$TEXMF/fonts/pk/<u>&lt;MFモード名&gt;/&lt;製作者名&gt;/&lt;パッケージ名&gt;/</u>
+<div class="alert">
+<span class="lbl">注意：</span> PK フォントは通常 METAFONT ソースファイル
+（拡張子 <code>.mf</code>）からの変換で作られるが、TrueType や Type1 等の
+アウトラインフォント形式からの変換で作ることもできる。
+dvipdfmx は使用すべきフォントが見つけられない場合、mktexpk によって
+変換されたビットマップを使うが、この時にアウトラインフォントからの変換が
+用いられうることに注意すべきである。
+</div>
+</li>
+<li>Type1 フォント（拡張子 <code>.pfb</code>）：アウトラインフォント。
+次のディレクトリに置く。<br>
+$TEXMF/fonts/type1/<u>&lt;製作者名&gt;/&lt;パッケージ名&gt;/</u>
+<div class="alert">
+<span class="lbl">注意：</span> ここでいう Type1 形式は「バイナリ形式」
+といわれるもので、Type1 には他に、中が人間に可読なテキストで書かれた
+「アスキー形式」（拡張子 <code>.pfa</code>）も存在する。
+アスキー形式は dvipdfmx では使えないので、もしこの形式のフォントを
+使いたい場合には t1binary 等のツールで変換する必要がある。
+（W32TeX では t1binary は t1utils-w32 アーカイブに含まれる。）
+</div>
+</li>
+<li>TrueType フォント（拡張子 <code>.ttf</code>／<code>.otf</code>）：
+Windows で一般的に用いられるアウトラインフォント形式。
+次のディレクトリに置く。<br>
+$TEXMF/fonts/truetype/<u>&lt;製作者名&gt;/&lt;パッケージ名&gt;/</u><br>
+あるいは、W32TeX の既定の設定だと、Windows にインストールしたフォントも
+TeX システムで使用可能である。
+</li>
+<li>OpenType フォント（拡張子 <code>.ttf</code>／<code>.otf</code>）：
+最近の OS で用いられるアウトラインフォント形式。
+次のディレクトリに置く。<br>
+$TEXMF/fonts/opentype/<u>&lt;製作者名&gt;/&lt;パッケージ名&gt;/</u>
+<div class="alert">
+<span class="lbl">注意：</span> OpenType 規格は元々 TrueType 規格の
+拡張として作られたものである。
+従って、OpenType と TrueType の区別は曖昧で、極端な話として
+「TrueType フォントは全部 OpenType フォントである」といっても間違いでは
+ない（はずである）。
+dvipdfmx では「TrueType グリフ表現をもつ」ものを「TrueType フォント」、
+「CFF グリフ表現をもつ」ものを「OpenType フォント」とみなしている
+ようである。
+この解釈の下では、どちらの形式のフォントも <code>.ttf</code> と <code>.otf</code>
+のどちらの拡張子も持ちうる。
+ひょっとしたら、他の DVI ドライバは扱いが異なるかも知れない。
+</div>
+</li>
+<li>TrueType コレクション形式（拡張子 <code>.ttc</code>）：
+複数の TrueType 形式のフォントを 1 つのファイルにまとめたもの。
+従って、使用する時には、ファイルの中のどのフォントを使うかを
+通常番号で指定することになる。
+配置するディレクトリは TrueType 形式と同じ。
+</li>
+</ul>
+</div><!--ssec-fonttype-->
+
+<div class="subsection" id="ssec-fontmetric">
+<h3>フォントファイル形式</h3>
+<ul>
+<li>TFM 形式（欧文 TFM 形式；拡張子 <code>.tfm</code>）：
+8 ビット（0～255）の符号値を扱える。
+全ての TeX の変種でサポートされていて、
+また、Unicode 対応以前の欧文 TeX、つまり TeX／e-TeX／pdfTeX は
+この形式のメトリックのみをサポートする。
+</li>
+<li>ΩFM 形式（OFM 形式；拡張子 <code>.ofm</code>）：
+16 ビット（0～65535）の符号値を扱えるように拡張された
+メトリック形式。
+Ω（Omega；最初の Unicode 対応の TeX）およびその後継のエンジン
+（Aleph、LuaTeX）でサポートされている。
+<div class="bend">
+<span class="lbl">参考：</span> 16 ビットでは Unicode は BMP しか
+扱えない。
+Omega 開発当時は Unicode は 16 ビットの符号系として設計されていた。
+</div>
+</li> 
+<li>JFM 形式（和文 TFM 形式；拡張子<code>.tfm</code>）：
+和文文字を扱うためのメトリック形式で、欧文用とは持っている情報の
+種類が少し異なる。
+JFM は他の形式と異なり、それ自身は符号空間を規定しない
+（つまり任意の符号値を扱えると思ってもよい）。
+実際には、DVI ウェア側で扱える符号値が限られる。
+dvipdfmx は 16 ビットの符号値しか扱えないが、
+upTeX 版の dvipdfmx（W32TeX では updvipdfmx の名称）は 24 ビット
+の符号値を扱える。
+<div class="bend">
+<span class="lbl">参考：</span> 欧文 TFM は 1 文字毎にその
+メトリック情報を記録しているが、JFM では、文字を複数のクラスに
+分類して、クラス毎にメトリック情報を記録する方式をとっている。
+すなわち各クラス毎に「そのクラスの文字のリスト」と
+「クラスのメトリック」を記述する。
+この時に、「どのクラスにも登録しなかった文字」が自動的に
+クラスとして扱われる。
+文字リストで指定できる文字は 16 ビットに限られるのだが、
+16 ビット超の符号値の文字が全部
+「その他大勢クラス」に属する時に限り、
+16 ビット超の符号化文字集合が JFM で表現可能ということになる。
+</div>
+</li>
+</ul>
+</div><!--ssec-fontmetric-->
+
+
+
+</div><!--sec-prelim-->
+
+
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">dvipdfmx のフォント設定</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2008-06-25
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

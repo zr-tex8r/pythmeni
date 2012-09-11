@@ -1,0 +1,853 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>Unicode による文字の入力 [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=unichar"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">Unicode による文字の入力</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/unichar.html">http://zrbabbler.sp.land.to/unichar.html</a>
+</div>
+<div id="maintext">
+<h1>Unicode による文字の入力</h1>
+
+<div class="abstract hdn">
+(stub)
+</div>
+<div class="important">
+<span class="lbl">重要：</span>
+このページで配布している一部の zip ファイルについて、
+サブディレクトリにあるべきファイルが欠落しているという
+誤りがあったので、正しいものに置き換えました。
+<span class="cdate">[2008/06/25]</span>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>この文書で扱う事項は、
+</p>
+<ul>
+<li>欧文 LaTeX2e / pLaTeX2e / upLaTeX2e、すなわち
+「欧文の Unicode 処理をもたない TeX 処理系」の上での LaTeX
+において
+（つまり元から全てを Unicode で扱う Omega、LuaTeX、XeTeX
+ではない）
+</li>
+<li>「コード値による入力」および「UTF-8 による直接入力」
+によって
+</li>
+<li>「欧文」および「和文」の Unicode 文字を出力する
+（もちろん欧文 LaTeX は欧文のみ）
+</li>
+</ul>
+<p>統一したインタフェースの解説である。
+</p>
+<p>ここでは、場合に応じて、
+次のようなパッケージ・拡張機能を利用する。
+</p>
+<ul>
+<li>bxbase パッケージ
+（<a href="bxbase.html">BXbase バンドル</a>内）
+または pxbase パッケージ
+（<a href="pxbase.html">PXbase バンドル</a>内）
+</li>
+<li>bxutf8 入力エンコーディング
+（<a href="bxbase.html">BXbase バンドル</a>内）
+</li>
+<li>bxucs パッケージ
+（<a href="bxbase.html">BXbase バンドル</a>内）
+</li>
+<li><a href="http://psitau.at.infoseek.co.jp/otf.html">
+OTF パッケージ</a> （齋藤修三郎氏製作）
+</li>
+<li><a href="http://homepage3.nifty.com/ttk/comp/tex/uptex.html">
+upTeX</a> （ttk 氏による拡張）の和文 Unicode 処理能力
+</li>
+</ul>
+
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-gadget">
+<h2>使用する「部品」</h2>
+
+<div class="subsection" id="ssec-bxutf8">
+<h3>bxutf8 入力エンコーディング : UTF-8 入力</h3>
+
+<p>UTF-8 入力の為の LaTeX 標準の入力エンコーディングオプション
+utf8 を拡張したもので、utf8 自身がその文字を扱えない場合に、
+ある内部形式に変換してそれを他のパッケージ
+（bxbase 等）が処理できるようにする。
+</p>
+
+
+</div><!--ssec-bxutf8-->
+
+<div class="subsection" id="ssec-bxbase">
+<h3>bxbase パッケージ : Unicode コード値による入力</h3>
+
+<p>bxbase パッケージを読み込むと、
+次に挙げる Unicode のコード値による入力命令が
+使えるようになる。
+</p>
+<ul>
+<li><code>\Ux{&#x2039;コード値16進&#x203A;,...}</code>：欧文用
+</li>
+<li><code>\UI{&#x2039;コード値16進&#x203A;,...}</code>：和文用
+</li>
+</ul>
+<p>どちらも、入力する文字のコード値を 16 進で書き、
+コンマで区切ることで複数文字の入力が可能である。
+文字の出力には、次の順で最初に利用可能な機能を利用する。
+</p>
+<ol>
+<li>bxucs パッケージによる欧文 Unicode 文字出力機能。
+（<code>\Ux</code> のみ）
+</li>
+<li>upTeX のネイティブな和文 Unicode 文字出力機能。
+</li>
+<li>OTF パッケージ（または UTF パッケージ）
+の和文 Unicode 文字出力機能。
+</li>
+</ol>
+<p>同時に、このパッケージでは、bxutf8 から渡された内部表現を
+<code>\Ux</code> と同様に処理する。
+</p>
+<div class="bend">
+<p><span class="lbl">参考：</span> PXbase バンドルの pxbase
+パッケージも同じ機能を提供するので bxbase の代わりに使える。
+ここでは BXbase バンドルを必要とすることが多いので bxbase
+を使って解説する。
+</p>
+</div>
+
+</div><!--ssec-bxbase-->
+
+<div class="subsection" id="ssec-bxucs">
+<h3>bxucs パッケージ : 欧文 Unicode 文字出力</h3>
+
+<p>Unicode subfont を用いて、
+欧文 Unicode 文字を出力する機能を提供する。
+このパッケージ自体はユーザ命令を持たず、
+bxbase パッケージの <code>\Ux</code> 命令が
+本パッケージの機能を利用する。
+</p>
+
+</div><!--ssec-bxucs-->
+
+<div class="subsection" id="ssec-inshort">
+<h3>要するに</h3>
+
+<p>まとめると次のようになる。
+</p>
+<ul>
+<li>bxbase(pxbase) + bxucs : 
+  <code>\Ux</code> のコード値入力で欧文 Unicode 文字出力が可能。
+</li>
+<li>bxbase(pxbase) + OTF(UTF) : 
+  <code>\UI</code> のコード値入力で和文 Unicode 文字出力が可能。
+</li>
+<li>上の各々について bxutf8 を併用 :
+  UTF-8 での直接の文字入力が可能。
+</li>
+<li>bxbase(pxbase) + upLaTeX : 
+  <code>\UI</code> のコード値入力で和文 Unicode 文字出力が可能。<br>
+（upLaTeX なので和文の直接入力は元々可能である。）
+</li>
+<li>もちろん全部併用することも可能。
+併用時の注意については<a href="#ssec-combined">後の節</a>を参照。
+</li>
+</ul>
+<p>なお、「utf8x 入力エンコーディング（unicode パッケージ）
+の機能と併用したい」という場合は、
+bxutf8 の代わりに bxutf8x
+（同じく BXbase バンドルに含まれる）を使うことが考えられる
+（ただしこちらは制限が多い）。
+後の <a href="#sec-bxutf8x">bxutf8x に関する解説</a>を参照されたい。
+</p>
+
+</div><!--ssec-inshort-->
+
+</div><!--sec-gadget-->
+
+<div class="section" id="sec-sample">
+<h2>サンプル</h2>
+
+<div class="subsection" id="ssec-alpha">
+<h3>欧文の場合</h3>
+
+<p>はっきりいって bxucs を使えるようにする為の設定
+（パッケージ内の説明書に述べている）は、
+LaTeX2e の NFSS や TeX システムでのフォントの扱いに関する知識が
+必要でかなり難しい。
+後で、「TrueType / OpenType フォントを dvipdfmx で使う」
+ことに限定した解説をする（予定である）が、
+それでも難しい。
+そこで、ここではサンプルを試す目的で、
+<a href="http://www.sil.org/">SIL International</a>
+が提供するフリー（OFL ライセンス）の Unicode フォントを
+bxucs で使う為のデータをまとめて置いておくことにする。
+</p>
+<ul>
+<li><a href="data/silfonts.zip">silfonts.zip</a>
+  <span class="mdate">[2008/06/25]</span><br>
+Charis SIL, Doulos SIL, Gentium の為のデータ。
+texmf の中身を TEXMF ツリーのいずれかにコピーする。
+その後、dvipdfmx の設定ファイル
+（$TEXMF/dvipdfm/config/dvipdfmx.cfg）に
+「<code>f SILfonts.map</code>」を追記する。
+（SILfonts.map は dvipdfmx 用の設定ファイルなので
+updmap は使えない。）
+</li>
+<li><a href="data/abyssinica.zip">abyssinica.zip</a>
+  <span class="mdate">[2008/06/25]</span><br>
+Abyssinica SIL（エチオピア文字のフォント）の為のデータ。
+アムハラ語の例を試してみたい人は必要。
+導入方法は上と同じ。設定ファイルは abyssinica.map。
+</li>
+<li><a href="data/funinst-sfd.zip">funinst-sfd.zip</a>
+  <span class="mdate">[2008/06/25]</span><br>
+  上の 2 つを使う時に、併せて導入する必要がある。
+  texmf の中身を TEXMF ツリーのいずれかにコピーする。
+</li>
+<li><a href="http://www.sil.org/computing/catalog/show_software_catalog.asp?by=cat&name=Font">
+  SIL のフォントのダウンロード</a><br>
+  W32TeX でフォントを使えるようにする手っ取り早い方法は、
+  そのフォントを Windows のシステムにインストールすることである。
+</li>
+</ul>
+<p>このデータの中に「USF」というフォントエンコーディングの為の
+フォント定義ファイル（usfcharis.fd 等）がある。
+USF エンコーディングが設定されているフォントファミリに対して
+bxucs の機能が有効となり、<code>\Ux</code>
+によるコード値入力でそのフォントにある文字が利用できる。
+さらに bxutf8 を併用すると UTF-8 での直接入力ができる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8 (BOM なし)
+\documentclass[a4paper]{article}
+\usepackage[bxutf8]{inputenc}  % bxutf8 と
+\usepackage{bxucs}             %   bxucs を読み込む
+\usepackage[T1]{fontenc}
+\renewcommand{\rmdefault}{charis} % 既定のファミリを charis に
+\begin{document}
+This document contains:
+\begin{itemize}
+\item English
+\item \textit{Fran&#xE7;ais}     % これは T1 で出力のはず 
+\item Русский язык
+\item \textit{&#x49A;аза&#x49B;ша}      % イタリックにしてみる
+      % ギリシャ文字は gentium で
+\item {\fontfamily{gentium}\selectfont Ελληνικ&#x3AC;}
+\item \textbf{Ti&#x1EBF;ng Vi&#x1EC7;t}   % ボールドに
+\item Az\Ux{259}rbaycanca   % \Ux の使用例。U+0259 は '&#x259;'
+\end{itemize}
+\end{document}
+</pre>
+<p>ラテン・キリル・ギリシャ文字以外の用字系を扱う例として、
+エチオピア文字（ゲーズ文字）フォント Abyssinica SIL
+によるアムハラ語の文章の組版を示す。
+</p>
+<pre>
+% This file is encoded in UTF-8 without BOM.
+\documentclass[a4paper]{article}
+\usepackage[bxutf8]{inputenc}
+\usepackage{bxucs}
+\begin{document}
+\section*{``The Tower of Babel'' in Amharic}
+\begin{flushright}
+From \textit{Omniglot}
+(http://www.omniglot.com/babel/amharic.htm)
+\end{flushright}
+  % Select family 'abyss' locally for which USF is available.
+\begin{sloppypar}\large\fontfamily{abyss}\selectfont
+\begin{itemize}
+\item[&#x1369;&#x1364;] &#x121D;&#x12F5;&#x122D;&#x121D; &#x1201;&#x1209; &#x1260;&#x12A0;&#x1295;&#x12F5; &#x124B;&#x1295;&#x124B;&#x1293; &#x1260;&#x12A0;&#x1295;&#x12F5; &#x1295;&#x130D;&#x130D;&#x122D; &#x1290;&#x1260;&#x1228;&#x127D;&#x1362;
+\item[&#x136A;&#x1364;] &#x12A8;&#x121D;&#x1225;&#x122B;&#x1245;&#x121D; &#x1270;&#x1290;&#x1225;&#x1270;&#x12CD; &#x1260;&#x1204;&#x12F1; &#x130A;&#x12DC; &#x1260;&#x1230;&#x1293;&#x12D6;&#x122D; &#x121D;&#x12F5;&#x122D; &#x12A0;&#x1295;&#x12F5; &#x121C;&#x12F3; &#x12A0;&#x1308;&#x1299;&#x1364;
+&#x1260;&#x12DA;&#x12EB;&#x121D; &#x1270;&#x1240;&#x1218;&#x1321;&#x1362;
+\item[&#x136B;&#x1364;] &#x12A5;&#x122D;&#x1235; &#x1260;&#x122D;&#x1233;&#x1278;&#x12CD;&#x121D;&#x1362; &#x1291;&#x1365; &#x1321;&#x1265; &#x12A5;&#x1295;&#x1225;&#x122B;&#x1365; &#x1260;&#x12A5;&#x1233;&#x1275;&#x121D; &#x12A5;&#x1295;&#x1270;&#x12B5;&#x1230;&#x12CD; &#x1270;&#x1263;&#x1263;&#x1209;&#x1362;
+&#x1321;&#x1261;&#x121D; &#x12A5;&#x1295;&#x12F0; &#x12F5;&#x1295;&#x130B;&#x12ED; &#x1206;&#x1290;&#x120B;&#x1278;&#x12CD;&#x1364; &#x12E8;&#x121D;&#x12F5;&#x122D;&#x121D; &#x12DD;&#x134B;&#x1275; &#x12A5;&#x1295;&#x12F0; &#x132D;&#x1243; &#x1206;&#x1290;&#x127D;&#x120B;&#x1278;&#x12CD;&#x1362;
+\item[&#x136C;&#x1364;] &#x12A5;&#x1295;&#x12F2;&#x1205;&#x121D;&#x1362; &#x1291; &#x1208;&#x12A5;&#x129B; &#x12A8;&#x1270;&#x121B;&#x1293; &#x122B;&#x1231; &#x12C8;&#x12F0; &#x1230;&#x121B;&#x12ED; &#x12E8;&#x121A;&#x12F0;&#x122D;&#x1235; &#x130D;&#x1295;&#x1265; &#x12A5;&#x1295;&#x1225;&#x122B;&#x1364;
+&#x1260;&#x121D;&#x12F5;&#x122D; &#x120B;&#x12ED; &#x1233;&#x1295;&#x1260;&#x1270;&#x1295;&#x121D; &#x1235;&#x121B;&#x127D;&#x1295;&#x1295; &#x12A5;&#x1293;&#x1235;&#x1320;&#x122B;&#x12CD; &#x12A0;&#x1209;&#x1362;
+\item[&#x136D;&#x1364;] &#x12A5;&#x130D;&#x12DA;&#x12A0;&#x1265;&#x1214;&#x122D;&#x121D; &#x12E8;&#x12A0;&#x12F3;&#x121D; &#x120D;&#x1306;&#x127D; &#x12E8;&#x1220;&#x1229;&#x1275;&#x1295; &#x12A8;&#x1270;&#x121B;&#x1293; &#x130D;&#x1295;&#x1265; &#x1208;&#x121B;&#x12E8;&#x1275; &#x12C8;&#x1228;&#x12F0;&#x1362;
+\item[&#x136E;&#x1364;] &#x12A5;&#x130D;&#x12DA;&#x12A0;&#x1265;&#x1214;&#x122D;&#x121D; &#x12A0;&#x1208;&#x1362; &#x12A5;&#x1290;&#x1206;&#x1365; &#x12A5;&#x1290;&#x122D;&#x1231; &#x12A0;&#x1295;&#x12F5; &#x12C8;&#x1308;&#x1295; &#x1293;&#x1278;&#x12CD;&#x1365; &#x1208;&#x1201;&#x1209;&#x121D;
+&#x12A0;&#x1295;&#x12F5; &#x124B;&#x1295;&#x124B; &#x12A0;&#x120B;&#x1278;&#x12CD;&#x1364; &#x12ED;&#x1205;&#x1295;&#x121D; &#x1208;&#x121B;&#x12F5;&#x1228;&#x130D; &#x1300;&#x1218;&#x1229;&#x1364; &#x12A0;&#x1201;&#x1295;&#x121D; &#x12EB;&#x1230;&#x1261;&#x1275;&#x1295; &#x1201;&#x1209; &#x1208;&#x1218;&#x1225;&#x122B;&#x1275;
+&#x12A0;&#x12ED;&#x12A8;&#x1208;&#x12A8;&#x1209;&#x121D;&#x1362;
+\item[&#x136F;&#x1364;] &#x1291;&#x1365; &#x12A5;&#x1295;&#x12CD;&#x1228;&#x12F5;&#x1364; &#x12A0;&#x1295;&#x12F1; &#x12E8;&#x12A0;&#x1295;&#x12F1;&#x1295; &#x1290;&#x1308;&#x122D; &#x12A5;&#x1295;&#x12F3;&#x12ED;&#x1230;&#x121B;&#x12CD; &#x124B;&#x1295;&#x124B;&#x1278;&#x12CD;&#x1295; &#x1260;&#x12DA;&#x12EB;
+&#x12A5;&#x1295;&#x12F0;&#x1263;&#x120D;&#x1240;&#x12CD;&#x1362;
+\item[&#x1370;&#x1364;] &#x12A5;&#x130D;&#x12DA;&#x12A0;&#x1265;&#x1214;&#x122D;&#x121D; &#x12A8;&#x12DA;&#x12EB; &#x1260;&#x121D;&#x12F5;&#x122D; &#x1201;&#x1209; &#x120B;&#x12ED; &#x1260;&#x1270;&#x1293;&#x1278;&#x12CD;&#x1364; &#x12A8;&#x1270;&#x121B;&#x12ED;&#x1271;&#x1295;&#x121D;
+&#x1218;&#x1225;&#x122B;&#x1275; &#x1270;&#x12C9;&#x1362;
+\item[&#x1371;&#x1364;] &#x1235;&#x1208;&#x12DA;&#x1205;&#x121D; &#x1235;&#x121D;&#x12CB; &#x1263;&#x1262;&#x120E;&#x1295; &#x1270;&#x1263;&#x1208;&#x1365; &#x12A5;&#x130D;&#x12DA;&#x12A0;&#x1265;&#x1214;&#x122D; &#x1260;&#x12DA;&#x12EB; &#x12E8;&#x121D;&#x12F5;&#x122D;&#x1295; &#x124B;&#x1295;&#x124B;
+&#x1201;&#x1209; &#x12F0;&#x1263;&#x120D;&#x124B;&#x120D;&#x1293;&#x1364; &#x12A8;&#x12DA;&#x12EB;&#x121D; &#x12A5;&#x130D;&#x12DA;&#x12A0;&#x1265;&#x1214;&#x122D; &#x1260;&#x121D;&#x12F5;&#x122D; &#x1201;&#x1209; &#x120B;&#x12ED; &#x12A5;&#x1290;&#x122D;&#x1231;&#x1295; &#x1260;&#x1275;&#x1296;&#x12A0;&#x1278;&#x12CB;&#x120D;&#x1362;
+\end{itemize}
+\end{sloppypar}
+\end{document}
+</pre>
+<div class="bend">
+<p><span class="lbl">参考：</span> 後述の通り、
+アムハラ語の部分は分綴ができないので、overfull を防ぐために
+<code>sloppypar</code> 環境に入れている。
+</p>
+</div>
+<p>言語や用字系ごとの設定が不要で、便利なように見えるが、
+以下のように制限が多く、使用範囲が限られていることにも注意されたい。
+一般に、LaTeX の提供する他の方法では扱えない
+（あるいは何らかの理由で他の方法を採らない）文字について、
+「何とかして文字の出力だけでもしたい」（言語的処理は度外視）
+という場合の方法だと考えるべきである。
+</p>
+<ul>
+<li>BMP 内の文字（コード値 U+10000 未満）しか扱えない。
+</li>
+<li>文字合成（アクセントを付ける等）ができない。
+LaTeX のアクセント命令を用いても、Unicode の結合文字を用いても
+正しい表示にならない。
+</li>
+<li>リガチャや他のグリフ置換についてフォントが持つデータを使用しない。
+カーニングも無効である。
+</li>
+<li>utf8x 入力エンコーディングと併用できない。
+（これについては、後の
+<a href="#sec-bxutf8x">bxutf8x に関する解説</a>も参照。）
+</li>
+</ul>
+<p>なお、bxucs を pLaTeX / upLaTeX で使用する場合は、
+<a href="#ssec-combined">和文 Unicode と併用する場合</a>と同じ注意が
+必要となるので、そちらの説明も参照されたい。
+</p>
+<div class="bend">
+<p><span class="lbl">参考：</span> 
+現在有効なフォントエンコーディングのいずれかに含まれる文字については、
+utf8 入力エンコーディングと全く同じ処理になるということにも
+注意する必要がある。
+例えば、この小節の最初の例で、fontenc の読込が
+</p>
+<pre>
+\usepackage[T2A,T1]{fontenc}
+</pre>
+<p>だとすると、T2A にあるキリル文字の Р は <code>\CYRR</code>
+に置き換えられる。
+これは現在のフォントエンコーディングが T1 である時はエラーになる。
+</p>
+</div>
+
+</div><!--ssec-alpha-->
+
+<div class="subsection" id="ssec-cjk">
+<h3>和文の場合</h3>
+
+<h4>pLaTeX の場合</h4>
+
+<p>bxutf8 + bxbase + OTF の組み合わせで、UTF-8 で入力した
+JIS X 0208 外の和文文字を出力できる。
+（内部で <code>\UTF</code> 命令に置き換えている。）
+<code>\UI</code> によるコード値入力も可能である
+（<code>\UTF</code> を直接使うのと大差ないが）。
+ここでも、OTF パッケージが BMP にしか対応していない為、
+使える文字は BMP に限られる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass{jarticle}
+\usepackage[bxutf8]{inputenc}
+\usepackage{bxbase}
+\usepackage{otf}
+\begin{document}
+世界最大のソフトウェア企業であるマイクロソフトの創業者の一人で
+現在会長職を務めている人は誰か。
+\begin{itemize}
+\item[&#x32d0;] 森&#x9dd7;外
+\item[&#x32d1;] 内田百閒
+\item[&#x32d2;] 鄧小平
+\item[&#x32d3;] 李承燁
+\item[&#x32d4;] ウィリアム・ヘンリー・ゲイツⅢ世
+\item[&#x32d5;] \UI{5721}屋さん
+\end{itemize}
+\end{document}
+</pre>
+<p id="elt-pxbabel">韓国語・中国語が混在する場合は、OTF パッケージに
+<code>multi</code> を指定した上で、 Babel と
+<a href="./pxbase.html">pxbabel パッケージ（PXbase バンドル）</a>
+（v0.2b 以降）を追加する。
+pxbabel の使用法については、
+<a href="./pxbase.html#sec-pxbabel">PXbase バンドルのページの解説</a>
+を参照されたい。
+pxbabel は OTF が <code>multi</code> 付きで読み込まれている場合は、
+CJK 言語が有効な時に <code>\UTF</code> を <code>\UTFK</code>
+等に置き換える。
+bxbase は <code>\UTF</code> を呼び出すので、
+結果的に適切なフォントが呼び出されるという仕組みである。
+ただし、JIS X 0208 の文字については、そもそも bxutf8
+の方に処理が回らず pTeX 自身が処理するので、
+必ず日本語のフォントになってしまうという制限がある
+（<code>\UI</code> によるコード値入力ならば大丈夫である）。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass{jarticle}
+\usepackage[bxutf8]{inputenc}
+\usepackage{bxbase}
+\usepackage[multi]{otf}
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+\begin{document}
+世界最大のソフトウェア企業であるマイクロソフトの創業者の一人で
+現在会長職を務めている人は誰か。
+\begin{itemize}
+\item[&#x32d0;] 森&#x9dd7;外
+\item[&#x32d1;] \foreignlanguage{schinese}{&#x9093;小平} %「小平」は日本語フォント
+\item[&#x32d2;] \foreignlanguage{korean}{&#xc774;&#xc2b9;&#xc5fd;}   %      になる
+\item[&#x32d3;] William Henry Gates III
+\item[&#x32d4;] ところで&#x32d3;の人は誰?
+\end{itemize}
+\end{document}
+</pre>
+<div class="bend">
+<span class="lbl">参考：</span> 中国語のフォント（字体）に
+関する問題を解消する方法として
+<a href="pxfltsrc.html#bend-ukanji">PXfltsrc パッケージ</a>を
+使うものがある。
+</div>
+
+<h4>upLaTeX の場合</h4>
+
+<p>upLaTeX はそもそも和文を Unicode で直接扱えるようにしたものなので、
+和文だけならば bxutf8 は不要である。
+bxbase の提供する <code>\UI</code> 命令は upLaTeX でも使える。
+upTeX は BMP 外の文字も扱えるので、<code>\UI</code> で 10000（16進）
+以上の値の指定も可能である。
+詳しくは<a href="uplatex.html">「upLaTeX を使おう」</a>を参照。
+</p>
+
+<div class="bend">
+<p><span class="lbl">参考：</span> 本当は和文扱いしたい文字を
+pxcjkcat で故意に「欧文扱い」にして bxutf8 で拾わせて、
+それを <code>\UI</code> の扱いで結局和文として出力するということは
+一応可能である。
+そうする必要はほとんどないと思われるが、
+例えば次のような使い方ができる。
+</p>
+<pre>
+% uplatex を使用する
+\documentclass[a4paper]{ujarticle}
+%% 全角空白を書くと酷い目にあう設定 ;-)
+\usepackage[bxutf8]{inputenc}
+\usepackage{bxbase}
+\usepackage{pxcjkcat}
+\newcommand*{\unbelError}{\GenericError{}%
+  {! ! ! ! ! SOME UNBELIEVABLE THINGS HAPPENED ! ! ! ! ! !}%
+  {I'd rather like to ask severely for hours why you wrote it.}%
+  {No idea how come this happened at all! Don't ask me!}}
+\DeclareUnicodeCharacter{3000}{\unbelError  % U+3000 = 全角空白
+  \makebox[1zw]{\Huge\raisebox{-.3zw}{■}}}
+\cjkcategory{cjk04}{noncjk} % U+3000 を含むブロックを欧文扱い
+\begin{document}
+　これはテフのテストです。合ってるかな？
+\end{document}
+</pre>
+</div>
+
+</div><!--ssec-cjk-->
+
+<div class="subsection" id="ssec-combined">
+<h3>併用する場合</h3>
+
+<p>欧文と和文の Unicode 処理は併用できる。
+つまり bxutf8 + bxucs + OTF（upLaTeX の場合は OTF は不要）
+という組み合わせになる（bxucs は bxbase を自動で読み込む）。
+この場合、ある文字について欧文と和文のどちらが使われるかは、
+次の規則による。
+</p>
+<ul>
+<li><code>\UI</code> による入力は和文のみが使われ、
+欧文は使われない。
+</li>
+<li><code>\Ux</code> による入力は欧文が優先され、
+現在の USF フォントがその文字を持たない場合は和文が使われる。
+</li>
+<li>UTF-8 による直接入力では、まず和文 TeX がネイティブに
+和文文字として取り扱う文字― pLaTeX
+では JIS X 0208 の文字、upLaTeX では
+<a href="uplatex.html#ssec-char-cjk">pxcjkcat で制御可能</a>―は
+当然和文文字になる。
+その他については <code>\Ux</code> と同じ。
+</li>
+</ul>
+
+<div class="bend">
+<p><span class="lbl">参考：</span>「フォントに文字があるか」
+の判断は、実際には USF フォントの設定により決まる。
+例えば、charis の設定（usfcharis.fd）は次のようになっている。
+</p>
+<pre>
+\USFDeclareFontShape{charis}{00-05,1D-1E,20-25,27,2C,A7,F1-F3,F6,FB,FE-FF}{
+  \USFShape{m}{n}{&lt;-&gt;charis-r-u#1}{}
+  \USFShape{m}{it}{&lt;-&gt;charis-ri-u#1}{}
+  \USFShape{bx}{n}{&lt;-&gt;charis-b-u#1}{}
+  \USFShape{bx}{it}{&lt;-&gt;charis-bi-u#1}{}
+}
+</pre>
+<p><code>\USFDeclareFontShape</code> の第 2 引数には、
+subfont の TFM が存在する Unicode の行（UCS2 の上位バイト）
+の番号を列挙する。
+その上で、コード値 U+XXYY の文字
+（XX 番の subfont の位置 YY にある）
+の有無は次のように判断される。
+</p>
+<ul>
+<li>TeX 処理系が e-TeX 拡張をもつ場合：
+subfont XX 番が有効（列挙された中にある）であり、
+かつ XX 番の位置 YY に文字（これは U+XXYY のはず）が存在する。
+（e-TeX 拡張プリミティブ <code>\iffontchar</code> を用いている。）
+</li>
+<li>TeX 処理系が e-TeX 拡張をもたない場合：
+subfont XX 番が有効であれば存在すると判断する。
+もし XX 番の位置 YY の文字が実際には無かった場合、
+警告が出て文字が欠けてしまう（和文の処理に回らない）。
+</li>
+</ul>
+</div>
+
+<p>次の例を用いて、欧文と和文の Unicode
+処理を併用した場合に期待通りの出力を得る為の注意点を説明する。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+
+% platex -kanji=utf8 の場合 (BOM なしにする必要あり)
+\documentclass[a4paper]{jarticle}
+\usepackage{otf}
+
+% uplatex の場合
+%\documentclass[a4paper]{ujarticle}
+%\usepackage[prefernoncjk]{pxcjkcat} % キリル文字を欧文扱いにする 
+
+\usepackage[bxutf8]{inputenc}
+\usepackage{bxucs}
+\renewcommand{\rmdefault}{charis}\normalfont
+
+\begin{document}
+\begin{itemize}
+\item A, B, C, D, E
+\item А, Б, В, Г, Д   % キリル文字(U+04xx)
+\item Ⅰ, Ⅱ, Ⅲ, Ⅳ, Ⅴ   % ローマ数字(U+21xx)
+\item ①, ②, ③, ④, ⑤   % 丸囲み数字(U+24xx)
+\item &#x32D0;, &#x32D1;, &#x32D2;, &#x32D3;, &#x32D4;   % 丸囲みカタカナ(U+32xx)
+\end{itemize}
+\end{document}
+</pre>
+<p>これを pLaTeX で組版すると、以下のような問題点が見つかる。
+</p>
+<ol>
+<li>キリル文字が和文（全角文字）として出力される。
+</li>
+<li>丸囲み数字が出力されない。
+</li>
+</ol>
+<p>1 の原因は、キリル文字が JIS X 0208 にある文字なので、
+pTeX がこれを先に和文文字として取り扱うからである。
+これを欧文の扱いにするには、以下のような方法がある。
+</p>
+<ul>
+<li><code>\Ux</code> によるコード値入力にする。
+</li>
+<li>処理系を upTeX に変えて、upLaTeX で
+<a href="pxbase.html">pxcjkcat パッケージ（PXbase バンドル内）</a>を使う。
+（上記のコードのコメント部分を参照。）
+</li>
+<li>どうしても pTeX で処理したい場合は
+<a href="pxfltsrc.html">PXfltsrc パッケージ</a>を使う。
+</li>
+</ul>
+<p>2 の原因は、
+「charis の USF には 24 番の subfont があるのに、
+丸囲み数字（例えば「丸1」は U+2460）のグリフを持たない」からである。
+つまり元の OpenType フォントの Charis SIL が U+24xx の範囲のいずれかの
+グリフを持つが U+2460 はないということである。
+（なお、Charis SIL はローマ数字のグリフは持っているので、
+「欧文が優先される」という原則に従って、
+ローマ数字は欧文フォントで出力されている。）
+丸囲み数字が欧文フォントにないのは仕方が無いとして、
+和文フォントにあることが分かっているのであれば和文として出力したい。
+このためには次のような方法がある。
+</p>
+<ul>
+<li><code>\UI</code> によるコード値入力にする。
+</li>
+<li>処理系を e-TeX 拡張をもつ pTeX である 
+<a href="http://sourceforge.jp/projects/eptex/wiki/FrontPage">e-pTeX</a> に変える。
+e-pTeX はごく最近（2008 年以降）の W32TeX には含まれていて、
+e-pTeX 上の LaTeX である e-pLaTeX がコマンド名 <code>eplatex</code>
+で利用できる。
+e-pLaTeX の文書の書き方は pLaTeX と全く変わらない。
+つまり、pLaTeX 用の文書は全てそのままで e-pLaTeX で組版できる。
+</li>
+</ul>
+<p>すなわち、UTF-8 の直接入力のまま、全てを期待通りに出力しようとすると、
+upTeX 拡張と e-TeX 拡張の両方、つまり「e-upTeX」が必要になる。
+幸い e-upTeX はちゃんと存在していて W32TeX では upTeX
+と一緒にインストールされ、
+e-upTeX 上の LaTeX である e-upLaTeX がコマンド名 <code>euplatex</code>
+で利用できる。
+上記のサンプル（先頭を uplatex 用に直したもの）を e-upLaTeX
+で処理させると、期待通りの出力になっていることがわかる。
+</p>
+
+</div><!--ssec-combined-->
+
+<div class="subsection" id="ssec-safecaret">
+<h3>Safe caret 機能</h3>
+
+<p>pLaTeX で Unicode 文字を使う場合には以下のような問題がある。
+verbatim で処理されているテキストの中ではこれまでに
+述べた Unicode 文字の処理が失敗するのである。
+</p>
+<p><em>（正しく出力されない例）</em></p>
+<pre>
+\documentclass{jsarticle}
+\usepackage{bxbase}
+\usepackage[bxutf8]{inputenc}
+\usepackage{otf}
+\begin{document}
+\verb|\int| は次のように使う。「式①～③」には任意の数式を書ける。
+\begin{quote}\begin{verbatim}
+\int_{式①}^{式②} 式③
+\end{verbatim}\end{quote}
+\end{document}
+</pre>
+<p>これを組版すると、<code>verbatim</code> の外の丸囲み数字は正しく出力
+されるが、<code>verbatim</code> 環境の中は
+</p>
+<pre>
+\int_{式^^e2^^91^^a0}^{式^^e2^^91^^a1} 式^^e2^^91^^a2
+</pre>
+<p>という訳の分からない出力になってしまう。
+</p>
+<div class="bend">
+<span class="lbl">参考：</span> ptexenc 拡張をもつ pTeX では
+従来の和文文字のデコード処理との衝突を避けるために
+pTeX で直接扱う JIS X 0208 の文字以外の文字を表す UTF-8 の
+バイト列を一旦上のような形式に変換している。
+通常は TeX は <code>^^ab</code> をコード ab（16 進）のバイトと
+解釈するのでこれで上手くいくのであるが、
+<code>verbatim</code> の中ではこの <code>^^ab</code> も
+「そのまま」になってしまうのである。
+</div>
+<p>この問題を解決するのが、bxbase／pxbase パッケージの
+<code>\safecaret</code> 命令である。
+プレアンブルにおいてこの命令が実行されると、verbatim 系の入力
+の中でも Unicode 文字の処理が正しく行われる。
+</p>
+<pre>
+\documentclass{jsarticle}
+\usepackage{pxbase} % \safecaret を使うのに必要
+\usepackage[bxutf8]{inputenc}
+\usepackage{otf}
+\safecaret
+\begin{document}
+\verb|\int| は次のように使う。「式①～③」には任意の数式を書ける。
+\begin{quote}\begin{verbatim}
+\int_{式①}^{式②} 式③
+\end{verbatim}\end{quote}
+\end{document}
+</pre>
+<p>（なお、bxutf8 を使う場合には pxbase と bxbase の一方があれば
+よいので、上の例では bxbase は不要である。）
+</p>
+
+<p>verbatim 系以外に <code>\safecaret</code> が必要になる場面として、
+Babel で <code>^</code> をアクティブにする言語（<code>esperanto</code> 等）
+を使う場合がある。
+要するに「<code>^</code> を普通とは異なる用途で用いる場合」と
+いうことである。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage[esperanto]{babel}
+\usepackage[bxutf8]{inputenc}
+\usepackage{pxbase}
+\usepackage{otf}
+\safecaret
+\begin{document}
+Mi legas \emph{San^so-daju} (山椒大夫),  % ^s は〈&#x015d;〉
+romanon kreitan de Mori Ogai (森&#x9dd7;外).
+\end{document}
+</pre>
+
+</div><!--ssec-safecaret-->
+
+</div><!--sec-sample-->
+
+<div class="section" id="sec-bxutf8x">
+<h2>bxutf8x 入力エンコーディング</h2>
+
+<p>bxutf8 入力エンコーディングは、utf8 を基にしているので、
+utf8x を前提とする「unicode パッケージ（ucs パッケージ）」
+とは共存できない。
+すなわち、utf8x では可能な
+「LGR エンコーディングでギリシャ語をまともに処理する」
+といったことと bxutf8 を使った処理が同時にできないことになる。
+そこでこれを可能にすべく、
+「utf8x で処理し、それが無理なら bxbase に回す」
+ような入力エンコーディングの bxutf8x を作成してみた。
+ただし、utf8 と違い utf8x（ucs パッケージ）
+は非常に複雑なプログラムであるので、
+今の実装がどれだけまともに動くかについては自信が無い。
+（なお、bxutf8x を使うためには unicode パッケージが必要である。）
+</p>
+<p>信頼性の他にも bxutf8x には大きな問題がある。
+utf8x は utf8 と異なり、フォントエンコーディングの読込状況に
+関わらず、広範な範囲の文字を自分で処理しようとする。
+結果的に、bxucs の方には処理がほとんど回らなくなっている。
+つまり、きちんとフォントエンコーディングを指定して、
+それに合ったフォントを使わなければならないということである。
+ただ、utf8x は既定では CJK 文字は自前で処理しないので、
+JIS X 0208 の外の CJK 文字の処理は使用できる。
+</p>
+<p>従って、bxutf8x の使用が適当な用途として考えられるものは、
+utf8x を必要とするギリシャ語等の Babel による「まともな処理」
+と JIS X 0208 外の CJK 文字の入力を、
+pLaTeX において併用する場合ということになる。
+ただこの場合、肝心のギリシャ文字やキリル文字が pTeX
+で和文扱いされるという問題に引っかかってしまうので、
+さらに PXfltsrc も必要になる。
+（なお upLaTeX はそもそも CJK 文字の UTF-8
+入力に入力エンコーディングを必要としない。）
+以下でそのような例を挙げてみた。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8 (BOM なし)
+% platex に -kanji=utf8 と -shell-escape が必要
+\documentclass[a4paper]{jsarticle}
+\usepackage[T2A,T1]{fontenc}   % ここでは T2A を使う
+\usepackage[bxutf8x]{inputenc} % bxutf8x を使う
+\usepackage{pxbase}            % 和文 Unicode 処理に必要
+\usepackage[multi]{otf}      % ハングルの出力に必要
+\usepackage[russian,english]{babel} % 'russian' を使う
+\usepackage{pxbabel}         % 'korean' を使う
+\usepackage[ucyrl]{pxfltsrc} % キリル文字を欧文扱いにするフィルタを使用
+\begin{document}
+\pxflstart                   % 以降にフィルタ適用
+「友達」のことを韓国（大韓民国）では
+「\foreignlanguage{korean}{&#xCE5C;&#xAD6C;}（親舊）」というのに対し、
+北朝鮮（朝鮮民主主義人民共和国）では
+「\foreignlanguage{korean}{&#xB3D9;&#xBB34;}」という。
+この\foreignlanguage{korean}{&#xB3D9;&#xBB34;}というのは朝鮮固有語で元々は
+朝鮮半島全土で使われていたが、分断後の韓国では使われなくなった。
+その理由は、北朝鮮がこの語をロシア語の\ 
+\foreignlanguage{russian}{товарищ}（同志）の訳語として用いたため
+韓国では使用が避けられるようになったからだという。
+\end{document}
+</pre>
+<div class="bend">
+<p><span class="lbl">参考：</span> 同じ文書を upLaTeX
+で作ると次のようになる。
+bxutf8x は不必要で utf8x でよいということに注意。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+% uplatex が必要
+\documentclass[uplatex,a4paper]{jsarticle}
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8x]{inputenc} % bxutf8x ではない
+\usepackage[russian,english]{babel}
+\usepackage{pxbabel}
+\usepackage[prefercjkvar]{pxcjkcat} % キリル文字を欧文扱い
+\begin{document}
+「友達」のことを韓国（大韓民国）では
+「\foreignlanguage{korean}{&#xCE5C;&#xAD6C;}（親舊）」というのに対し、
+北朝鮮（朝鮮民主主義人民共和国）では
+「\foreignlanguage{korean}{&#xB3D9;&#xBB34;}」という。
+この\foreignlanguage{korean}{&#xB3D9;&#xBB34;}というのは朝鮮固有語で元々は
+朝鮮半島全土で使われていたが、分断後の韓国では使われなくなった。
+その理由は、北朝鮮がこの語をロシア語の\ 
+\foreignlanguage{russian}{товарищ}（同志）の訳語として用いたため
+韓国では使用が避けられるようになったからだという。
+\end{document}
+</pre>
+</div>
+<div></div><!-- to avoid something... -->
+
+</div><!--sec-bxutf8x-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">Unicode による文字の入力</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2009-07-05
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

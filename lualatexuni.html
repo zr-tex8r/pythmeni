@@ -1,0 +1,918 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>LuaLaTeX で Unicode してみる ～そして日本語できそうな件について～</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="LuaTeX,LuaLaTeX,Lua,Unicode,OpenType,TrueType,UTF-8,TeX">
+<meta name="description" content="LuaTeX上で動くLaTeXであるLuaLaTeXについて、Unicodeフォントの使用を中心に解説する。さらに日本語文書の作成についての現時点での状況を解説する。">
+<style type="text/css"><!--
+ul.compact li, ol.compact li {
+  margin: 0;
+}
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=lualatexuni"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">LuaLaTeX で Unicode してみる</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>LuaLaTeX で Unicode してみる<br>
+<span class="subtitle">～そして日本語できそうな件について～</span>
+</h1>
+
+<div class="abstract">
+LuaTeX 上で動く LaTeX である LuaLaTeX について基本的な使い方を解説する。
+その際に、
+まず LuaLaTeX が従来の欧文 LaTeX の代用として使えることを示して、
+その後に
+「UTF-8 で入力して TrueType／OpenType 形式の Unicode
+フォントで出力を行う」
+ための方法を解説する。
+加えて、LuaLaTeX
+で日本語文書を作成することについての現時点での状況を解説する。
+</div>
+
+<div id="changelog" class="hdn">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2011/06/05: 誤記を訂正。
+出力結果の画像を追加。
+</li>
+<li>2011/05/28: 新規作成。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-legacy">
+<h2>従来の欧文 LaTeX の代わりに使う</h2>
+
+<p>Unicode フォントで出力することがこの文書の目的であるが、
+まずは従来の 8 ビット欧文 LaTeX と同様に 8 ビットな
+（TFM ベースの）
+フォントーーType1 形式、
+あるいはビットマップーーでの出力の方法を述べる。
+わざわざそれを行う目的は、
+「LuaTeX エンジンは pdfTeX の後継であるので、
+LuaLaTeX は 8 ビット LaTeX と同じことが行えるはずであり、
+また実際に行える」
+ことを確認するためである。
+</p>
+<div class="alert"><span class="lbl">注意：</span>
+Unicode での入出力ができることは LuaLaTeX の利点の一つであるが、
+例えそれを使わないとしても LuaLaTeX にはもう一つの大きな特長がある。
+それは <a href="lualatexlua.html">Lua が使えること</a>である。
+</div>
+
+<div class="subsection" id="ssec-legacy-use">
+<h3>文書の作成とコンパイルの方法</h3>
+
+<p>結論からいうと、
+LuaLaTeX で文書を以下のように記述すると、
+ほぼ 8 ビットの LaTeX の上位互換として動作させることができる。
+</p>
+<ol>
+<li>文字コードを UTF-8 （または ASCII）にする。
+</li>
+<li>コメント以外の部分は ASCII 文字のみで入力する。
+</li>
+</ol>
+<p>後で見るように、
+Unicode フォントを使った場合は、
+全ての Unicode 文字が UTF-8 で直接入力できるが、
+今は 8 ビットフォントを前提にしているため 2 の条件が入る。
+</p>
+<p>例えば、
+次の LaTeX 文書は LuaLaTeX でも完全に通用する。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\begin{document}
+Hello, {\TeX}!
+\end{document}
+</pre>
+<p>このファイル名を hello.tex とすると、
+以下のコマンドで組版された PDF 文書 hello.pdf が得られる。
+</p>
+<pre>
+<span class="in">lualatex hello.tex</span>
+#（PDF 文書 hello.pdf が得られる）
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:102px">
+<img src="sample/lualatexuni-sample01.png" width="102" height="19">
+</div></div>
+<p>文書の中では、
+従来の LaTeX と全く同様に Computer Modern
+フォントが使われていることが判る。
+</p>
+<p>このように lualatex コマンドは、
+pdfLaTeX（pdflatex コマンド）と同様に
+TeX 文書を DVI 形式ではなく PDF 形式に直接に変換する。
+（XeLaTeX のように「裏で 2 段階の変換を行っている」のではない。）
+</p>
+<p class="notice">（Unicode フォントでの出力にのみ興味がある人は、
+この節の残りを飛ばして<a href="#sec-unicode">次節</a>に進んで構わない。）</p>
+<div class="bend"><p><span class="lbl">参考：</span> 
+実際には、
+LuaTeX は DVI 出力を行う（DVI モード）こともできて、
+また DVI モードの LuaLaTeX のコマンド dvilualatex
+も用意されている。
+従来の LaTeX と同様の 8 ビットフォントしか用いない場合には、
+これは従来の DVI ウェア
+（dvipdfmx、dviout、dvips 等）
+で処理できる DVI ファイルを出力できる。
+</p>
+<p>同じエンジンで
+「DVI モード」
+と
+「PDF モード」
+があるのは LuaTeX に限ったことではない。
+実は、最近の TeX システムでは、
+latex コマンドで DVI 出力を行う場合でも、
+実際に動作しているものは pdfTeX エンジンの DVI モードである。
+</p>
+<p>参考として、
+各エンジン・各モードでの
+「LaTeX のコマンド」
+の名前を以下の表にまとめた。
+</p>
+<table class="std centered">
+<tr><th>エンジン</th><th>LuaTeX</th><th>pdfTeX</th><th>XeTeX</th><th>pTeX</th></tr>
+<tr><th>PDF 出力</th><td>lualatex</td><td>pdflatex</td><td>xelatex</td><td>ー</td></th>
+<tr><th>DVI 出力</th><td>dvilualatex</td><td>latex</td><td>ー</td><td>platex</td></th>
+</table>
+<p>ちなみに、コマンド名の ～latex を ～tex に変えると
+「plain TeX のコマンド名」
+が得られる。
+ただし、
+「tex」
+だけは例外で、
+これは pdfTeX でなく（Knuth の）オリジナルの plain TeX が起動する。
+「pdfTeX・DVI 出力の plain TeX」
+のコマンド名は
+「etex」
+である。
+</p>
+</div>
+
+</div><!--ssec-legacy-use-->
+
+<div class="subsection" id="ssec-legacy-enc">
+<h3>エンコーディングの扱い</h3>
+
+<p>従来の
+（8 ビット）
+LaTeX において、
+Latin-1 や KOI8-R 等の 8 ビットの入力エンコーディング
+（文書ファイルの文字コード）
+を扱うには inputenc パッケージを用いればよかった。
+しかし、LuaTeX は原則的に入力を UTF-8 として処理するので、
+「8 ビット入力」
+を前提とする inputenc パッケージは正常に動作しない。
+従って、例え UTF-8 の指定
+（<code>\usepackage[utf8]{inputenc}</code>）
+であっても <em>inputenc は決して読み込んではいけない</em>。
+</p>
+<p>これに対して、7 ビット／8 ビットの<em>フォントエンコーディング</em>
+（OT1、T1、T2A 等）
+は LuaLaTeX で制限なく用いることができて、
+その指定には従来通り fontenc パッケージを読み込む。
+ちなみに、
+「既定のエンコーディング」
+は LuaLaTeX でも OT1 である。
+</p>
+<pre>
+% 文字コードは UTF-8
+% (ただしコメント以外は全て ASCII)
+\documentclass[a4paper]{article}
+% この時点でのフォントエンコーディングは OT1
+\usepackage[T1]{fontenc}  % フォントエンコーディングを T1 に変更
+\usepackage{lmodern}      % Latin Modern フォントを使用する
+\begin{document}
+,,Gr\&quot;u{\ss} Gott!\mbox{}`` % ただし入力は ASCII で
+Ich liebe $e^{\pi i} = -1$.
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:295px">
+<img src="sample/lualatexuni-sample02.png" width="295" height="22">
+</div></div>
+<div class="alert"><p><span class="lbl">注意：</span> 
+上掲の例の中で、
+「<code>!\mbox{}``</code>」
+は
+〈<code>!`</code>〉 → 〈&#xa1;〉
+のリガチャを抑止するための処置である。
+従来の LaTeX では
+「<code>!{}``</code>」
+でよかったが、
+LuaLaTeX ではグルーピング境界でリガチャ・カーンが無効化されない
+（だから上の
+「<code>u{\ss}</code>」
+ではカーニングが有効である）
+のでこのようにする必要がある。
+（実は XeLaTeX でも同様である。）
+</p>
+</div>
+
+<h4>luainputenc パッケージ</h4>
+
+<p class="notice">（高度な話題である。）</p>
+<p>もし、
+どうしても LuaLaTeX で 8 ビットの入力エンコーディングを用いる必要がある場合は、
+inputenc の代わりに luainputenc パッケージを用いる
+（オプション名は inputenc と同じで、
+例えば Latin-1 なら <code>latin1</code> である）。
+</p>
+<pre>
+% This file is encoded in Latin-1.
+\documentclass[a4paper]{article}
+\usepackage[latin1]{luainputenc} % specified input encoding
+\usepackage[T1]{fontenc}
+\usepackage{txfonts}
+\begin{document}
+% Here follows some text en fran&#xe7;ais....
+La valeur approch&#xe9;e de $\pi$
+(le rapport entre la circonf&#xe9;rence d'un cercle et son diam&#xe8;tre)
+est \directlua{tex.sprint(math.pi)}.
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:715px">
+<img src="sample/lualatexuni-sample03.png" width="715" height="43">
+</div></div>
+<p>この他に luainputenc には特殊な指定が存在する。
+「文字コードは UTF-8 であるが
+8 ビットフォントエンコーディングを用いる部分の入力に
+ASCII 外の Unicode 文字を使いたい」
+という場合は、
+オプションに <code>lutf8</code> を指定する。
+</p>
+<pre>
+% 文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage[lutf8]{luainputenc} % lutf8 指定
+\usepackage[T1]{fontenc} % T1 エンコーディングで出力したい
+\usepackage{pxfonts}
+\begin{document} % しかも ASCII 外の文字を直接入力したい
+R&#xF3;wnie dobrze mog&#x142;oby to by&#x107; po chi&#x144;sku!
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:398px">
+<img src="sample/lualatexuni-sample04.png" width="398" height="21">
+</div></div>
+<div class="alert"><p><span class="lbl">注意：</span> 
+luainputenc に utf8 や utf8x オプションを指定した場合は、
+代わりに lutf8 オプションを指定したものと見なされる。
+</div>
+<div class="alert"><p><span class="lbl">注意：</span> 
+luainputenc を用いるとテキスト入出力が全て
+「8 ビット直接」
+（8 ビット LaTeX と同等の処理）
+になり、
+（コメント以外で）
+UTF-8 で書かれたファイルを読み込むことはできなくなる。
+ただし例外的に、
+lutf8 オプション（および以下で述べる lutf8x オプション）
+の場合はテキスト入出力の方法は変更されない――つまり、
+通常
+（luainputenc なしの場合）
+と同じく UTF-8 になる。
+</div>
+<div class="bend"><p><span class="lbl">参考：</span> 
+通常
+（luainputenc なしの場合）
+は、
+LuaLaTeX は入力された Unicode 文字を直接出力しようとする。
+Unicode フォントを用いる場合はこれでよいが、
+8 ビットフォントだと文字が化けてしまう。
+そこで、
+lutf8 オプションでは、受け取った Unicode
+文字に対して fontenc の処理を挟む
+（一旦 LICR に変換する）
+ことで、
+様々な 8 ビットエンコーディングに対応している。
+</p>
+<p>なお、
+lutf8 の指定では Unicode フォントでの出力は保証されない。
+もし 8 ビットフォントと Unicode フォントを併用する
+（かつ両方で UTF-8 直接入力を行う）
+場合は、
+lutf8x オプションを代わりに用いるのが適当である。
+このオプションはフォントが 8 ビットの場合だけ
+fontenc の処理を介入させる。
+</p>
+</div>
+
+</div><!--ssec-legacy-enc-->
+
+</div><!--sec-legacy-->
+
+<div class="section" id="sec-unicode">
+<h2>Unicode したい場合は</h2>
+
+<p>本節では、
+LuaLaTeX において、
+OpenType／TrueType 形式の Unicode
+フォントを用いて出力を行う方法を解説する。
+なお、
+<a href="#sec-legacy">前節</a>で述べたように、
+LuaLaTeX では UTF-8 の入力が既定になっているので、
+そのままで任意の Unicode
+文字の<em>入力</em>が可能であることを注意しておく。
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+現状の LuaLaTeX では、
+Unicode で直接出力
+（fontenc を介さない）
+する場合に
+UTF-8 以外の文字コードで入力する方法は用意されていない。
+luainputenc パッケージは飽くまでも
+8 ビット LaTeX の処理方式をサポートするためのものなので、
+日本語用の旧来の文字コード
+（Shift_JIS 等）
+に適用できる可能性はない。
+LuaTeX の
+「入力フィルタ機能」
+を用いれば日本語文字コードでの入力自体は可能だと思われるが、
+特に LaTeX の場合は、
+本体の LaTeX
+文書以外の複数のテキストファイルの入出力が絡むことになり、
+それを全て適切な文字コードで行うことは結構難しい。
+</div>
+<div class="alert"><span class="lbl">注意：</span> 
+先述の通り、LuaLaTeX は DVI 出力を行えるが、
+Unicode フォントを用いた場合は DVI 出力は
+「事実上使えない」
+ので PDF 出力を用いる必要がある。
+</div>
+
+<div class="subsection" id="ssec-preamble">
+<h3>プレアンブルの書き方</h3>
+
+<p>LuaLaTeX で Unicode フォントを使用するには、
+fontspec パッケージの機能を用いる。
+以下に例を一つ示す。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+\setmainfont[Scale=MatchLowercase]{Linux Libertine O} % \rmfamily のフォント
+\setsansfont[Scale=MatchLowercase]{Linux Biolinum O}  % \sffamily のフォント
+\setmonofont[Scale=MatchLowercase]{Inconsolata}       % \ttfamily のフォント
+\begin{document}
+
+This document contains English, \textit{Français}, Српски,
+and Rom\^an\u{a}.
+
+{\sffamily
+If you want the logo {Lua\TeX} then simply type \verb|Lua\TeX|.}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:545px">
+<img src="sample/lualatexuni-sample05.png" width="545" height="45">
+</div></div>
+
+<p>見比べれば判るが、
+実はこの例は
+<a href="xelatex.html#ssec-preamble">XeLaTeX の解説で挙げた例</a>とほとんど同じになっている。
+（XeLaTeX の方は
+「<code>\XeTeX</code>」
+の複雑なロゴを出すために xltxtra パッケージを読み込んでいるが、
+それはこちらでは不要である。）
+fontspec パッケージは XeLaTeX と LuaLaTeX の両方をサポートし、
+しかも両方のエンジンで利用可能な機能については可能な限り共通のインタフェースで使えるようにしている。
+従って、
+「Unicode フォントを指定する方法」
+については、XeLaTeX における説明がほぼそのまま通用することになる。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+8 ビット LaTeX と LuaLaTeX
+（または XeLaTeX）
+を比較した場合に、
+相違する点として最も際立つのがフォントの扱いであるが、
+これに関しては LuaLaTeX と XeLaTeX での扱いが共通になっている。
+（その他の点でも、総じて LaTeX のパッケージは
+「エンジン
+（あるいは DVI ドライバ）
+間の相違を吸収する
+（共通の書式を与える）」
+ように設計されている。）
+だから、
+「『新しい TeX』
+として XeTeX と LuaTeX の
+2 つがあるようなんだが、
+どちらの使い方を習ったほうが得
+（将来主流になる）
+のか分からない」
+と悩んで躊躇する必要はないと考えられる。
+一方で得た知識のほとんどが他方でも通用することが期待できるからである。
+</div>
+<p>プレアンブルの書き方の注意について、
+fontspec の読込以外の点においても
+XeLaTeX と同じことがいえる。
+</p>
+<ul>
+<li>本節冒頭で述べたように、
+文字コードは UTF-8 にする。
+</li>
+<li>文書クラスは、
+8 ビット欧文 LaTeX 用のもの
+（article、book、amsart 等）
+のほとんどが使用できるが、
+pLaTeX 専用のもの
+（jarticle、jsarticle 等）
+は使えない。
+</li>
+<li>8 ビット欧文 LaTeX のパッケージについては、
+フォント関連のものを除けばそのまま使用できる可能性が高い。
+pLaTeX 専用のパッケージ
+（OTF パッケージ等）
+は使えない。
+</li>
+<li>LuaLaTeX に深く関連する fontspec 以外のパッケージ：
+<ul>
+<li>luatexbase ― LuaTeX の拡張機能の使用を支援するパッケージ。
+LuaLaTeX 上で
+（Lua や TeX で）
+プログラムを組む開発者用のもので、
+普通の LaTeX ユーザには関係がない。
+</li>
+<li>lualibs ― LuaTeX の Lua ライブラリ部分に対する拡張。
+例えば、
+文字列のパターン用エスケープ
+（<code>string.esc()</code>）
+やテーブルのシリアライズ
+（<code>table.serialize()</code>）
+等の機能を提供する。
+</li>
+<li>luacode ― LaTeX の特殊文字を含む Lua
+コードを直接書くための環境 <code>luacode*</code>
+（<a href="lualatexlua.html#ssec-ixbase0">ixbase0</a> の
+<code>execluacodeblock</code> 環境と同等）
+等を提供する。
+</li>
+<li>metalogo ― 各種の TeX ロゴ命令
+（<code>\LaTeX</code>、<code>\XeTeX</code>、<code>\LuaTeX</code> 等）
+を提供する。
+ただし、
+<code>\LuaTeX</code> は単に
+「<code>Lua\TeX</code>」
+に過ぎないので、
+これのために読み込む必要はない。
+むしろ、
+LuaTeX で XeTeX ロゴを書きたいときに必要？
+（どのエンジンでも使用可能。）
+</li>
+<li>luatextra ― fontspec と上記のパッケージ類をまとめて読み込む。
+（ただし luatexbase と lualibs に関しては fontspec が内部で読み込んでいる。）
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> 
+<a href="xelatex.html#ssec-preamble">XeLaTeX の解説</a>で挙げられている
+xunicode と xltxtra の両パッケージは XeLaTeX 専用であり
+LuaLaTeX では使えない。
+ただし、
+xunicode 相当の機能は fontspec を読み込めば使用可能になっている。
+（実際には fontspec は内部で xunicode を
+「無理やり」
+読み込んでいる。）
+</div>
+</li>
+</ul>
+
+</div><!--ssec-preamble-->
+
+<div class="subsection" id="ssec-fontspec">
+<h3>フォント関係の命令（fontspec パッケージ）</h3>
+
+<p>LuaLaTeX における fontspec パッケージの使用法は、
+XeLaTeX の場合とほとんど同じであるので、
+そちらの解説を参照してほしい。
+</p>
+<ul>
+<li><a href="xelatex.html#ssec-fontspec">XeLaTeX における fontspec の使用法</a>
+</li>
+</ul>
+<p>以下では、
+XeLaTeX との相違点について述べる。
+</p>
+<ul>
+<li>XeTeX はフォントの検索を OS のフォント管理
+（Windows の場合は Linux のエミュレートを間に挟む）
+を利用していたが、
+LuaTeX は全て自前でフォントの管理を行う。
+従って、
+フォント
+（ファミリ）
+名での指定で使用可能な
+OpenType／TrueType フォントは TeX システムが検知できるものに限られる
+（環境によっては OS 管理のフォントが使える場合もある）。
+これは
+「フォントファイル名での指定
+（この場合は XeLaTeX でも同じ）」
+および
+「dvipdfmx のフォントマップでの指定」
+での使用可能性の条件と同等である。
+<div class="bend"><span class="lbl">参考：</span> 
+従って、
+W32TeX の <code>fc-cache</code> コマンドは
+LuaTeX には無関係である。
+W32TeX の場合、
+Windows にインストールされたフォントは
+「TeX システムが検知するもの」
+に含まれるので、
+LuaTeX でも使えるはずである。
+</div>
+<div class="alert"><span class="lbl">注意：</span> 
+LuaLaTeX + fontspec でフォント名による指定を含む文書を組版する場合、
+その初回に
+「TeX システムが検知するフォントを全て検索して一覧を保存する」
+処理
+（mkluatexfontdb コマンドの実行）
+を行う。
+この処理にはかなり時間がかかるので注意してほしい。
+2 回目以降はこの処理は行われない。
+</div>
+</li>
+<li>フォントの属性指定のうち、
+以下のものは LuaLaTeX では使えない。
+<ul>
+<li><code>Vertical=RotatedGlyphs</code>： 縦書きの実現方法は
+LuaTeX では全く異なり、
+それは fontspec ではサポートされていない。
+</li>
+<li><code>Mapping=tex-text</code>： 「<code>Mapping=...</code>」
+は XeTeX 特有の機能の指定である。
+代わりに <code>Ligatures=TeX</code> の方を使う。
+</li>
+<li><code>Renderer=...</code>： これは
+XeTeX が用意する複数のレンダリングエンジンの選択の指定である。
+LuaTeX では OpenType 用の単一の
+「レンダリングエンジン」
+をもつ。
+</li>
+</ul>
+</ul>
+
+</div><!--ssec-fontspec-->
+
+</div><!--sec-unicode-->
+
+<div class="section" id="sec-japanese">
+<h2>日本語する件について</h2>
+
+<p><a href="#sec-unicode">前節</a>までに述べた方法を用いると、
+Unicode フォント中にある任意の文字を出力できる。
+従って、
+日本語フォントを指定すれば、
+日本語の文字を出力することも可能である。
+しかし、
+このことは直ちに
+「LuaLaTeX が日本語の文書の組版に使える」
+ことを意味しない。
+欧文 LaTeX と比較した時、
+日本語の文書の組版には、
+（1）
+「和文文字の間では禁則を除いて行分割可能にする」
+（2）
+「和文と欧文でフォントを自動的に切り替える」
+（3）
+「和文の約物
+（句読点等）
+の間の空白を調整する」
+等の特有の処理が必要だからである。
+これについては既に
+<a href="xelatex.html#sec-japanese-paragraph">XeLaTeX の解説の日本語に関する節</a>で説明しているので、
+必要に応じて参照してほしい。
+</p>
+<p>「体裁は度外視してとにかく日本語の文書を組版したい」
+という場合、
+LuaTeX は XeTeX よりも不利である。
+XeTeX では（1）の機能をエンジン自体が備えていて
+（<code>\XeTeXlinebreaklocalelocale</code> 命令）、
+これさえ用いれば大掛かりなマクロパッケージを用いなくともとにかく
+「日本語の判読可能な文書」
+を出力することが可能である。
+対して、
+LuaTeX の設計思想ではそのような
+「言語特有の処理」
+というのは
+「必要に応じて Lua で実装する」
+ことが求められており、
+エンジン自体に組み込まれてはいない。
+従って、
+LuaTeX で日本語文書の組版を行おうとするとどうしても
+「大きなパッケージ」
+が必要になる。
+その反面、
+日本語の高品位な組版を追求するのであれば話は全く異なり、
+「TeX の内部処理に直接手を加える」
+ことができる LuaTeX
+の方が高品質でかつ頑強な機構を構築することが可能である。
+</p>
+
+<div class="subsection" id="ssec-luajalayout">
+<h3>luajalayout パッケージ</h3>
+
+<p>LuaLaTeX の日本語組版用パッケージとして
+（普通の LaTeX ユーザが）
+今すぐ使えるものの中で最も完成度が高いと思われるのが
+luajalayout パッケージ
+（作者：前田一貴）
+である。
+</p>
+
+<h4>インストール</h4>
+
+<p>作者のサイトからアーカイブ
+（zip ファイル）
+をダウンロードする。
+luajalauout は同じ作者による luafontcomp パッケージを必要とするので、
+これも一緒に入手する。
+</p>
+<ul>
+<li><a href="http://www-is.amp.i.kyoto-u.ac.jp/lab/kmaeda/lualatex/luajalayout/">luajalayout パッケージ ―LuaLaTeX による日本語組版―</a>
+ここから luajalayout-x.xx.zip を取得する。
+</li>
+<li><a href="http://www-is.amp.i.kyoto-u.ac.jp/lab/kmaeda/lualatex/luafontcomp/">luafontcomp パッケージ</a>
+ここから luafontcomp-x.xx.zip を取得する。
+</li>
+</ul>
+<p>各アーカイブについて、それを展開して現れる tex/ ディレクトリを
+$TEXMF/ の直下にコピーする。
+（W32TeX を <u>C:\usr\local</u> にインストールした場合は
+<u>C:\usr\local</u>\share\texmf-local の下。）
+必要に応じて mktexlsr を実行する。
+</p>
+<p>その他の前提環境については、恐らく、
+TeX Live 2010
+（または同時期の W32TeX）
+以降で
+fontspec が正常動作する LuaTeX があればよいと思われる。
+</p>
+
+<h4>基本的な使い方</h4>
+
+<p>luajalayout
+（+ luafontcomp）
+パッケージを用いる場合のプレアンブルは以下のようになる。
+</p>
+<pre>
+% パッケージ読込（luafontcomp と fontspec が内部で読み込まれる）
+\usepackage{luajalayout}
+% 合成フォントファミリ定義
+\setrftovf[scale=0.92]{IPAMincho}{Termes+IPAM}
+\setrftovf[overwrite,exclude=\jarange]{TeX Gyre Termes}{Termes+IPAM}
+% メインのフォントを合成フォントに設定
+\setmainfont[Ligatures=TeX]{vf:Termes+IPAM}
+% \setsansfont 等についても同様に設定する
+</pre>
+<p>luajalayout パッケージでは和文と欧文でのフォントの自動切り替えを
+「和文と欧文の合成フォントのファミリを構成する」
+ことで実現している
+（これは LuaTeX のもつ
+「仮想フォントを実行中に生成する機能」
+を利用している）。
+「合成フォント
+（仮想フォント）」
+を構成する命令が
+（luafontcomp の）
+<code>\setrftovf</code> であり、
+以下の書式をもつ。
+（注意：以下では fontspec での使用を前提として説明する。）
+</p>
+<pre>
+\setrftovf[&lt;オプション&gt;]{&lt;実フォント名&gt;}{&lt;仮想フォント名&gt;}
+</pre>
+<p>この命令は、
+指定の名前の仮想フォント
+（現在存在しなければ新たに作成する）
+が指定の実フォントのグリフを参照するように設定する。
+（イメージとしては、
+<code>&lt;実フォント名&gt;</code> のフォントのグリフを
+<code>&lt;仮想フォント名&gt;</code> のフォントにコピーすると考えればよい。）
+同じ仮想フォントに対して続けて <code>\setrftovf</code>
+を実行し別の実フォントのグリフも参照させることで、
+複数の実フォントを参照する仮想フォント
+（合成フォント）
+を構成することができる。
+</p>
+<p>オプションについては、
+<a href="http://www-is.amp.i.kyoto-u.ac.jp/lab/kmaeda/lualatex/luafontcomp/">luafontcomp パッケージの配布元のページ</a>
+（「使い方」
+の節）
+を参照されたい。
+ここではいくつかの注意を述べておく。
+</p>
+<ul>
+<li>luafontcomp パッケージの <code>\jarange</code>
+命令は
+「パッケージが和文扱いする文字の範囲」
+（現在のところこれは固定である）
+を、
+<code>\setrftovf</code> 命令の <code>range</code> および
+<code>exclude</code> の値に適する形式で出力する。
+したがって、上の例に現れる
+「<code>overwrite,exclude=\jarange</code>」
+という指定は、
+「仮想フォントの中の欧文扱いの文字に対する参照を指定の実フォントのものに変更する」
+ことを意味する。
+</li>
+<li>BXjscls パッケージの文書クラスでは、
+「和文フォントに対するスケールの想定値」
+がマクロ <code>\jsScale</code> に収められている。
+従って、該当の文書クラスを用いるときは、
+和文部分の実フォントを指定する <code>\setrftovf</code> には
+「scale=\jsScale」
+を指定するのが適切である。
+</li>
+</ul>
+
+<h4>サンプル</h4>
+
+<p>本サイトの
+<a href="lualatexlua.html">「思わず Lua で LaTeX してみた」</a>
+の冒頭の内容を LuaLaTeX 文書にしたものを挙げる。
+</p>
+<ul>
+<li><a href="sample/luajalayout-zr-sample.zip">luajalayout-zr-sample.zip ダウンロード</a><br>
+LuaLaTeX 文書と組版結果の PDF 文書が入ったアーカイブ。
+</li>
+</ul>
+
+<pre>
+% 文字コードは UTF-8
+\documentclass[a4paper]{bxjsarticle}
+\usepackage{luajalayout}
+\usepackage{metalogo} % \XeTeX, \LuaTeX のため
+\usepackage{mflogo} % \MF のため
+% 合成フォントファミリ「Termes+IPAM」の構成
+\setrftovf[scale=\jsScale]{IPAMincho}{Termes+IPAM}
+\setrftovf[overwrite,exclude=\jarange]{TeX Gyre Termes}{Termes+IPAM}
+% 合成フォントファミリ「Heros+IPAG」の構成
+\setrftovf[scale=\jsScale]{IPAGothic}{Heros+IPAG}
+\setrftovf[scale=.95,% ← Helvetica用のスケールです
+    overwrite,exclude=\jarange]{TeX Gyre Heros}{Heros+IPAG}
+% 総称ファミリを先に構成した合成フォントに設定する
+\setmainfont[Ligatures=TeX]{vf:Termes+IPAM}
+\setsansfont[Ligatures=TeX]{vf:Heros+IPAG}
+% ロゴ
+\newcommand{\METAFONT}{\MF}
+\newcommand{\pdfTeX}{pdf\/\TeX}
+\begin{document}
+
+\title{思わずLuaで{\LaTeX}してみた}
+\author{ZR}
+\date{2010 年 7 月 24 日}
+\maketitle
+
+\begin{abstract}
+{\LuaTeX}上で動く{\LaTeX}である{\LuaLaTeX}を使ってみる。
+特に、{\LaTeX}の多少複雑な処理をLuaで（{\TeX}ではなく！）
+プログラミングすることで実現することに焦点を当てる。
+\end{abstract}
+
+\section{{\LuaTeX}の紹介}
+
+\subsection{いつも通り能書きから}
+
+{\LuaTeX}は{\TeX}の拡張の一つで、
+主にTaco Hoekwater、Hartmut Henkel、Hans Hagenによって開発されている。
+簡単に言うと、{\LuaTeX}は以下に挙げるものを統合して成立した
+{\TeX}エンジンである。
+
+%………（以下略）
+</pre>
+<div align="center">
+<img src="sample/luajalayout-zr-sample.png" width="992" height="1403">
+</div>
+
+</div><!--ssec-luajalayout-->
+
+<div class="subsection" id="ssec-luatexja">
+<h3>日本語 TeX の未来を目指して</h3>
+
+<p>pTeX を上回る高品質の日本語組版を目指した本格的なパッケージを作成するプロジェクトが進行している。
+</p>
+<ul>
+<li><a href="http://sourceforge.jp/projects/luatex-ja/">LuaTeX-ja プロジェクト日本語トップページ</a>
+（SourceForge.JP）
+</li>
+</ul>
+<p>このプロジェクトは次のような設計方針をもって進められている。
+</p>
+<ul>
+<li>LuaTeX の
+「TeX の内部処理に割り込む」
+機構を用いて、
+pTeX が内部で行っている和文処理と同等のものを実装する。
+（これが他の欧文 TeX エンジン上の CJK
+処理の実装と決定的に異なる点である――ただし、
+LuaTeX 上の既存の実装
+（luajalayout 等）
+も大概はこの方針に則っている。）
+</li>
+<li>pTeX の設計の良い点は踏襲するが、
+好ましくない点・不完全な点は積極的に改める。
+</li>
+<li>少なくとも pTeX と同等の自由度を確保する。
+すなわち、
+fontspec の使用を前提とするのでなく、
+NFSS レベルの処理、
+また pTeX のプリミティブに相当するレベルの処理も提供する。
+（これが他の LuaTeX 上の実装と比した時の特徴。）
+</li>
+</ul>
+<p>現状では、
+「プリミティブに相当するレベルの処理」
+の開発が行われている段階なので、
+まだ LaTeX での使用は考慮されていない。
+その意味で、
+まだ
+「普通の TeX ユーザ」
+が使えるものにはなっていない。
+しかし、このプロジェクトが完遂した先には、
+今までとは違う日本語 TeX の世界が待っていることだろう。
+pTeX の高品位の日本語組版を完全に保ったまま、
+最新の TeX の機能を好きなように使えるわけである。
+</p>
+
+</div><!--ssec-luatexja-->
+
+</div><!--sec-japanese-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">LuaLaTeX で Unicode してみる</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-06-05
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

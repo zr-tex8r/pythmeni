@@ -1,0 +1,680 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>コンクリートなフォント、その他。～Computer Modern の兄弟たち～</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="Computer Modern,Computer Concrete,Concrete font,Computer Modern Bright,CM Bright">
+<meta name="description" content="TeX/LaTeXの既定の欧文フォントであるComputer Modernフォントの派生フォントである、Computer ConcreteフォントとComputer Modern Brightフォントの紹介。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=concrete"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">コンクリートなフォントとか</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>コンクリートなフォントとか<br>
+<span class="subtitle">～Computer Modern の兄弟たち～</span></h1>
+
+<div class="abstract">
+TeX/LaTeXの既定の欧文フォントであるComputer Modernフォントの派生フォントである、
+Computer ConcreteフォントとComputer Modern Brightフォントの紹介。
+特に後者はサンセリフ体をメインとする文書の作成に適している。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/05/16：一部のアーカイブファイルがリンク切れになっていたのを訂正。
+</li>
+<li>2010/02/07：<a href="#sec-xelatex">XeLaTeX での使用について</a>を追加。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<ul>
+<li>Computer Modern Roman （本家）
+<div align="center" class="display">
+<div class="imagebox" style="width:939px">
+<img src="sample/cm-sample01.png" width="939" height="332">
+</div></div>
+</li>
+<li>Computer Concrete
+<div align="center" class="display">
+<div class="imagebox" style="width:939px">
+<img src="sample/cc-sample01.png" width="939" height="332">
+</div></div>
+</li>
+<li>Computer Modern Bright
+<div align="center" class="display">
+<div class="imagebox" style="width:937px">
+<img src="sample/cmbr-sample01.png" width="937" height="330">
+</div></div>
+</li>
+</ul>
+
+<p>LaTeX の既定のフォントとして指定されている Computer Modern
+フォント（CM フォント）は、TeX の作者でもある Donald E. Knuth がデザインしたものである
+ということは（TeX 愛好家の間では）よく知られている。
+ところで、この CM ファミリには、他のフォントにはない
+大きな特色がある。
+CM フォントには大きく分けて Roman、Sans Serif、Typewriter
+の 3 つの系列があり、これらがそれぞれ
+<code>\rmfamily</code>、<code>\sffamily</code>、<code>\ttfamily</code>
+の既定となっている。
+当然、同じ文字であってもこの 3 つの間では大きな字形の違いがあるのだが、
+CM フォントではこれが「1 つの記述」に対してパラメタ
+（60 個以上ある；例えば縦および横の線の太さ、セリフの有無、等）
+を変えたものとして実現されている。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+Computer Modern の生成に用いられているソフトウェアである
+METAFONT は「フォント記述用のプログラム言語」である
+（丁度 TeX が「文書記述用のプログラム言語」であるように）。
+従って、字形の記述は 1 つのプログラムであり、
+またパラメタはそこに現れる「変数」で、別のファイルで
+その値を代入しておくという形式になっている。
+（プログラミングの経験のある人なら何を言っているのか想像できると思う。）
+従って、先述の「特色」は CM フォント以外の METAFONT
+で作られた幾つかフォントにも当てはまる。
+ただし、METAFONT でも特にパラメタを置かずに設計することも
+できるので、全てのフォントに当てはまる訳ではない。
+</div>
+<p>従って、CM フォントで行われているもの以外のパラメタ設定
+を行う（字形の記述の本体は全く買えずに）ことで、
+新しいデザインのフォントができる可能性があるといえる。
+この文書では、そういう方法で作られたフォントの中の代表的な 2 つである
+「Computer Concrete フォント」と「Computer Modern Bright フォント」
+を紹介し、その導入方法を説明する。
+</p>
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-concrete">
+<h2>Computer Concrete フォント</h2>
+
+<p>Computer Concrete フォント（CC フォント）
+は単一のセリフファミリと数式フォントからなるコレクションである。
+この唯一の本文用ファミリである Concrete Roman ファミリは
+セリフフォントであるが、
+CM Roman が縦画と横画の間に明確な線幅の違いをもつのと異なり、
+線幅がその向きに関わらずほぼ一定に作られている。
+全体として CM Roman よりも濃い色となる。
+そのため、画面上等の解像度の低い環境で表示を行った場合に
+CM Roman よりも高い視認性をもつ。
+</p>
+<pre class="hdn">
+\documentclass[b4paper]{article}
+\usepackage[scale=0.92]{geometry}
+\pagestyle{empty}
+\begin{document}
+
+\noindent{\sffamily\bfseries CM Roman:}\quad
+{\fontfamily{cmr}\selectfont
+Such misdeed may well sleep furiously,
+just as all those green ideas,
+colorless or not!}
+
+\noindent{\sffamily\bfseries CM Roman:}\quad
+{\fontfamily{ccr}\selectfont
+Such misdeed may well sleep furiously,
+just as all those green ideas,
+colorless or not!}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:575px">
+<img src="sample/cc-sample05.png" width="575" height="29">
+</div></div>
+<p>Concrete Roman フォントは、Donald Knuth が著書
+『Concrete Mathematics』（Ronald Graham、Oren Patashnik との共著）
+を著す際に、その本文用フォントとして作ったものである。
+Knuth はこの本を、当時新しく作られた数式フォント「AMS Euler」
+（Hermann Zapf によるデザイン）を用いた最初の出版物にしようと考え、
+AMS Euler との調和が CM Roman よりも優れた本文用フォントとしてこの
+フォントを作成した。
+「Concrete Roman」の名はこの書名に由来する。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+「Concrete Mathematics」という書名は、
+abstract mathematics（抽象数学）の対極にある「具象数学」
+という意味であるが、
+continuous（連続）と discrete（離散）の間にあるものと
+いう意味も込められているらしい。
+</div>
+
+<p>CC フォントの中で Knuth が作ったものは
+OT1 エンコーディングのもののみで、
+他のエンコーディングや数式用のフォントは
+後に他の人により製作されたものである。
+</p>
+
+<div class="subsection" id="ssec-concrete-install">
+<h3>インストール</h3>
+
+<p>別々に開発された複数の部分からなるという事情があって、
+CC フォントの配布は複数のパッケージからなっている。
+現在では CC フォントを LaTeX2e で使うには
+ccfonts パッケージを利用するのが一般的だが、
+この場合も、過去のパッケージを併せてインストールする必要がある。
+
+<div align="center" class="display"><table class="std">
+<tr><th>&nbsp;</th><th>パッケージ名</th>
+<th>構成ファイル例</th><th>作者</th><th>収録内容</th></tr>
+<tr><td>①</td><td>concrete</td>
+<td><code>ccr10.tfm</code></td><td>Donald Knuth</td>
+<td>OT1 版の MF ソース、TFM</td></tr>
+<tr><td>②</td><td>concmath (fonts)</td>
+<td><code>xccmi10.tfm</code></td><td>Ulrike Vieth</td>
+<td>数式用の MF ソース、TFM</td></tr>
+<tr><td>③</td><td>ecc</td>
+<td><code>eorm10.tfm</code></td><td>Walter Schmidt</td>
+<td>T1/TS1 用 MF ソース、TFM</td></tr>
+<tr><td>④</td><td>concmath (latex)</td>
+<td><code>concmath.sty</code></td><td>Ulrike Vieth</td>
+<td>OT1+数式の LaTeX2e スタイル</td></tr>
+<tr><td>⑤</td><td>ccfonts</td>
+<td><code>ccfonts.sty</code></td><td>Walter Schmidt</td>
+<td>T1/TS1 も扱える LaTeX2e スタイル</td></tr>
+<tr><td>⑥</td><td>cm-super</td>
+<td><code>sfrm1000.pfb</code></td><td>Vladimir Volovich</td>
+<td>T1/TS1 用 Type1 フォント</td></tr>
+</table></div>
+<div class="bend"><span class="lbl">参考：</span> 
+キリル文字（T2* エンコーディング）の CC フォントについては、
+T2* の CM フォントと同じパッケージにある。
+すなわち、MF ソース／TFM は「LH フォントコレクション」に、
+LaTeX2e スタイルは「cyrillic バンドル」に、
+Type1 フォントは cm-super コレクションに含まれる。
+ccfonts パッケージ等を用いてファミリを ccr に切り替えた上で、
+エンコーディングを T2* にすれば利用できる。
+</div>
+<p>ところで、上の表を見ればよくわかるが、
+「OT1 と数式用の Type1 フォント」が抜けている。
+すなわち、上掲のパッケージを全て揃えたとしても、
+OT1 と数式については、
+PDF 文書に変換した時にビットマップになってしまう。
+OT1 と数式用の Type1 フォントでフリーのものは公開されていない
+ようなので（有償のものはある）、
+私が TeXtrace による自動トレースで作成した Type1
+フォントを公開しておく。
+</p>
+<ul>
+<li><a href="data/rcfonts.zip">RC Fonts パッケージ v0.1（1.26MB）</a>
+<span class="mdate">[2010/01/16]</span><br>
+<small>Reinforced Concrete Fonts すなわち「鉄筋コンクリートフォント」。
+特に深い意味はない ;-)</small>
+</li>
+</ul>
+<p>TeX Live であれば、上記のパッケージは全て含まれている
+（勿論、拙作の RC Fonts はない）。
+残念ながら、W32TeX には①しか含まれていない。
+そこで、②～⑤と RC Fonts を W32TeX の TeXMF ツリーにそのまま
+導入できる構成にしたものを用意した。
+⑥については容量が大きく、また T1 の CM フォントのために
+既に導入しているユーザも多いと思うので含めていない。
+CC フォントを T1/TS1 で使いたい場合は適宜追加してほしい。
+</p>
+<ul>
+<li><a href="data/texmf-cc.zip">texmf-cc.zip（1.46MB）</a>
+<span class="mdate">[2010/05/16]</span>
+</li>
+</ul>
+<p>W32TeX をインストールしたフォルダを <u>C:\usr\local</u>
+だとすると、次の手順でインストールできる。
+</p>
+<ul>
+<li><u>C:\usr\local</u>\share\texmf-local
+の直下で texmf-cc.zip を展開する。
+（あるいは、別の場所で展開して現れた doc 等のフォルダを
+上記のフォルダの中に入れる。）
+mktexlsr を実行する。
+</li>
+<li>RC Fonts のマップファイルを updmap に登録する。
+すなわち、
+<u>C:\usr\local</u>\share\texmf\dvipdfmx\config\dvipdfmx.cfg
+に次の記述を追加して、updmap を実行する。
+<pre>
+Map rcfonts.map
+</pre>
+</li>
+</ul>
+
+</div><!--ssec-concrete-install-->
+
+
+<div class="subsection" id="ssec-concrete-usage">
+<h3>使用法</h3>
+
+<p>ccfonts パッケージを読み込むと、セリフファミリ
+（<code>\rmfamily</code>）の割当が CM Roman から CC Roman
+に変更される。
+さらに数式フォントも CC フォントのものに変更される。
+なお、CC フォントには太字がないので、
+太字のシリーズ（<code>\bfseries</code>）については、
+CM Roman のもので代用される。
+</p>
+<p>ccfonts パッケージは、
+行送りを欧文文書クラスの通常の設定より少し大きな値に変更する。
+（フォントサイズが 10pt の場合、12pt → 13pt。）
+ところが、和文文書クラスだとより大きい行送りが使われている
+（jsarticle だと 15pt）ので、
+変更されると逆に行送りが狭くなって不適切である。
+これに対して、行送りの変更を抑止する
+<code>standard-baselineskips</code> オプションが用意されて
+いるので、和文の場合はこれを設定するのがよい。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepakcage[standard-baselineskips]{ccfonts}
+\begin{document}
+{\LaTeX}を使えば、例えば
+\begin{quote}Is this a pen or a dog?\end{quote}
+のような簡単な欧文でも、
+\[ 2 \times 2 \neq 2010\pi \]
+のような簡単な数式でも大丈夫。
+\end{document}
+</pre>
+<pre class="hdn">
+\documentclass[a4paper]{jsarticle}
+\usepakcage[standard-baselineskips]{ccfonts}
+\begin{document}
+{\LaTeX}を使えば、例えば
+\begin{quote}Ndicela uxolo!\end{quote}
+のような簡単な欧文でも、
+\[ 2 \times 2 \neq 2010\pi \]
+のような簡単な数式でも大丈夫。
+\end{document}
+</pre>
+
+</div><!--ssec-concrete-install-->
+
+<div class="subsection" id="ssec-concrete-euler">
+<h3>Concrete + AMS Euler の組み合わせ</h3>
+
+<p>Knuth が行ったような、
+「本文フォントは Concrete Roman、数式フォントは AMS Euler」
+というフォント設定を行う場合は、
+ccfonts の後に eulervm パッケージを読み込めばよい。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepackage[standard-baselineskips]{ccfonts}
+\usepackage{eulervm}
+\begin{document}
+{\LaTeX} を使えば、例えば、
+\begin{quote}
+``?`!`But aren't Kafka's \emph{Schlo{\ss}} and {\AE}sop's {\OE}uvres
+often na\&quot;{\i}ve vis-\`a-vis the d{\ae}monic ph{\oe}nix's
+official r\^ole in fluffy souffl\'es!?''
+\end{quote}
+のような複雑な欧文でも、
+\[
+  \left( \int_0^\infty \frac{\sin x}{\sqrt x}\,\mathrm{d}x \right)^2 =
+  \prod_{k=1}^\infty \frac{4k^2}{4k^2-1} \neq \frac{\pi}{2010}
+\]
+のような複雑な数式も
+\[
+  2 \times 2 = 4
+\]
+のような簡単な数式も大丈夫。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:938px">
+<img src="sample/cc-sample06.png" width="938" height="330">
+</div></div>
+
+</div><!--ssec-concrete-install-->
+
+</div><!--sec-concrerte-->
+
+<div class="section" id="sec-bright">
+<h2>Computer Modern Bright フォント</h2>
+
+<p>Computer Modern Bright フォント（CM Bright フォント）
+はサンセリフ体とタイプライタ体の
+2 つの本文用ファミリと数式用フォントから構成される。
+サンセリフ体をメインにした文書の作成を目的にして製作されたものである。
+従って、数式用フォントもサンセリフ体のデザインになっている。
+サンセリフ体のファミリである CM Bright ファミリ
+CM Sans-serif に比べて線幅が細く「軽い」印象になっている。
+そして、タイプライタ体の CM Typewriter Light ファミリは
+CM Bright と調和するように CM Typewriter の線幅を細くしたものである。
+</p>
+
+<div class="subsection" id="ssec-bright-install">
+<h3>インストール</h3>
+
+<p>CC フォント程ではないが、CM Bright も複数のパッケージに
+分かれて配布されている。
+TeX Live の配布物には全て含まれているが、
+W32TeX はどれも含んでいない。
+
+<div align="center" class="display"><table class="std">
+<tr><th>&nbsp;</th><th>パッケージ名</th>
+<th>構成ファイル例</th><th>作者</th><th>収録内容</th></tr>
+<tr><td>①</td><td>cmbright</td>
+<td><code>ccr10.tfm</code></td><td>Walter Schmidt</td>
+<td>MF ソース、TFM、LaTeX2e スタイル</td></tr>
+<tr><td>②</td><td>hfbright</td>
+<td><code>xccmi10.tfm</code></td><td>Harald Harders</td>
+<td>OT1+数式用 Type1 フォント</td></tr>
+<tr><td>③</td><td>cm-super</td>
+<td><code>sfrm1000.pfb</code></td><td>Vladimir Volovich</td>
+<td>T1/TS1 用 Type1 フォント</td></tr>
+</table></div>
+<div class="bend"><span class="lbl">参考：</span> 
+T2* エンコーディングの CM Bright の扱いについては
+CC フォントと全く同じことがいえる。
+</div>
+<p>CC フォントと同様に、
+①、②を W32TeX の TeXMF ツリーにそのまま
+導入できる構成にしたものを用意した。
+</p>
+<ul>
+<li><a href="data/texmf-cmbr.zip">texmf-cmbr.zip（1.46MB）</a>
+<span class="mdate">[2010/05/16]</span>
+</li>
+</ul>
+<p>W32TeX をインストールしたフォルダを <u>C:\usr\local</u>
+だとすると、次の手順でインストールできる。
+</p>
+<ul>
+<li><u>C:\usr\local</u>\share\texmf-local
+の直下で texmf-cmbr.zip を展開する。
+（あるいは、別の場所で展開して現れた doc 等のフォルダを
+上記のフォルダの中に入れる。）
+mktexlsr を実行する。
+</li>
+<li>hfbright のマップファイルを updmap に登録する。
+すなわち、
+<u>C:\usr\local</u>\share\texmf\dvipdfmx\config\dvipdfmx.cfg
+に次の記述を追加して、updmap を実行する。
+<pre>
+Map hfbright.map
+</pre>
+</li>
+</ul>
+
+</div><!--ssec-bright-install-->
+
+<div class="subsection" id="ssec-bright-usage">
+<h3>サンセリフ体（ゴシック体）がメインの文書を作成する</h3>
+
+<p>cmbright パッケージを読み込むと、
+サンセリフファミリ（<code>\sffamily</code>）、
+等幅フォント（<code>\ttfamily</code>）、
+および数式フォントの割当が CM Bright のものに変更されるのと同時に、
+文書におけるメインのファミリがサンセリフに設定される。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{cmbright}
+\begin{document}
+For very small $\varepsilon$, you can approximate as follows:
+$(1 + \varepsilon)^r \approx 1 + r\varepsilon$.
+\end{document}
+</pre>
+<div class="bend"><p><span class="lbl">参考：</span> 
+「文書のメインのフォントをサンセリフにする」
+という設定を自分で行うには、次の記述をプレアンブルに追加すればよい。
+</p>
+<pre>
+\renewcommand{\familydefault}{\sfdefault}
+\normalfont
+</pre>
+<p>単に文書の先頭で <code>\sffamily</code> を実行した場合、
+本文領域のフォントはサンセリフになるが、
+ノンブル（ページ番号）や柱の出力での既定フォントは変わらない。
+</p>
+</div>
+<p>ただし、pLaTeX で和文を含む文書の場合、cmbright パッケージは
+和文フォントについては何も設定を変更しない。
+和文のメインの書体をゴシック（<code>\gtfamily</code>）
+にする場合は以下の例のような設定を加える。
+なお、細身のゴシック体の方が CM Bright と調和するので、
+この例では既定のゴシック体フォントを「HGゴシックM」に変更している。
+（ここでは
+<a href="./pxchfon.html">pxchfon パッケージ</a>を使っているが、
+手段については別に何でもよい。）
+また、ccfonts の場合と同様に、
+行送りの変更を抑止するために cmbright パッケージに
+<code>standard-baselineskips</code> オプションを指定している。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepackage[standard-baselineskips]{cmbright}
+  % ゴシックのフォントを「HGゴシックM」に変更
+\usepackage{pxchfon}
+\setgothicfont[0]{hgrgm.ttc}
+  % 和文のメインのフォントをゴシックに変更
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\normalfont
+\begin{document}
+複素数 $z$ の絶対値は複素平面上の $z$ と原点（0）との距離
+として定義される。
+\[ |x + yi| = \sqrt{x^2 + y^2} \quad\mbox{（$x$, $y$ は実数）} \]
+\end{document}
+</pre>
+
+<div class="bend"><span class="lbl">参考：</span> 
+サンセリフフォントをメインとする文書というと、
+まずプレゼンテーション用スライドが思いつくが、
+CM Bright は線幅を細めにしているため、スライドには不向きである
+（といっても CM Roman よりは見易いと思うが）。
+Computer Modern 系のスライド用フォントで数式用フォントを含むものとして、
+<a href="http://www.ring.gr.jp/pub/text/CTAN/fonts/lxfonts.zip">LX フォントコレクション</a>
+（Claudio Beccari 氏製作）がある。
+このパッケージは単独で使用可能で、かつインストールは普通の
+updmap 利用のものだから詳しい解説は省く。
+ただし一つだけ注意すべき点がある。
+マップファイル lxfonts.map の記述形式に不備があり、
+このままでは W32TeX の updmap では通らないので、
+代わりに<a href="data/lxfonts.map">正しい形式のマップファイル</a>を
+用いる必要がある。
+</div>
+
+</div><!--ssec-bright-usage-->
+
+</div><!--sec-bright-->
+
+<div class="section" id="sec-xelatex">
+<h2>XeLaTeX での使用について</h2>
+
+<p>最後に、CC フォントと CM Bright フォントを XeLaTeX で使う方法に
+ついて述べる。
+XeLaTeX では本文（非数式）は Unicode フォントを用いるのが標準であるので、
+まずこれらの書体の Unicode フォントが必要であるが、これは
+<a href="http://canopus.iacp.dvo.ru/~panov/cm-unicode/">Computer Modern Unicode フォント</a>
+（<a href="http://sourceforge.net/projects/cm-unicode/">SourceForge.net のページ</a>）</a>の
+配布アーカイブの中に含まれている。
+SourceForge のダウンロードページから cm-unicode-0.6.3a-otf.tar.gz
+（または最新版の cm-unicode-0.7.0-otf.tar.xz）を取得してそれを展開すれば
+OpenType フォントが得られる。
+W32TeX の場合は <a href="./xelatex.html#sssec-newfont">XeTeX の解説ページ</a>に
+述べた手順に従ってインストールすればよい。
+数式フォントを併用する場合は、
+<a href="./xelatex1.html#ssec-mathfont">同じページの別の箇所</a>で説明するように、
+8 ビット欧文用のフォント（Type1 形式）を使うことになる。
+</p>
+<div class="bend"><p><span class="lbl">参考：</span> 
+CM Unicode のアーカイブの中で該当するファイルは以下のとおり。
+</p>
+<ul>
+<li>cmun{orm,oti,obx,obi}.otf ― CC フォント
+</li>
+<li>cmun{bmr, bmo, bsr, bso, bbx. bxp}.otf ― CM Bright フォント
+</li>
+</ul>
+</div>
+
+<p>CM Unicode 版の Concrete Roman のファミリ名は「CMU Concrete」である。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{ccfonts}
+%\usepackage{eulervm} % 数式フォントを AMS Euler にする場合
+\usepackage[no-math]{fontspec}
+\setmainfont{CMU Concrete}
+\begin{document}
+An interesting fact about subfactorial is the following
+asymptotic equality:
+\begin{equation}
+\lim_{n\to\infty} \frac{n\mbox{&#xa1;}}{n!} = \frac{1}{e}.
+\end{equation}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:683px">
+<img src="sample/cc-sample07.png" width="683" height="83">
+</div></div>
+<div class="bend"><span class="lbl">参考：</span> 
+上の数式に現れる「<i>n</i>&#xa1;」は <i>n</i> の subfactorial
+（攪乱順列数）として
+「Concrete Mathematics」で用いられている記法であるが、
+一般的に用いられているものではないため、
+〈&#xa1;〉は数式記号としては利用できない。
+（現在最も一般的な記法は「!<i>n</i>」。
+歴史的には <i>n</i>&#xa1; の方が古いようである。）
+従って、<code>\mbox</code> に入れて非数式扱いにしている
+（だから UTF-8 直接入力が有効）。
+ところで、「Concrete Mathematics」では数式中の〈!〉を AMS Euler
+で出力しているはずだが、AMS Euler には
+（一般的な数式記号でない）〈&#xa1;〉は存在しない。
+Knuth はどう対処したのだろうか？
+</div>
+<p>CM Unicode 版の CM Bright のファミリ名は「CMU Bright」である。
+以下ではサンセリフ体＋ゴシック体をメインとした日本語文書の例を示す。
+例によって、<a href="./zxjatype.html">ZXjatype</a> 等を用いている。
+</p>
+<pre>
+\documentclass[a4paper]{bxjsarticle}
+\usepackage[standard-baselineskips]{cmbright} % 数式フォントパッケージを先に
+\usepackage[no-math]{fontspec} % no-math が要るので明示的に読込
+\usepackage{zxjatype}
+\setsansfont{CMU Bright} % なおセリフは LM Roman のまま
+\setjamainfont{IPA明朝}  % 一応明朝も指定しておく
+\setjamainfont{HGｺﾞｼｯｸM} % 細めのゴシックがよい
+\begin{document}
+{\LaTeX}\>を使えば、例えば、 % \> = 和欧文間空白
+\begin{quote}\begin{rawentext} % 約物が和文扱いされるのを防ぐ
+&#x201E;Aber sind Kafkas \emph{Schlo&#xDF;} und &#xC4;sops &#x152;uvres nicht oft naiv 
+vis-&#xE0;-vis der offizielen Rolle des d&#xE4;mo\-ni\-schen Ph&#xF6;nixes
+in flockigen Souffl&#xE9;s?&#x201c;
+\end{rawentext}\end{quote}
+のような複雑な欧文でも、
+\[
+  \left( \int_0^\infty \frac{\sin x}{\sqrt x}\,\mathrm{d}x \right)^2 =
+  \prod_{k=1}^\infty \frac{4k^2}{4k^2-1} \neq \frac{\pi}{2010}.
+\]
+のような複雑な数式でも、
+\begin{quote}\begin{rawentext}
+  Дваждый два &#x2014; четыре.
+\end{rawentext}\end{quote}
+のような簡単なロシア語でも大丈夫。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:938px">
+<img src="sample/cmbr-sample07.png" width="938" height="354">
+</div></div>
+<div class="bend"><span class="lbl">参考：</span> 
+zxjatype を用いた日本語組版では、総称ファミリについては、
+和文での設定は常に欧文の設定に追随するので、
+cmbright が施した「メインを <code>\sffamily</code> にする」
+設定がそのまま和文にも適用されている。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+この例に現れるドイツ語の quote では、
+「言語指定」を行っていないので、
+そのままでは不正な箇所でハイフネーションが起こる。
+よって <code>d&#xE4;mo\-ni\-schen</code>
+のところで手動でハイフネーション指定をしている。
+なお、XeLaTeX において「言語指定」を行うためのパッケージ
+（8 ビット欧文 LaTeX での Babel に相当するもの）
+は Polyglossia である。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+rawentext 環境は zxjatype パッケージが提供する機能で、
+zxjatype（xeCJK）
+の和文処理を無効にして全て欧文フォントで出力するためのものである。
+これがないと、一部の約物が和文として出力されてしまう。
+</div>
+
+</div><!--ssec-xelatex-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">コンクリートなフォントとか</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009, 2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-05-16
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>ZXotf パッケージ ～XeTeX でも CID フォントを～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="description"
+  content="ZXotf は Adobe-Japan1 のグリフ集合をもつ CID-keyed OpenType フォントについて、XeLaTeX で CID 番号によるグリフ出力を可能にするパッケージである。">
+<meta name="keywords" content="XeLaTeX,XeTeX,Adobe-Japan1,CID,OTF,OpenType,LaTeX,Unicode,TeX">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=zxotf"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">ZXotf パッケージ</span>
+</div><!--navibar-->
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/zxotf.html">http://zrbabbler.sp.land.to/zxotf.html</a>
+</div>
+<div id="maintext">
+<h1>ZXotf パッケージ<br><span class="subtitle">～XeTeX でも CID フォントを～</span></h1>
+
+<div class="abstract">
+ZXotf は Adobe-Japan1 のグリフ集合をもつ CID-keyed OpenType フォントについて、
+XeLaTeX で CID 番号によるグリフ出力を可能にするパッケージである。
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>Adobe-Japan1 のグリフ集合をもつ CID-keyed OpenType フォントについて、
+XeLaTeX で CID 番号によるグリフ出力を可能にする。
+齋藤修三郎氏作の OTF
+パッケージの \CID 命令を XeLaTeX で使うためものなので ZXotf という名前にした。
+</p>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<ul>
+<li>TeX 処理系： XeLaTeX
+</li>
+<li>前提パッケージ：
+<a href="pxbase.html">BXbase パッケージバンドル</a>
+</li>
+</ul>
+
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/zxotf.zip"><!--
+-->圧縮ファイル zxotf.zip (v0.2)のダウンロード</a>
+</li>
+</ul>
+
+<p>インストール方法については、パッケージ付属の説明書
+（README）を参照してほしい。
+</p>
+
+</div><!--ssec-download-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-gtkanji">
+<h2>サンプル</h2>
+
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?OTF">TeX Wiki の OTF のページ</a>
+にある例を zxotf で作ってみる。
+
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+  %「日本語組版のための設定」は省略します...
+\setmainfont{Kozuka Mincho Pro-VI}  % Adobe-Japan1 対応のフォントを指定する
+\setsansfont{Kozuka Gothic Pro-VI}  %  （ここでは小塚フォント）
+\usepackage{zxotf}
+\begin{document}
+
+森\UTF{9DD7}外と内田百\UTF{9592}とが\UTF{9AD9}島屋に行くところを想像した。
+
+\CID{7652}飾区の\CID{13706}野屋
+
+\end{document}
+</pre>
+
+<p><code>\CID</code> だけ別のフォントを用いる場合は次のようにする。
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+  %「日本語組版のための設定」は省略します...
+\setmainfont{IPAMincho}  % ここは IPA フォント
+\setsansfont{IPAGothic}  %
+\usepackage{zxotf}
+\setcidminchofont{Kozuka Mincho Pro-VI} % \CID 用の明朝フォント
+\setcidgothicfont{Kozuka Gothic Pro-VI} % \CID 用のゴシックフォント
+\begin{document}
+
+森\UTF{9DD7}外と内田百\UTF{9592}とが\UTF{9AD9}島屋に行くところを想像した。
+
+\CID{7652}飾区の\CID{13706}野屋
+
+\end{document}
+</pre>
+<div class="alert"><span class="lbl">注意：</span> 
+<code>\UTF</code> では直接入力の文字と同じフォントが使われる。
+</div>
+
+<p>同じ参照ページの後にある例を以下に示す。
+この中の <code>\゜</code>（<code>\</code> + 半濁点）
+は ajmacros パッケージで提供されているマクロであるが、
+zxotf で <code>macros</code> オプションを付けると ajmacros パッケージを
+読み込むので、その中の命令
+（他には <code>\ajMaru</code>、<code>\ajLig</code>、<code>\○</code> 等）
+が（多分）使えるようになる。
+勿論、このためには OTF パッケージがインストールされている必要がある。
+ajmacros.sty の文字コードは UTF-8 か ISO-2022-JP（JIS エンコーディング）
+のいずれかであればよい。
+</p>
+<p>（この例では BXjscls バンドルの文書クラスと zxjatype パッケージを用いた。
+これらについては
+<a href="./xelatex.html">「XeLaTeX で日本語する件について」のページ</a>を参照してほしい。
+</p>
+
+<pre>
+\documentclass{bxjsarticle} % BXjscls の文書クラス
+\usepackage{zxjatype} % 下2行は zxjatype の「和文」フォント設定
+\setjamainfont[RawFeature=-palt]{Kozuka Mincho Pro-VI} %+ 小塚フォントを
+\setjasansfont[RawFeature=-palt]{Kozuka Gothic Pro-VI} %+  等幅で使用する
+\usepackage[macros]{zxotf} % macros オプション付加
+\begin{document}
+Adobe-Japan1-5で追加された文字を使った例
+\begin{itemize}
+  \item 「\゜か」，「\゜き」，「\゜く」，「\゜け」，「\゜こ」，%
+        「\゜カ」，「\゜キ」，「\゜ク」，「\゜ケ」，「\゜コ」は鼻濁音を表す。
+  \item Macintosh用キーボードの\UTF{2318}(Command key)を押す。
+  \item \UTF{2672}を心がけよう。
+\end{itemize}
+
+Adobe-Japan1-6で追加された文字を使った例
+\begin{itemize}
+  \item ほげほげ番組\CID{20556}
+  \item ほげほげフェスティバル\CID{20656}
+  \item \CID{20939}(Bq: becquerel)は放射能の強さを表す単位である。
+  \item フラーレン(fullerene) C$_{60}$は
+        サッカーボール状（\CID{20957}）の構造をしている。
+  \item \UTF{9B87}とは岩魚（イワナ）のことであり，嘉魚とも書く。
+\end{itemize}
+\end{document}
+</pre>
+
+</div><!--sec-irect-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">ZXotf パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009&#x2013;2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-01-17
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

@@ -1,0 +1,26 @@
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{xltxtra} % これは後で解説
+\usepackage[margin=5mm,noheadfoot,papersize={84mm,36mm},%
+]{geometry}
+\pagestyle{empty}
+\newfontfamily\fchr{Charis SIL}  % \fchr でフォント“Charis SIL”に切替
+\newfontfamily\fipm{IPA明朝}     % \fipm でフォント“IPA明朝”に切替
+  % \faru でデーヴァナーガリー文字用の設定を施した“Arial Unicode MS”に切替
+\newfontfamily\faru[Script=Devanagari]{Arial Unicode MS}
+  % \showUC は何の変哲のない LaTeX のマクロ
+\newcommand*\showUC[1]{\ \texttt{\footnotesize U+#1}}
+\begin{document}
+\begin{itemize}
+\item {\fipm 土\symbol{"571F}}\showUC{571F} /
+      {\fipm 圡\symbol{"5721}}\showUC{5721} /
+      {\fipm 𡈽\symbol{"2123D}}\showUC{2123D}
+\item {\fchr j}\showUC{006A} + {\fchr\symbol{"0302}}\showUC{0302}
+      = {\fchr j\symbol{"0302}}
+\item {\fipm か}\showUC{304B} + {\fipm\symbol{"309A}}\showUC{309A}
+      = {\fipm か\symbol{"309A}}
+\item {\faru \symbol{"915}}\showUC{0915} + {\faru\symbol{"93F}}\showUC{093F}
+      = {\faru \symbol{"915}\symbol{"93F}}
+\end{itemize}
+
+\end{document}

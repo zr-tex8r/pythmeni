@@ -1,0 +1,346 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>ZXjafont パッケージ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="フォント,変更,TeX,dvipdfmx,upTeX,dviout,OpenType,LaTeX,pTeX,pLaTeX,upLaTeX">
+<meta name="description"
+  content="ZXjafont は pLaTeX において一般的なフォント設定を XeLaTeX において簡単に行うためのパッケージである。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=zxjafont"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">ZXjafont パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>ZXjafont パッケージ</h1>
+
+<div class="abstract">
+ZXjafont は pLaTeX において一般的なフォント設定を
+XeLaTeX において簡単に行うためのパッケージである。
+</div>
+
+<div id="changelog" class="hdn">
+<div class="lbl">変更履歴</div>
+<ul>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>
+pLaTeX においては、和文のフォント設定は文書の「外」
+で行われるのが通例であった。
+（文書中では常に rml（リュウミン）を指定しておいて、
+DVI ウェアの設定で rml を別のフォント（例えばヒラギノ明朝）で代替する。）
+それに対して XeLaTeX + fontspec ではフォントはファミリ名を直接指定する
+方式を採る。
+従って、「好きなフォントを指定する」という点では、
+pLaTeX よりも格段に容易になっているといえるが、
+fontspec の既定のフォント（Latin Modern）では日本語が扱えないので、
+必ず何らかのフォントを設定する必要があり、これが煩わしく感じられるかも知れない。
+（何より、正しいフォント名を思い出すのが面倒である。）
+</p>
+<p>そこで、本パッケージでは、
+pLaTeX において一般的に行われている設定を予め用意しておいて、
+簡単に呼び出せるようにしている。
+例えば、「IPA フォントを使う」設定
+（セリフは「IPA明朝」、サンセリフと等幅は「IPAゴシック」）は
+</p>
+<pre>
+\usepackage[ipa]{zxjafont}
+</pre>
+<p>と書くだけで済む。
+なお、（u）pLaTeX 用にも同じ目的の
+<a href="./pxjafont.html">PXjafont パッケージ</a>があり、
+それとオプション名（<code>ipa</code> 等）を合わせている。
+</p>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<ul>
+<li>TeX 処理系： XeLaTeX2e
+</li>
+<li>前提パッケージ： fontspec
+</li>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/zxjafont.zip"><!--
+-->圧縮ファイル zxjafont.zip (v0.2)のダウンロード</a>
+<span class="mdate">[2009/12/21]</span>
+</li>
+</ul>
+<p>インストールについてはパッケージ内の説明書（README ファイル）を参照。
+</p>
+</div><!--ssec-download-->
+
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-usage">
+<h2>使い方</h2>
+
+<p>以下のようにパッケージを読み込むだけである。
+（ユーザ命令・環境はない。）
+</p>
+<pre>
+\usepackage[&lt;メイン設定&gt;,&lt;サブ設定&gt;,&lt;他オプション&gt;]{pxjafont}
+</pre>
+<p><code>&lt;メイン設定&gt;</code> は 1 つだけ指定できるが、
+<code>&lt;サブ設定&gt;</code> と <code>&lt;他オプション&gt;</code>
+は任意個数指定可能である。
+もし fontspec が未読込の場合は自動的に読み込む。
+</p>
+<p>XeLaTeX には和文と欧文の元来の区別がないので、
+このパッケージで指定するフォントが全ての文字に通用する。
+ただし、<a href="./zxjatype.html">ZXjatype パッケージ</a>では和文と欧文を区別するので、
+それと併用の場合は和文のみにフォント設定が適用される。
+</p>
+
+
+<div class="subsection" id="ssec-mainspec">
+<h3>メイン設定</h3>
+
+<p>総称ファミリの設定（fontspec の
+<code>\setmainfont</code>、<code>\setsansfont</code>、<code>\setmonofont</code>）
+を行うもの。
+</p>
+
+<h4>単ウェイト用の設定</h4>
+
+<p>明朝・ゴシック各々 1 ウェイトのみを用いる設定。
+セリフ（<code>\rmfamily</code>）に明朝、
+サンセリフ（<code>\sffamily</code>）と等幅（<code>\ttfamily</code>）
+にゴシックを割り当てる。
+さらに、pLaTeX の習慣に合わせて、セリフの太字（\bfseries）もゴシックにする。
+（これは必ずしも好ましい設定ではないことに注意。）
+</p>
+
+<ul>
+<li><code>ms</code> ： MS フォント（「ＭＳ 明朝」「ＭＳ ゴシック」）を使用する。
+</li>
+<li><code>ipa</code> ： IPA フォント（「IPA明朝」「IPAゴシック」）を使用する。
+ver.003 でも ver,002 でも同じ（フォント名が同じだから）である。
+</li>
+<li><code>kozuka4</code> ： Pro 仕様の小塚フォント（「小塚明朝 Pro R」「小塚ゴシック Pro M」）を使用する。
+</li>
+<li><code>kozuka6</code> ： Pr6 仕様の小塚フォント（「小塚明朝 Pro-VI R」「小塚ゴシック Pro-VI M」）を使用する。
+</li>
+<li><code>kozuka6n</code> ： Pr6N 仕様の小塚フォント（「小塚明朝 Pr6N R」「小塚ゴシック Pr6N M」）を使用する。
+</li>
+<li><code>hiragino</code> ： ヒラギノフォント「ヒラギノ明朝 Pro W3」「ヒラギノ角ゴ Pro W6」を使用する。
+</li>
+</ul>
+
+<h4>多ウェイト用の設定</h4>
+<p>明朝・ゴシック各々 2 ウェイトを用いる設定。
+（fontspec では 3 ウェイト以上の設定ができない。）
+セリフに明朝、サンセリフと等幅にゴシックを割り当て、
+各々について通常（<code>\mdseries</code>）と太字（<code>\bfseries</code>）
+を個別に設定する。
+</p>
+<ul>
+<li><code>ms-dx</code> ： MS フォントおよび Microsoft Office 付属の日本語フォントを使用する。
+</li>
+<li><code>ipa-dx</code> ： IPA フォントおよび Microsoft Office 付属の日本語フォントを使用する。
+</li>
+<li><code>hiragino-dx</code> ： ヒラギノフォント「ヒラギノ明朝 Pro W3・W6」「ヒラギノ角ゴ Pro W3・W6」
+を使用する。
+</li>
+</ul>
+
+<div class="bend"><p><span class="lbl">参考：</span> 
+XeTeX は「フォント非埋込の PDF 生成」に対応していない。
+</div>
+
+</div><!--ssec-mainspec-->
+
+
+<div class="subsection" id="ssec-subspec">
+<h3>サブ設定</h3>
+
+<p>fontspec では使用するフォントを <code>\newfontfamily</code> 命令で
+増やすことができる。
+それを利用した追加設定である。
+</p>
+<ul>
+<li><code>hg</code>：
+Microsoft Office のフォント（HG フォント）に対応する、
+以下のファミリ命令が定義される。
+<ul>
+<li><code>\hgmcfamily</code>： HGS明朝B、太字=HGS明朝E。
+</li>
+<li><code>\hgprfamily</code>： HGS創英ﾌﾟﾚｾﾞﾝｽEB
+</li>
+<li><code>\hggtfamily</code>： HGSｺﾞｼｯｸM、太字=HGSｺﾞｼｯｸE。
+</li>
+<li><code>\hggufamily</code>： HGS創英角ｺﾞｼｯｸUB
+</li>
+<li><code>\hgmgfamily</code>： HG丸ｺﾞｼｯｸM-PRO
+</li>
+<li><code>\hgkkfamily</code>： HGS教科書体
+</li>
+<li><code>\hgksfamily</code>： HG正楷書体-PRO
+</li>
+<li><code>\hggsfamily</code>： HGS行書体
+</li>
+<li><code>\hgppfamily</code>： HGS創英角ﾎﾟｯﾌﾟ体
+</li>
+</ul>
+<li><code>hiraginomg</code>：
+ヒラギノの丸ゴシックを使う設定。
+<ul>
+<li><code>\hmgfamily</code>： ヒラギノ丸ゴ Pro W4
+</ul>
+</li>
+</ul>
+
+<div class="bend"><span class="lbl">参考：</span> 
+fontspec では取り扱うフォントのウェイトを通常（<code>\mdseries</code>）
+と太字（<code>\bfseries</code>）の 2 つに制限している。
+多くの OS での扱いに合わせているようである。
+</div>
+
+</div><!--ssec-subspec-->
+
+<div class="subsection" id="ssec-other-options">
+<h3>他オプション</h3>
+
+<ul>
+<li><code>prop</code>： プロポーショナル幅のフォントを用いる。
+例えば、「IPA明朝」の代わりに「IPA P明朝」、
+「HGS行書体」の代わりに「HGP行書体」を指定する。
+既定で用いるのは等幅のフォントだが、
+「欧文のみプロポーショナル」の変種（HGフォントの場合「HGS～」名称のもの）
+がある場合はそれを優先させている。
+<div class="alert"><span class="lbl">注意：</span> 
+zxjatype を用いる場合は、和文は等幅フォントを用いることが前提なので、
+このオプションは指定できない（エラーになる）。
+</div>
+</li>
+<li><code>scale=&lt;実数&gt;</code>： スケール値
+（fontspec の <code>Scale</code> 属性の値）。
+既定値は、BXjscls の文書クラスおよび zxjatype パッケージで指定されて
+いる場合はその値、なければ 1 となる。
+</li>
+<li><code>feature={&lt;属性リスト&gt;}</code>：
+このパッケージで指定されるフォント全体に通用する
+fontspec の属性の指定。
+</li>
+</ul>
+
+</div><!--ssec-other-options-->
+
+</div><!--sec-usage-->
+
+<div class="section" id="sec-sample">
+<h2>サンプル</h2>
+
+<p><a href="./xelatex.html#ssec-bxjscls">BXjscls パッケージ</a>の文書クラス、
+<a href="./zxjatype.html#ssec-bxjscls">ZXjatype パッケージ</a>、
+<a href="./zxjafont.html#ssec-bxjscls">ZXjafont パッケージ</a>の組み合わせによって、
+日本語文書を XeLaTeX で作成する際のプレアンブルの記述を大幅に減らすことができる。
+<!--
+なお、下の例では xltxtra パッケージは <code>\XeLaTeX</code>
+命令のために必須となっているが、
+たとえ不必要にみえる（なくてもコンパイルが通る）場合でも、
+入れておく方が無難であるように思える。
+-->
+</p>
+<pre>
+\documentclass[a4paper]{bxjsarticle}
+\usepackage{zxjatype}
+\usepackage[ipa-dx]{zxjafont}
+\usepackage{xltxtra} % \XeLaTeX ロゴのために必要
+\begin{document}
+\title{\XeLaTeX\ 怪文書作成入門}
+\author{絶対匿名希望}
+\maketitle
+
+\section{美しい怪文書組版のために}
+先日、ある新聞社が行った、
+怪文書作成の専門家に対するアンケート結果によると……
+
+\section{おいしい焼きリンゴを作る秘訣 ― 「3 つのΨ」}
+ここで話は変わって……
+
+\end{document}
+</pre>
+
+</div><!--sec-sample-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">ZXjafont パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009&#x2013;2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-05-08
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

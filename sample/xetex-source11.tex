@@ -1,0 +1,44 @@
+\documentclass[a4paper]{article}
+\usepackage{zxjatype}
+\usepackage{alltt,color}
+%\setmonofont は既定の LM Typewriter
+\setjamonofont{IPAGothic}
+\newfontface{\fCour}{Courier New Bold}
+\newfontfamily{\fMang}{Mangal}
+\nojafamilyinverbatim
+\newcommand*{\ja}[1]{\textrawja{#1}}
+\newcommand*{\cBS}{\symbol{`\\}} % <\>
+\newcommand*{\cLB}{\symbol{`\{}} % <{>
+\newcommand*{\cRB}{\symbol{`\}}} % <}>
+\definecolor{back}{rgb}{0,0.067,0.2}
+\pagestyle{empty}
+\pagecolor{back}
+\renewcommand{\baselinestretch}{0.95}
+\begin{document}
+\color{white}
+\begin{alltt}
+% \ja{このファイルの文字コードは} UTF-8
+{\cBS}documentclass[a4paper]{\cLB}article{\cRB}
+{\cBS}usepackage{\cLB}xltxtra{\cRB}
+{\cBS}usepackage{\cLB}bidi{\cRB} % right-to-left \ja{モードを使う}
+{\cBS}newfontfamily{\cBS}fchr{\cLB}Charis SIL{\cRB}
+{\cBS}newfontfamily{\cBS}fman{\cLB}Mangal{\cRB}
+{\cBS}newfontfamily{\cBS}ftah{\cLB}Tahoma{\cRB}
+{\cBS}begin{\cLB}document{\cRB}
+
+{\cBS}Large
+{\cBS}fchr % \ja{ヨルバ語で「すみませんが」}
+Ẹ ṣe fun mi. % <sﾌ｣> \ja{は} <0073 0323>
+
+{\cBS}fman % \ja{ヒンディー語でホバークラフト文}
+{\fMang{}मेरी मँडराने वाली नाव सर्पमीनों से भरी ह।}
+
+{\cBS}ftah % \ja{イディッシュ語で「わかりません」}
+{\cBS}setRL % right-to-left \ja{モードに切替}
+{\fCour{}איך פֿאַרשטיי דאָס ניט.}
+{\cBS}setLR % left-to-right \ja{モードに切替}
+
+{\cBS}end{\cLB}document{\cRB}
+\end{alltt}
+
+\end{document}

@@ -1,0 +1,511 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>奥底の道具箱 ～奥底のパッケージ～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="本サイトで配布されている TeX／LaTeX 関連のパッケージの一覧です。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=package"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">奥底の道具箱</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>奥底の道具箱<br>
+<span class="subtitle">～奥底のパッケージ、モジュール、その他の何か～</span></h1>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2012/05/19：旧「奥底の道具箱」ページと統合。
+タイトルを「奥底のパッケージ」から「奥底の道具箱」に変更。
+</li>
+<li><a href="#sec-simple">簡易包装</a>が増殖中。</a>
+</li>
+<li>2011/03/19：トップページから分離。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-normal">
+<h2>通常パッケージ</h2>
+
+<p>バージョン番号が 1 未満のものは開発中の &alpha; 版です。
+仕様は予告なく変更される可能性があることをご了承下さい。
+このサイトにあるソフトウェアは、特に他のものが
+（パッケージ内の文書にも）明示されていない場合は、
+<em>MIT ライセンス</em>（X11 ライセンス）の下で配布されているものとします。
+</p>
+
+<div class="subsection" id="ssec-px">
+<h3>PX シリーズ （pTeX 用）</h3>
+<p>実行に pTeX（またはその派生の e-pTeX／upTeX／e-upTeX）を必要とするもの。
+</p>
+
+<ul>
+<li id="elt-pxrubrica"><a href="pxrubrica.html">PXrubrica パッケージ</a>
+  <a href="https://github.com/zr-tex8r/PXrubrica">（github）</a><br>
+JIS 規格
+「JIS X 4051」
+および W3C 技術ノート
+「日本語組版処理の要件」
+で述べられているような、
+日本において一般的な様式に従ってルビを付ける機能を提供する。
+</li>
+<li id="elt-pxchfon"><a href="pxchfon.html">PXchfon パッケージ</a>
+  <a href="data/pxchfon.zip">（v0.5; ダウンロード 80KB）</a>
+  <span class="mdate">[2010/05/15]</span><br>
+pLaTeX／upLaTeX
+の標準の和文フォントを簡単に変更できるようにする。
+LaTeX の文書中で使うフォントを指定できる。
+欧文を和文と同じフォントにすることも可能。
+インストール・設定が簡単。
+シンプル・イズ・ベスト。
+ただし dvipdfmx 専用。<br>
+※ 0.5 版への改版で、PXjafont
+パッケージの機能がこのパッケージに取り込まれた
+（PXjafont は廃止）。
+</li>
+<li id="elt-pxbase"><a href="pxbase.html">PXbase パッケージ</a>
+  <a href="data/pxbase.zip">（v0.5; ダウンロード 44KB）</a>
+  <span class="mdate">[2010/08/22]</span><br>
+pLaTeX／upLaTeX
+における日本語文書の作成を支援する基本的な機能を提供する。
+例えば、Unicode のコード値による文字入力、
+PDF の文書情報に日本語を使用する設定の自動化、
+upLaTeX の和文文字カテゴリ（kcatcode）の変更が含まれる。
+CJK 間のフォント切替の支援等の
+CJK 言語の為の機能も含まれる。
+また PX シリーズの他のパッケージでこれを必要とするものがある。
+</li>
+<li id="elt-pxgtfont"><a href="pxgtfont.html">PXgtfont パッケージ</a>
+  <a href="data/pxgtfont.zip">（v0.3; ダウンロード 2.32MB）</a>
+  <span class="mdate">[2009/12/10]</span><br>
+7万字を超える漢字集合を含む「GT書体フォント」を pLaTeX／upLaTeX
+で使用する為のパッケージである。
+現在の GT 漢字の全て(78774 番まで)を使うことができるが、
+GT 番号で指定できるのは 69263 番までである。
+dviout、dvips、dvipdfmx に対応している。
+</p>
+</li>
+<li id="elt-pxmonja"><a href="pxmonja.html">PXmonja パッケージ</a>
+  <a href="data/pxmonja.zip">（v0.2; ダウンロード 9KB）</a>
+  <span class="mdate">[2010/06/06]</span><br>
+端末表示を模したいわゆる「等幅」出力、すなわち
+「欧文を和文の半分の幅にしてベタ組」する機能を提供する。
+Verbatim 出力でもそれ以外でも使用可能である。
+</li>
+<li id="elt-pxmika"><a href="pxmika.html">PXmika パッケージ</a>
+  <a href="data/pxmika.zip">（v0.2; ダウンロード 392KB）</a>
+  <span class="mdate">[2008/05/17]</span><br>
+フリーの手書きフォントとして有名な
+<a href="http://mikachan-font.com">「みかちゃん」</a>を
+pLaTeX／upLaTeX で使用する為のパッケージである。
+和欧文共に対応し、欧文は OT1 の範囲の文字が全て使える。
+既に同じ機能を提供するパッケージがあるが、
+こちらは細かな調整を行っているので、横書き・縦書きともに、
+従来のものより優れた出力結果が得られるはずである。
+</li>
+<li id="elt-pxtosb"><a href="pxtosb.html">PXtosb パッケージ</a>
+  <a href="data/pxtosb.zip">（v0.2a; ダウンロード 373KB）</a>
+  <span class="mdate">[2009/12/11]</span><br>
+  PXtosb-extra パッケージ
+  <a href="data/pxtosb-extra.tar.lzma">（v0.2; ダウンロード 245KB）</a>
+  <span class="mdate">[2008/06/28]</span><br>
+pTeX／upTeX の DVI を dvi2dvi で変換して dvipng
+に通すための仮想フォント（VF）のセット。
+pLaTeX／upLaTeX の一般的なフォント
+（UTF／OTF パッケージを含む）を用いた文書なら何でも変換可能で、
+かつ元の組版が完全に再現される。
+</li>
+<li id="elt-pxwjmap"><span href="pxwjmap.html">PXwjmap パッケージ</span>
+  <a href="data/pxwjmap.zip">（v0.4a; ダウンロード 29KB）</a>
+  <span class="mdate">[2010/06/19]</span><br>
+W32TeX において、pTeX／upTeX
+の標準および有名なパッケージで使用される日本語（正確には CJK）
+のフォントへの実フォントの対応として、
+いくつかの妥当な設定例を記述したもの。
+（このパッケージはパブリックドメインの扱いとする。）
+</li>
+<li id="elt-pxcopyfont"><a href="pxcopyfont.html">PXcopyfont パッケージ</a>
+  <a href="data/pxcopyfont.zip">（v0.7.1; ダウンロード 9KB）</a>
+  <span class="mdate">[2010/06/07]</span><br>
+TeX の仮想フォント（TFM と VF の組；和文・欧文ともに可）を、
+その参照関係を保ったままで、別名でコピーする。
+Perl 版の他に Lua 版（W32TeX の標準インストールだけで動作可能）
+が用意されている。
+</li>
+<li id="elt-pxutil"><a href="pxutil.html">PXutil パッケージ</a>
+  <a href="data/pxutil.zip">（v0.6.2; ダウンロード 10KB）</a>
+  <span class="mdate">[2010/06/06]</span><br>
+和文の仮想フォント（VF と JFM の組）を VPL 類似のテキスト形式で
+ある「ZVP 形式」に変換/逆変換するツール。
+VF ファイルのみをテキスト形式に変換する機能もある。
+実行には Perl および <a href="#elt-zrtextor">ZRTeXtor モジュール</a>が必要。
+</li>
+<li id="elt-pxacid"><a href="pxacid.html">PXacid パッケージ</a>
+  <a href="data/PXacid.zip">（v0.2.3; ダウンロード 16KB）</a>
+  <span class="mdate">[2011/02/19]</span><br>
+昔々、或る所に、Adobe-Japan1 の CID 対応の OpenType フォントの
+従属欧文を使う、なんて話がありました。
+</li>
+</ul>
+
+</div><!--ssec-px-->
+
+<div class="subsection" id="ssec-zx">
+<h3>ZX シリーズ （XeTeX 用）</h3>
+<p>実行に XeTeX を必要とするもの。
+</p>
+
+<ul>
+<li id="elt-zxjatype"><a href="zxjatype.html">ZXjatype パッケージ</a>
+  <a href="https://github.com/zr-tex8r/ZXjatype">（github）</a><br>
+XeLaTeX で日本語の標準的な組版を行うためのパッケージであり、
+pTeX に匹敵する品質を得ることを目指している。
+中国語用の xeCJK パッケージを土台にしているので、こちらのインストールも必要。 
+</li>
+<li id="elt-zxjafont"><a href="zxjafont.html">ZXjafont パッケージ</a>
+  <a href="data/zxjafont.zip">（v0.2; ダウンロード 5KB）</a>
+  <span class="mdate">[2009/12/22]</span><br>
+pLaTeX で一般的に行われている和文フォント設定を
+XeLaTeX + fontspec の環境で簡単に行えるようにしたもの。
+</li>
+<li id="elt-zxotf"><a href="zxotf.html">ZXotf パッケージ</a>
+  <a href="data/zxotf.zip">（v0.2a; ダウンロード 17KB）</a>
+  <span class="mdate">[2009/11/18]</span><br>
+Adobe-Japan1 のグリフ集合をもつ CID-keyed OpenType フォントについて、
+XeLaTeX で CID 番号によるグリフ出力を可能にする。
+齋藤修三郎氏作の OTF
+パッケージの \CID 命令を XeLaTeX で使うためものなので ZXotf という名前にした。
+</li>
+<li id="elt-zxgtfont"><a href="zxgtfont.html">ZXgtfont パッケージ</a>
+  <a href="data/zxgtfont.zip">（v0.2; ダウンロード 469KB）</a>
+  <span class="mdate">[2009/11/16]</span><br>
+7万字を超える漢字集合を含む「GT書体フォント」を XeLaTeX
+で使用する為のパッケージである。
+現在の GT 漢字の全て(78774 番まで)を使うことができるが、GT 番号で指定
+できるのは 69263 番までである。
+要するに PXgtfont の XeTeX 版である。
+</li>
+</ul>
+
+</div><!--ssec-zx-->
+
+<div class="subsection" id="ssec-bx">
+<h3>BX シリーズ（エンジン不問）</h3>
+
+<ul>
+<li id="elt-pxfltsrc"><a href="pxfltsrc.html">BXfltsrc パッケージ</a>（旧 PXflrsrc パッケージ）
+  <a href="data/BXfltsrc.zip">（v0.5; ダウンロード 40KB）</a>
+  <span class="mdate">[2011/03/01]</span><br>
+LaTeX において、（shell escape の機能を用いて）
+組版時に自動的に入力ファイルにある種の変換フィルタが施されるようにする。
+日本語コード変換（JIS X 0213 対応；自動判別可能）、
+ギリシャ・キリル文字の「欧文化」、
+外部フィルタ呼び出し等が利用できる。
+内蔵のスクリプトを単体でフィルタとして用いることも可能。
+（Perl が必要。）
+</li>
+<li id="elt-bxjscls"><a href="bxjscls.html">BXjscls パッケージ</a>
+  <a href="https://github.com/zr-tex8r/BXjscls">（github）</a><br>
+奥村晴彦氏製作の
+「pLaTeX2e新ドキュメントクラス」
+を pLaTeX 以外の
+「日本語が通るLaTeX」
+―例えば XeLaTeX―で使えるように改造したもの。
+</li>
+<li id="elt-bxpict2e"><a href="bxpict2e.html">BXpict2e パッケージ</a>
+  <a href="data/bxpict2e.zip">（v0.1; ダウンロード 9KB）</a>
+  <span class="mdate">[2010/08/19]</span><br>
+pict2e パッケージを dvipdfmx に完全に対応させるための
+bxdpxp2e モジュールと、
+epic+eepic パッケージの picture 拡張機能（楕円や破線など）を
+pict2e の枠組の上で実現するための bxeepic パッケージの詰め合わせ。
+</li>
+<li id="elt-bxptool"><a href="bxptool.html">BXptool パッケージ</a>
+  <a href="data/bxptool.zip">（v0.2; ダウンロード 15KB）</a>
+  <span class="mdate">[2010/05/16]</span><br>
+ascmac とか jsverb とかを欧文 LaTeX／XeLaTeX
+でも使えるようにしようという話。
+</li>
+<li id="elt-bxsuika"><a href="bxsuika.html">BXsuika パッケージ</a>
+  <a href="data/bxsuika.zip">（v0.3; ダウンロード 207KB）</a>
+  <span class="mdate">[2010/05/16]</span><br>
+W32TeX の topdftex フィルタと併用して、pdfLaTeX で日本語を使えるようにする。
+topdftex は元々 ums パッケージ(稲垣淳 氏製作)と併用する
+前提で作られているので、ums の改良版といえる。主な改良点は DVI 出力の場合
+も同じ出力ができるようにしたことである。
+残念ながら、和文組版品質は元の ums と同じであまり良くない。
+</li>
+<li id="elt-bxbase"><a href="pxbase.html">BXbase パッケージ</a>
+  <a href="data/bxbase.zip">（v0.5; ダウンロード 24KB）</a>
+  <span class="mdate">[2010/08/22]</span><br>
+欧文 LaTeX2e における多言語文書およびそれに関わるマクロパッケージの
+作成を支援する基本的な機能を提供する。
+</li>
+</ul>
+
+</div><!--ssec-bx-->
+
+<div class="subsection" id="ssec-perl">
+<h3>Perl モジュール</h3>
+
+<ul>
+<li id="elt-zrtextor">ZRTeXtor パッケージ
+  <a href="data/zrtextor.zip">（v1.3.0; ダウンロード 32KB）</a>
+  <span class="mdate">[2010/05/05]</span><br>
+拙作の一部の Perl プログラムを実行するのに必要な Perl モジュール。
+</li>
+</ul>
+
+</div><!--ssec-perl-->
+
+<div class="subsection" id="ssec-other">
+<h3>その他</h3>
+
+<ul>
+<li id="elt-jxempt">JXempt パッケージ
+  <a href="data/jxempt.zip">（v0.2b; ダウンロード 72KB）</a>
+  <span class="mdate">[2008/07/04]</span><br>
+pLaTeX2e の新文書クラス（jsarticle／jsbook）の文書を
+NTT jTeX で組版できるようにする。
+これにより、新文書クラスの文書をほぼそのままの体裁で、dvipng
+で画像に変換することが可能。
+（PXtosb が使用可能ならそれの方がよい。）
+</li>
+<li id="elt-rcfonts">RC Fonts パッケージ
+  <a href="data/rcfonts.zip">（v0.1: ダウンロード 1.26MB）</a>
+  <span class="mdate">[2010/01/16]</span><br>
+Concrete Roman （OT1 エンコーディング）および Concrete Math
+フォントを Type 1 形式に変換したもの。
+名付けて「鉄筋コンクリートフォント」。
+詳しくは<a href="concrete.html">「コンクリートなフォントとか」</a>を参照。
+<small>（ハードディスクの整理をしていたら埋もれていたのが見つかったので
+公開してみた。;-) ）</small><br>
+※ 2010/01/10 の版は作業ミスのため肝心のフォントが壊れていました。
+手数ですが更新をお願いします。
+</li>
+</ul> 
+
+</div><!--ssec-other-->
+
+</div><!--sec-normal-->
+
+<div class="section" id="sec-simple">
+<h2>簡易包装コーナー</h2>
+
+<p>通常に比べて「詰めが甘い」パッケージ。
+README も必要最低限にしていて解説ページもないという不親切さ。
+それでも何かの役に立つかも知れないと思って、ひっそりと公開中。
+</p>
+<p>参照リンクのあるものは、
+リンク先に少しは解説のようなものがあるかも知れないし、
+ないかも知れない。
+</p>
+<ul>
+<li id="elt-pxeveryshi"><a href="https://gist.github.com/2549595">pxeveryshi.sty</a> （gist）
+<span class="mdate">[2012/05/19]</span><br>
+pLaTeX の縦書き文書で everyshi パッケージを使うとエラーになるのを解消する。
+everyshi パッケージは、ドライバ依存機能を提供するパッケージ
+（例えば tikz パッケージ）で内部で読み込まれることがある。
+（everyshi の代わりにこれを読み込む。
+もし内部で everyshi が読み込まれる場合には、
+everyshi が読み込まれた後に読み込むのが安全である。）<br>
+参考： <a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/56760.html">[qa:56760] tikz を縦書きで</a>
+/ <a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/56761.html">[qa:56761]</a>
+</li>
+<li id="elt-ixbm"><a href="https://gist.github.com/2549595">ixbm.sty</a> （gist）
+<span class="mdate">[2012/05/19]</span><br>
+LuaLaTeX で bm パッケージを使うには、代わりにこのパッケージを使えばよい。<br>
+参考： <a href="http://d.hatena.ne.jp/zrbabbler/20120509/1336584479">\mathcode と \omathcode と \Umathcode と</a>
+</li>
+<li id="elt-pxshowa"><a href="https://gist.github.com/2549595">pxshowa.sty</a> （gist）
+<span class="mdate">[2012/04/29]</span><br>
+日付を「昭和」にする。読み込んで <code>\昭和</code> を実行すれば OK。
+</li>
+<li id="elt-bxproofstyle"><a href="https://gist.github.com/1582926">bxproofstyle.sty</a> （gist）
+<span class="mdate">[2012/02/09]</span><br>
+「証明型環境」について amsthm と同じ感じで自分でスタイルを定義したい。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20120109/1326115861">例の proof 環境のアレ</a>
+</li>
+<li id="elt-1tex"><a href="data/1tex.zip">1tex.zip （ダウンロード 5KB）</a>
+<span class="mdate">[2011/11/11]</span><br>
+「1」だけで文書が作成可能な画期的な TeX フォーマット「1TeX」。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111111/1321022257">1 から始める TeX ～1TeXの紹介～</a>
+</li>
+<li id="elt-aencdviout"><a href="data/aencdviout.zip">aencdviout.zip （ダウンロード 9KB）</a>
+<span class="mdate">[2011/11/07]</span><br>
+「dviout 流」の欧文フォント設定に必要なデータとその使用例。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111105">dviout の欧文フォントの謎が解けた！</a>
+       <a href="http://d.hatena.ne.jp/zrbabbler/20111106">(2)</a>
+       <u href="http://d.hatena.ne.jp/zrbabbler/20111107">(3)</u> /
+       <a href="http://oku.edu.mie-u.ac.jp/tex/mod/forum/discuss.php?d=728">TeX Forum のある質問</a>
+</li>
+<li id="elt-bxtollogo"><a href="data/BXtollogo.zip">BXtollogo.zip （ダウンロード 24KB）</a>
+<span class="mdate">[2011/11/03]</span><br>
+「TeX on LaTeX」のロゴ。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111025">「TeX on LaTeX」のロゴ</a>
+</li>
+<li id="elt-PXgtfontalpha"><a href="data/PXgtfont.tar-0.4alpha.xz">PXgtfont.tar-0.4alpha.xz （ダウンロード 698KB）</a>
+<span class="mdate">[2011/10/18]</span><br>
+「Tフォント」への対応を加えた PXgtfont パッケージのテスト版。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111018">Tフォントが凄い件について</a>
+</li>
+<li id="elt-mplus1ps"><a href="data/mplus1ps.zip">mplus1ps.zip （ダウンロード 59KB）</a>
+<span class="mdate">[2011/10/08]</span><br>
+サブフォント定義（SFD）を用いた欧文フォントの設定のサンプル。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111004">dvipdfmx で OpenType する件について (SFD編-1)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111005">(2)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111007">(3)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111008">(4)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111009">(5)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111011">(6)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111012">(7)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20111014">(8)</a>
+</li>
+<li id="elt-mplus1p"><a href="data/mplus1p.zip">mplus1p.zip （ダウンロード 814KB）</a>
+<span class="mdate">[2011/10/15]</span><br>
+<a href="http://mplus-fonts.sourceforge.jp/">「M+ 1P」フォント</a>の欧文部分を使えるようにする。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110926">dvipdfmx で OpenType する件について (1)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20110927">(2)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20110928">(3)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20110929">(4)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20110930">(5)</a> /
+<a href="http://d.hatena.ne.jp/zrbabbler/20111001">できない件</a> /
+<a href="http://d.hatena.ne.jp/zrbabbler/20111015">CJK</a>
+</li>
+<li id="elt-bxattritta"><a href="data/BXattritta.zip">BXattritta.zip （ダウンロード 105KB）</a>
+<span class="mdate">[2011/09/25]</span><br>
+Computer Modern 派生の、和文の「丸ゴシック」に合わせた欧文フォント。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110919">updmap はなぜ動くのか(1)</a>
+<a href="http://d.hatena.ne.jp/zrbabbler/20110920">(2)</a> /
+<a href="http://d.hatena.ne.jp/zrbabbler/20110925">Bxattritta を使っている</a>
+</li>
+<li id="elt-ixerrtrick"><a href="data/IXerrtrick.zip">IXerrtrick.zip （ダウンロード 2KB）</a>
+<span class="mdate">[2011/04/10]</span><br>
+LuaTeX において、展開限定文脈の中でエラー通知をする実験。<br>
+参照：<a href="http://d.hatena.ne.jp/zrbabbler/20110409/1302373587">展開限定文脈でエラーを出す</a>
+</li>
+<li id="elt-bxnumtrick"><a href="data/BXnumtrick.zip">BXnumtrick.zip （ダウンロード 2KB）</a>
+<span class="mdate">[2011/04/10]</span><br>
+よくわからないなにか。
+</li>
+<li id="elt-bxmirageat"><a href="data/BXmirageat.zip">BXmirageat.zip （ダウンロード 3KB）</a>
+<span class="mdate">[2011/04/03]</span><br>
+PDF にメールアドレスを書く時に、スパム除けのために「読めない〈@〉」を書く。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110402/1301764429">スパマーに読まれない〈@〉を書く（BXmirageat パッケージ）</a><br>
+サンプル：<a href="sample/bxmirageat-sample.pdf">PDF</a>
+</li>
+<li id="elt-bxpdfcrypt"><a href="data/BXpdfcrypt.zip">BXpdfcrypt.zip （ダウンロード 6KB）</a>
+<span class="mdate">[2011/03/20]</span><br>
+dvipdfmx 用の暗号化設定を文書中で行う。パスワードをファイルから読むことも可能。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110320/1300620094">dvipdfmx の暗号化指定を文書内で行う（BXpdfcrypt パッケージ）</a>
+</li>
+<li id="elt-zxjafbfont"><a href="data/ZXjafbfont.zip">ZXjafbfont.zip （ダウンロード 3KB）</a>
+<span class="mdate">[2011/02/20]</span><br>
+xeCJK（または ZXjatype）使用の文書で、
+現在のフォントにない文字を別のフォントで自動的に代替できるようにするというお話。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110220/1298209702">フォントにない文字を別のフォントで補う～xeCJKの場合～</a>
+</li>
+<li id="elt-bxopcjk"><a href="data/BXopcjk.tar.xz">BXopcjk.tar.xz （ダウンロード 35KB）</a>
+<span class="mdate">[2011/02/20]</span><br>
+OTF パッケージで設定されている CJK フォントを CJK パッケージで使おうというお話。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110126/1296063230">CJKパッケージを極めて簡単にセットアップする方法</a>
+</li>
+<li id="elt-prajnya"><a href="data/prajnya.zip">prajnya.zip （ダウンロード 685KB）</a>
+<span class="mdate">[2011/02/13]</span><br>
+「般若心経」を「漢文」「サンスクリット・デーヴァナーガリー文字」
+「サンスクリット・ラテン文字」「ロシア語（キリル文字）」
+の 4 種類の文字で入力して XeLaTeX／LuaLaTeX で組版したもの。
+Unicode TeX での多言語組版の例を挙げることを目的としている。<br>
+参照：<a href="http://d.hatena.ne.jp/zrbabbler/20110213/1297595355">般若心経 LuaTeX</a>
+</li>
+<li id="elt-zxaddrite"><a href="data/ZXaddrite.zip">ZXaddrite.zip</a>
+<span class="mdate">[2011/01/09]</span><br>
+年賀状の宛名印刷用の XeLaTeX 文書クラス。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110109/1294532666">宛名書き用文書クラス（ZXaddrite パッケージ）</a>
+</li>
+<li id="elt-pxftnote"><a href="data/pxftnote.zip">pxftnote.zip (ダウンロード 3KB)</a>
+<span class="mdate">[2010/02/07]</span>
+和文における、脚注記号の前後の調節を可能にする。<br>
+参照：<a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/54424.html">[qa:54424] 閉じ括弧（全角）\inhibitglue\footnote</a>
+/ <a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/54482.html">[qa:54482]</a>
+</li>
+</ul>
+
+
+</div><!--sec-main-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">奥底の道具箱</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2007&ndash;2012 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2012-05-19
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+
+</body>
+</html>

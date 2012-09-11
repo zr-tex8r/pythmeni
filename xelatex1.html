@@ -1,0 +1,452 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>XeLaTeX：欧文フォントについての補足 [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="XeLaTeX,XeTeX,フォント,CMフォント,cmr,pifont.dingbat,ding,TFM">
+<meta name="description" content="「XeLaTeX で日本語する件について」の補足として、欧文フォントの取り扱いについての高度な話題を扱う。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=xelatex1"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">XeLaTeX：欧文フォントについての補足</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>XeLaTeX：欧文フォントについての補足</h1>
+
+<div class="abstract">
+<a href="./xelatex.html">「XeLaTeX で日本語する件について」</a>の補足として、
+欧文フォントの取り扱いについての高度な話題を扱う。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/08/14： <a href="./xelatex.html">「XeLaTeX で日本語する件について」</a>の 1 節を分離してこのページを作成。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-xetex-font">
+<h2>欧文フォントについての補足</h2>
+
+<div class="subsection" id="ssec-unicode-font">
+<h3>従来の LaTeX で常用されたフォントに対応する Unicode フォント</h3>
+
+<p>任意の TrueType／OpenType フォントが使えるというののが XeLaTeX
+の魅力ではあるが、
+時には従来の LaTeX で使っていたフォントと同じものが使いたい場合もあるだろう。
+ここでは、LaTeX の既定設定である「Computer Modern フォント」
+（およびその拡張）、および LaTeX で多用される
+「Adobe 基本 35 書体」―Times、Helvetica 等―
+について、XeLaTeX の使用に適したフリーの Unicode フォントを紹介する。
+（なお、W32TeX
+での新しいフォントの導入手順については<a href="./xelatex.html#sssec-newfont">既に説明した</a>。
+</p>
+<ul>
+<li id="lm-font">
+<p><a href="http://www.ring.gr.jp/pub/text/CTAN/fonts/lm.zip">Latin Modern フォント</a>
+（LM フォント；リンク先は CTAN ミラー）： 
+Computer Modern フォント（CM フォント）
+の字形を基にして作られた OpenType フォント。
+作者は Bogus&#x142;aw Jackowski と Janusz Marian Nowacki。
+CM フォントに含まれる全てのシェープおよびサイズに対応している。
+（例えば CM フォントの cmti12（<code>OT1/cmr/m/it/12</code>）
+に対して「Latin Modern Roman 12 Italic」、
+cmssdc10（<code>OT1/cmss/sbc/n/10</code>）に対して
+「Latin Modern Sans Demi Cond 10 Regular」がある。）
+また、細身のタイプライタ体である「Latin Modern Mono Light」ファミリ等の
+LM フォントで独自に追加された書体もある。
+従来の TeX のラテン文字エンコーディング（OT1、T1、T5、L7x 等）
+およびシンボル用の TS1 エンコーディングに含まれる文字の全てをカバーしている。
+ただし、Latin Modern の名から判るように、
+ギリシャ文字・キリル文字は含まれていない（数式用ギリシャ文字はある）。
+</p>
+<p>先述の通り、fontspec での総称ファミリへの割当の既定値は
+LM フォントであるので、
+XeTeX が含まれる TeX ディストリビューションでは LM フォントも既に入っていると思われる。
+W32TeX では XeTeX のアーカイブ（xetex-w32.tar.xz）
+の中に一緒に収録されている。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+CM フォントは同じシェープでもサイズ毎にデザインを変えていてそのサイズで綺麗に見えるようにしている。
+例えば CM Roman の 5pt 版である cmr5 は 10pt 版の cmr10
+を 50 ％に縮小したものとはかなり違う字形を持っている。
+コンピュータ用のフォントでこのような設計（optical size という）
+をもっているものは少ないが、一部の「高級な」フォントでは採用されている。
+<!--
+OpenType フォントでは、1 つのフォントファイルで optical size を実現できる
+（つまり複数のサイズ用の字形を持たせられる）ようであるが、
+Latin Modern はサイズ毎に別ファイルとなっている。
+-->
+fontspec の既定である LM フォントの設定では、
+指定サイズ毎に適切な変種が選ばれるようになっている―つまり、
+従来の LaTeX の CM フォントの設定と同じである。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+LM フォントの字形データは、OT1 の文字については、
+品質について定評のある AMS の Type1 フォントのものを用いていて、
+残りの文字はそれを基にして
+（MetaType1 システム上で）独自に作られている。
+従って、LM フォントの製作の過程では、
+ビットマップフォントからの自動トレースは用いられていない。
+またこのため、OT1 以外の文字については、対応する
+CM 系フォント（EC フォント（T1）、TC フォント（TS1）等）
+とは異なる字形をもつものがある。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+従来（欧文 8 ビット）の LaTeX でも LM フォントを使うことができる。
+方法は、単に lmodern パッケージを読み込むだけである
+（この場合、Type1 版の LM フォントが使われる）。
+W32TeX には CM-Super コレクション（EC、TC フォントの Type1 版）
+が含まれていないので、既定の設定（つまり CM フォント）のまま
+T1 エンコーディングに切り替えると
+PDF 変換の時に EC、TC フォントのビットマップ版が使われることになるが、
+Type1 版の LM フォントならば W32TeX にもあり
+（t1fonts.tar.xz アーカイブ）、
+かつ最初から DVI ウェアの適切な設定もされている。
+よって、CM 系のフォントを T1 エンコーディングで用いたい場合は、
+LM フォントを使うのが手軽である。
+<pre>
+% 8 ビット LaTeX/pLaTeX において LM フォントを T1 で用いる
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+</pre>
+</div>
+</li>
+<li>
+<p><a href="http://canopus.iacp.dvo.ru/~panov/cm-unicode/">Computer Modern Unicode フォント</a>：
+CM フォントのソースを用いて、X ウィンドウシステム
+（Unix 系 OS で広く用いられている）用の高品位な OpenType
+フォントを作成しようというプロジェクト。
+基本的に METAFONT ソースからの自動トレース（+ FontForge による後処理）
+を用いた過程で製作されている。
+先に挙げた LM フォントと比べると、以下のような特徴がある。
+</p>
+<ul>
+<li>CM 系のフォントの METAFONT ソースで利用可能なものは全て利用している。
+従って、ラテン文字（CM／EC フォント等）だけでなくキリル文字（LH フォント）、
+ギリシャ文字（CB フォント）、国際音標字母（TIPA フォント）等もカバーしている。
+</li>
+<li>既存の文字の合成で作成可能な文字（アクセント付文字等）
+は大抵作成されている。
+（ただし、その中には字形にかなり疑問の残るものもある。）
+</li>
+<li>先述の通り、CM フォントはサイズにより字形に違いがあるのだが、
+その内の 10pt のサイズの字形に対応するもののみを用意していて、
+これを全サイズで用いることになる（optical size でない）。
+</li>
+<li><a href="./concrete.html">Computer Concrete フォントや Computer Modern Bright フォント</a>に対応する
+OpenType フォントも含んでいる。
+</li>
+</ul>
+<p>Latin Modern で対応していない文字が必要な時に有用だと思われる。
+</p>
+</li>
+<li>
+<p><a href="http://www.ring.gr.jp/pub/text/CTAN/fonts/tex-gyre.zip">TeX Gyre フォント</a>
+（リンク先は CTAN ミラー）： 
+従来の LaTeX において既定の CM フォント以外に簡単に使える欧文フォントといえば
+Times、Helvetica 等の「Adobe 基本 35 書体」が挙げられる。
+TeX Gyre フォントコレクションはこれらの書体
+（ただしシンボルフォントである Symbol と Zapf Dingbat
+を除く―<a href="#ssec-tfmfont">後述</a>の通り
+シンボルフォントは従来と同じものを使う）
+に対応する OpenType フォントである。
+作者は LM フォントと同じ
+Jackowski と Nowacki で、
+35 書体のクローンとして有名な URW++ の Type1
+フォントを基にしている。
+</p>
+<p><!--W32TeX の場合、アーカイブ（tex-gyre.zip）の中に含まれる OpenType
+フォント（<code>*.otf</code> ファイル）を Windows
+にインストールした後、「<code>fc-cache -r</code>」
+を実行すると XeLaTeX で使えるようになる。-->
+TeX Gyre フォントのファミリ名は以下のようになっている。
+このうち、TeX Gyre Chorus は Italic スタイルしかない
+（Zapf Chancery だから当然）が、
+残りのファミリは Regular、Italic、Bold、Bold Italic の
+4 スタイルをもつ
+（勿論、<a href="./xelatex.html#fontspec-BoldFont">fontspec による自動割当</a>が働く）。
+</p>
+<div align="center" class="display"><table class="std">
+<tr><th>TeX Gyre ファミリ名</th><th>元の Adobe フォント</th>
+<tr><td>TeX Gyre Adventor</td><td>Avant Garde</td></tr>
+<tr><td>TeX Gyre Bonum</td><td>Bookman Old Style</td></tr>
+<tr><td>TeX Gyre Chorus</td><td>Zapf Chancery</td></tr>
+<tr><td>TeX Gyre Cursor</td><td>Courier</td></tr>
+<tr><td>TeX Gyre Heros</td><td>Helvetica</td></tr>
+<tr><td>TeX Gyre Heros Cn</td><td>Helvetica Narrow</td></tr>
+<tr><td>TeX Gyre Pagella</td><td>Palatino</td></tr>
+<tr><td>TeX Gyre Schola</td><td>New Century Schoolbook</td></tr>
+<tr><td>TeX Gyre Termes</td><td>Times</td></tr>
+</table></div>
+</li>
+</ul>
+
+</div><!--ssec-unicode-font-->
+
+<div class="subsection" id="ssec-mathfont">
+<h3>数式フォントについて</h3>
+
+<p>XeTeX 自身は Unicode 数式フォントを扱える（らしい）が、
+LaTeX での取り扱いについては未確定であり、
+また現状では数式用の Unicode フォント自体が数少ない
+（数式用のメトリック情報を持った OpenType
+フォントが必要なのだと思うが、
+この辺りのことは私自身がよく理解していない）。
+従って、当面は数式フォントについては従来と同じ
+TFM ベースのフォント（多くは Type1 形式）を用いることになる。
+</p>
+<p>fontspec の既定の設定では数式用フォントには従来の LaTeX
+と同じ CM フォントが割り当てられる。
+ただし数式文字フォント（<code>\mathrm</code>、<code>\mathit</code>
+等で用いられるもの）は本文用のものに合わせられる
+（例えば <code>\mathit</code> は <code>\rmfamily\mdseries\itshape</code>
+と同じになる）。
+ここで、fontspec のパッケージオプションに <code>no-math</code>
+を付けることで、この数式フォントの設定を抑止できる。
+従って、次の手順で（8 ビット欧文の）
+LaTeX 用の数式フォントパッケージを用いることができる。
+</p>
+<ol>
+<li>まず、数式フォントパッケージを読み込む。
+多くの場合、数式フォントと同時に本文用フォント
+（8 ビット欧文エンコーディング用）も設定される。
+（この状態では Unicode での直接入力はできない。）
+</li>
+<li>fontspec パッケージを <code>no-math</code>
+オプション付で読み込む。
+数式用フォントの設定は変わらないが、
+本文用フォントは LM フォント（fontspec の既定）
+に変更される。
+</li>
+<li>改めて数式フォントと調和する本文用 Unicode フォントを
+<code>\setmainfont</code> 等を用いて設定する。
+</li>
+</ol>
+<p>例として、pxfonts パッケージ（Young Ryu 氏製作）と TeX Gyre Pagella
+を組み合わせた（つまり Palatino 系で統一した）ものを示す。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage[scale=0.83]{geometry}
+\usepackage{pxfonts}
+\usepackage[no-math]{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\begin{document}
+Mit {\LaTeX} kann man einen spezielle Buchstaben enthaltenden
+Satz setzen, als:
+\begin{quote}
+&#x201E;Aber sind Kafkas \emph{Schlo&#xDF;}, &#xC4;sops &#x152;uvres, und auch
+Tolstois \emph{Война и мир} nicht oft naiv
+vis-&#xE0;-vis der offizielen Rolle des d&#xE4;monischen Ph&#xF6;nixes
+in flockigen Souffl&#xE9;s?“
+\end{quote}
+und auch kann man eine komplexe mathematische Formel, als:
+\[
+  \left( \int_0^\infty \frac{\sin x}{\sqrt x}\,\mathrm{d}x \right)^2 =
+  \prod_{k=1}^\infty \frac{4k^2}{4k^2-1} \neq \frac{\pi}{2010}.
+\]
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:978px">
+<img src="sample/xetex-sample12.png" width="978" height="213">
+</div></div>
+
+</div><!--ssec-mathfont-->
+
+<div class="subsection" id="ssec-tfmfont">
+<h3 id="sssec-tfmfont">8 ビット欧文テキストフォントの使用</h3>
+
+<div class="notice">（少し高度な話題である。）</div>
+
+<p>XeTeX が従来の TFM に基づくフォントを扱えるのは数式フォントに限らない。
+つまり TFM 定義のフォントは完全にサポートされている
+（ただしそのようなフォントは従来と同じ 8 ビット符号空間
+（文字コード 0～255）しか扱えない）。
+XeLaTeX で TFM 定義のフォントを使いたい場合は、単に
+<a href="./xelatex.html#sssec-nfss">LaTeX のフォント管理システム</a>（NFSS）に従って
+命令を実行すればよい。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\useoackage[T1]{fontenc}
+\usepackage{fontspec}
+\setmainfont{Palatino Linotype}
+\begin{document}
+Здесь Palatino шрифт,
+% Zapf Chancery の LaTeX ファミリ名は pzc
+{\fontencoding{T1}\fontfamily{pzc}\selectfont et ici Zapf Chancery,}
+и ещё Palatino.
+\end{document}
+</pre> 
+<div align="center" class="display">
+<div class="imagebox" style="width:517px">
+<img src="sample/xetex-sample13.png" width="517" height="21">
+</div></div>
+<p>ここで注意すべきなのは「フォントエンコーディングを指定する必要がある」
+ことである。
+XeLaTeX でもフォントは全て NFSS で管理していてこれは fontspec
+で指定されたフォントにも当てはまる。
+そのようなフォントのエンコーディングは要するに「Unicode」であって、
+既存の 8 ビットエンコーディングのどれとも異なるため、
+XeLaTeX では Unicode に対して「EU1」という識別子を与えている。
+従って、XeLaTeX では普通はエンコーディングは「EU1」
+に指定されたままになっている。
+従来の LaTeX の欧文フォントファミリに切り替えた場合、
+そういうファミリは当然「EU1」には対応していない。
+従って、そのファミリが対応するエンコーディングに切り替える必要があるわけである。
+</p>
+<p>既存のフォントパッケージを利用する場合、そのパッケージが提供する命令が
+エンコーディング切替の処理を含むかどうかはパッケージにより異なる。
+一般に、シンボルフォント（pifont や mflogo 等）の場合は、
+シンボル用の「U」エンコーディングへの切替が元々入っていることが多い。
+対して、テキスト用フォントは適切なエンコーディングでの使用が前提になっていて、
+パッケージ側で切替をしていない場合が多い。
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+数式フォントの場合と同様に、パッケージ読込は fontspec より前に行う必要がある。
+従って、パッケージの役割が単に特定のファミリを総称ファミリの既定に設定する
+（<code>\rmdefault</code> 等を書き換える）だけであれば、
+結局それは fontspec に上書きされるので、
+読み込んでも意味がないことになる。
+</div>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{mflogo} % シンボルフォントのパッケージは
+\usepackage{pifont} % XeTeX でもそのまま通用することが多い
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Heros}
+\begin{document}
+\noindent Вот наши рекомендаци!
+\begin{dinglist}{224} % Zapf Dingbat の記号を用いたリスト(pifont)
+\item \TeX
+\item \MF   % METAFONT ロゴ(mflogo)
+\item TAOCP %←ロシア語じゃないよ ;-)
+\end{dinglist}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:230px">
+<img src="sample/xetex-sample14.png" width="230" height="139">
+</div></div>
+
+<p>もう一つの注意点を挙げておく。
+TFM 定義のフォントでは、Unicode 同士の「素の直接入力」
+は上手くいかない。
+さらに「inputenc 利用の直接入力」も使えない（使わない）ため、
+非英語文字の入力には
+ASCII 翻字（<code>\oe</code> や <code>\v{r}</code> 等）
+を用いる必要がある。
+Antykwa Toru&#x144;ska フォント
+（<a href="http://www.ring.gr.jp/pub/text/CTAN/fonts/antt.zip">antt パッケージ</a>）
+を用いた例を示す。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{anttor} % 数式フォント不用の場合は実は無意味
+\usepackage{fontspec}
+\begin{document}
+\noindent\textbf{Antykwa Toru&#x144;ska Examples}\par
+{\usefont{T1}{antt}{m}{n} % UTF-8 直接入力はダメ
+Antykwa Toru&#x144;ska jest antykw&#x105; dwuelementow&#x105; projektu
+toru&#x144;skiego typografa Zygfryda Gardzielewskiego.\par}
+{\usefont{T1}{antt}{m}{n} % ASCII 翻字入力
+Antykwa Toru\'nska jest antykw\k{a} dwuelementow\k{a} projektu
+toru\'nskiego typografa Zygfryda Gardzielewskiego.\par}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:716px">
+<img src="sample/xetex-sample15.png" width="716" height="118">
+</div></div>
+<div class="bend"><p><span class="lbl">参考：</span> 
+そもそも Antykwa Toru&#x144;ska のパッケージ（antt パッケージ）には
+OpenType フォントも含まれているので、XeLaTeX ではこちらを用いるべきである。
+数式用フォントと併用する場合は以下のようになる。
+</p>
+<pre>
+\usepackage[math]{anttor} % Antykwa Toru&#x144;ska 数式フォントを指定
+\usepackage[no-math]{fontspec} % こちらでは数式設定をパス
+\setmainfont{Antykwa Torunska} % 本文用フォントの設定
+</pre>
+</div>
+<p></p>
+
+</div><!--ssec-tfmfont-->
+
+</div><!--sec-xetex-font-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">XeLaTeX：欧文フォントについての補足</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009&#x2013;2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-05-08
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

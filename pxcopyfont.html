@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXcopyfont パッケージ ～TeX 仮想フォントのコピー～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords"
+  content="TeX,LaTeX,仮想フォント,VF,virtual,コピー,複製,簡単,自動">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxcopyfont"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXcopyfont パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/pxcopyfont.html">http://zrbabbler.sp.land.to/pxcopyfont.html</a>
+</div>
+<div id="maintext">
+<h1>PXcopyfont パッケージ<br>
+<span class="subtitle">～TeX 仮想フォントのコピー～</span></h1>
+
+<div class="abstract">
+TeX の仮想フォント（TFM と VF の組；和文・欧文ともに可）を、
+その参照関係を保ったままで、別名でコピーする。
+Perl 版の他に Lua 版（W32TeX の標準インストールだけで動作可能）
+が用意されている。
+</div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>TeX における「仮想フォント」とは VF と TFM の組のことである。
+ここでは VF の構造の詳細については述べないが、
+VF の中にはそれが参照する TFM（「実フォント」と呼ぶことにする）
+の名前が、参照のために用いる番号（ID）とともに記されている。
+pxcopyfont コマンドは、TeX の仮想フォントを、その参照関係の構造
+（参照の出現順や ID も含む）を保ったまま、
+別名でのコピーを作成するためのツールである。
+</p>
+<div align="center" class="display">
+<div class="imagebox" style="width:864px">
+<img src="image/pxcopyfont-image01.png" id="img-example" width="864" height="147"
+  alt="仮想フォント「upjisr-h」は.tfmと.vfの組であり、upjisr-h.vfは、ID 0でuprml-h.tfmを、ID 2 でupjisr-hq.tfmを参照する。
+これに対し、upjisr-h、uprml-h、upjisr-hqの名をfoo-r-jy2、r-foo-r-jy2、r-foo-r-jy2xに置き換えたコピーを作成したい。">
+</div></div>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<p>TeX のインストールに加えて、
+以下の<em>何れか</em>のインタプリタを必要とする。
+</p>
+<ul>
+<li>Perl 5.8.1 版以降 （この場合、kpsewhich コマンドが必要）<br>
+（なお、ZRTeXtor 等の追加のモジュールは不要。）
+</li>
+<li>LuaTeX 0.50 版以降（Lua インタプリタモードを用いる）
+</li>
+</ul>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/pxcopyfont.zip"><!--
+-->圧縮ファイル pxcopyfont.zip (v0.7.0)のダウンロード</a>
+</li>
+</ul>
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-install">
+<h3>インストール</h3>
+
+<p>このパッケージには、Perl の pxcopyfont.pl と Lua の pxcopyfont.lua の
+2 つのスクリプトが含まれていて、どちらも全く同じ動作をする。
+以下の解説では、これらのスクリプトが pxcopyfont のコマンド名で実行される
+ことを仮定することにし、
+ここで W32TeX でそれを実現するための手順を述べる。
+</p>
+<h4>Perl 版を使う場合</h4>
+<p>W32TeX の実行ファイルフォルダ（$TEXMF/bin）にある runscr.exe
+を pxcopyfont.exe の名前でコピーし、実行パスの通ったフォルダに置く。
+pxcopyfont.pl を同じフォルダに置く。
+</p>
+<h4>Lua 版を使う場合</h4>
+<p>Lua 版を用意した目的は、W32TeX において Perl
+インタプリタのインストールを不要にするためである。
+すなわち、Lua 版のスクリプトは W32TeX の標準インストールに含まれる
+LuaTeX を「Lua インタプリタモード」で起動させて実行させる。
+手順は Perl 版と全く同じで、
+$TEXMF/bin/runscr.exe を pxcopyfont.exe の名前でコピーし、
+実行パスの通ったフォルダに置いた後、
+pxcopyfont.lua を同じフォルダに置く。
+</p>
+<div class="bend"><p><span class="lbl">参考：</span> 
+LuaTeX を「Lua インタプリタモード」で起動する場合の標準的な
+コマンド名は texlua である。
+従って、（runscr.exe を使わずに）Lua スクリプトを実行する場合は
+</p>
+<pre>
+texlua pxcopyfont.lua
+</pre>
+<p>とすればよい。
+（従って、UNIX 系 OS の場合、shebang 行に texlua へのパスを書けばよいと思われる。）
+ただし、他のコマンド名（luatex や lualatex 等）で起動した場合も、
+引数のファイルの拡張子が <code>.lua</code> の場合は「Lua インタプリタモード」
+になるので、結局 <code>luatex pxcopyfont.lua</code> でもよいことになる。
+</p>
+</div>
+<div class="alert"><p><span class="lbl">注意：</span> 
+pxcopyfont.lua は LuaTeX に内臓されている kpse ライブラリを
+利用しているので、LuaTeX でない「単独の Lua インタプリタ」では動作しない。
+</div>
+
+</div><!--ssec-install-->
+
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-basic">
+<h2>基本的な使い方</h2>
+
+<p>コマンドライン書式は以下の通り。
+</p>
+<pre>
+# 仮想フォントのコピー
+pxcopyfont [&lt;オプション&gt;...] &lt;入力仮想フォント&gt; &lt;出力仮想フォント&gt; &lt;出力実フォント&gt;...
+# 仮想フォントの参照先情報を表示
+pxcopyfont [&lt;オプション&gt;...] &lt;入力仮想フォント&gt;
+</pre>
+<p><code>&lt;入力/出力仮想フォント&gt;</codE> には仮想フォント名、
+すなわちファイル名から拡張子（<code>.tfm</code>／<code>.vf</code>）
+を除いたものを指定する。
+<code>&lt;出力実フォント&gt;</code> には出力仮想フォントの参照先と
+なる実フォントの名前（同じく拡張子抜きのファイル名）
+を入力仮想フォントの参照先の出現順に対応する形で並べる。
+（後の<a href="#ssec-sample">サンプル</a>を参照。）
+</p>
+<p>オプションは次の通り。</p>
+<ul>
+<li><code>-o / --overwrite</code>： 
+ファイル出力時に既に同名のものがあれば上書きする。
+<em>注意</em>：<code>-o</code> 無指定時は既存ファイルへの書き込みはスキップされる。
+</li>
+<li><code>-v / --verbose</code>： 
+詳細表示モード。
+</li>
+<li><code>-D / --dry-run</code>： 
+詳細表示モードにし、ファイル出力を一切行わない。（動作確認用）
+</li>
+<li><code>-K / --no-kpse</code>： 
+Kpathsearch を使用しない。
+この場合、全ての入力ファイルはカレントになければならない。
+（パス指定不可。）
+</li>
+<li><code>-z / --zero</code>： 
+VF の先頭の参照フォントの ID を 1 から 0 に変更する
+（1 でない場合はエラー）。
+dviout のバグ対策。
+</li>
+<li><code>-Z / --zrname</code>： 
+「ZR命名規則」（謎）に基づきフォント名を自動生成する。
+（ここでは詳細は省略。いずれ説明を追加するかも知れない。）
+</li>
+</ul>
+
+<div class="subsection" id="ssec-sample">
+<h3>サンプル</h3>
+<p>例として、「概要」で用いた<a href="#img-example">図</a>のケースを実行してみる。
+</p>
+<p>まず、コピー元の仮想フォント upjisr-h での参照の出現順序等を確かめる
+ために、表示機能を利用する。
+</p>
+<pre>
+&gt; <span class="pre-in">pxcopyfont upjisr-h</span>
+VF 'upjisr-h' refers to:
+000:uprml-h
+002:upjisr-hq
+</pre>
+<p>参照先実フォントは「uprml-h に対応するもの」「upjisr-hq に対応するもの」
+の順に指定する必要がある
+（ID の大小は関係ない）。
+従って、実際にコピーを行うコマンド行は以下のようになる。
+<pre>
+&gt; <span class="pre-in">pxcopyfont upjisr-h foo-r-jy2 r-foo-r-jy2 r-foo-r-jy2x</span>
+</pre>
+<p>これにより、foo-r-jy2.tfm、r-foo-r-jy2.tfm、r-foo-r-jy2x.tfm の 3 つの TFM
+ファイルと foo-r-jy2.vf の VF ファイルが生成される。
+TFM ファイルの中身は、コピー元の対応ファイルと全く同一であり、
+VF ファイルの中身は、upjisr-h.vf とほぼ同一で、
+中に含まれる参照先ファイル名だけを書き換えたものになっている。
+</p>
+
+
+</div><!--ssec-sample-->
+
+</div><!--sec-basic-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXbase パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-06-07
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

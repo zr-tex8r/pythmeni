@@ -1,0 +1,647 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>怯まず Lua で LaTeX してみた ～続・LuaTeX で日本語しない件について～</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="LuaTeX,LuaLaTeX,Lua,プログラミング,マクロ,TeX">
+<meta name="description" content="LuaTeX 上で動く LaTeX である LuaLaTeX を使ってみる。特に、LaTeX の多少複雑な処理を Lua でプログラミングすることで実現することに焦点を当てる。「思わず Lua で LaTeX してみた」の続編。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=lualatexlua2"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">怯まず Lua で LaTeX してみた</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/lualatexlua2.html">http://zrbabbler.sp.land.to/lualatexlua2.html</a>
+</div>
+<div id="maintext">
+<h1>怯まず Lua で LaTeX してみた<br>
+<span class="subtitle">～続・LuaTeX で日本語しない件について～</span></h1>
+
+<div class="abstract">
+<a href="lualatexlua.html">「思わず Lua で LaTeX してみた」</a>の
+更なる続編。
+Lua と LaTeX が織り成す不可思議な世界。
+</div>
+
+<div id="changelog" class="hdn">
+<div class="lbl">変更履歴</div>
+<ul>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-lua-latex">
+<h2>しつこく Lua で LaTeX してみる</h2>
+
+<p>例によって、
+<a href="data/ixbase0.sty">ixbase0 パッケージ</a>（<a href="./lualatexlua.html#ssec-ixbase0">参照</a>）の使用を前提とする。
+</p>
+
+<div class="subsection" id="ssec-download">
+<h3>事例 6： その場で LaTeX パッケージをダウンロードして読み込む</h3>
+
+<p><code>\fetchfromwww[&lt;ファイル名&gt;]{&lt;対象URL&gt;}</code> で
+指定の URL から内容（別に LaTeX パッケージでなくてもよい）を取得し、
+指定のファイル名（省略時は URL の末尾部分）で保存する。
+従って、直後に <code>\usepackage</code>/<code>\input</codE> を
+実行してそれを読み込むことができる。
+常に最新版のパッケージを利用することができるのでとっても便利。
+（サーバに余計な負荷をかけることになるので、
+よい子のみなさんはマネしないように。）
+</p>
+<pre>
+% 文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+%%------ ダウンローダ
+\begin{execluacodeblock}
+local http = require("socket.http")
+-- URL url の内容を取得してファイル file に書き出す
+-- (file が nil なら url のパス末尾の名前を採る)
+-- 戻り値は正常に取得できたかのブール値
+function fetch_from_www(url, file)
+  file = file or ({url:find("/([-_.%w]+)$")})[3]
+  if not file then return false end
+  -- 指定URLにGET要求, ここでは200以外のステータスはエラー扱い
+  local res, code = http.request(url)
+  if not res or code ~= 200 then return false end
+  -- 取得した内容をファイルに書き出す
+  local fh = io.open(file, "wb")
+  if not fh then return false end
+  fh:write(res); fh:close()
+  return true
+end
+\end{execluacodeblock}
+%
+%% \fetchfromwww[&lt;出力ファイル名&gt;]{&lt;対象URL&gt;}
+\newcommand*\fetchfromwww[2][]{
+  \renewcommand*\ffwTargetUrl{#2}%
+  \directlua{
+    local file, url = "\luaescapestring{#1}", "\luaescapestring{#2}"
+    % file が空なら nil に置き換える
+    local res = fetch_from_www(url, (file \?\~= "" and file) or nil)
+    if not res then tex.print("\??\\ffwShowWarning") end
+  }%
+}% 失敗した時の警告処理も入れておく
+\newcommand*\ffwTargetUrl{}
+\newcommand*\ffwShowWarning{%
+  \typeout{Warning: Fetch from WWW failed for some reason.}%
+  \typeout{(URL=\ffwTargetUrl)}}
+%%------
+% 以下では marginnote パッケージを CTAN からダウンロードして読み込んでいる
+\fetchfromwww{http://www.ring.gr.jp/pub/text/CTAN/macros/latex/contrib/marginnote/marginnote.sty}
+\usepackage{marginnote}
+\begin{document}
+This method is really worth noting.
+\marginnote{But the example is marginal.}
+\end{document}
+</pre>
+<div class="imagebox" style="width:801px">
+<img src="sample/lualatex-example16.png" width="801" height="69"
+     alt="“But the example is marginal.”は余白領域に傍注として出力される。">
+</div>
+<p>marginnote パッケージは 2 パス処理を行うので、
+完全な出力を得るには lualatex を 2 回実行する必要がある。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+LuaTeX では luasocket ライブラリは組み入れられているので、
+追加でインストールする必要がない。
+</div>
+<div class="alert"><span class="lbl">注意：</span> 
+最近では、LaTeX パッケージは <code>.dtx</code> 形式で配布されて
+いることがほとんどである。
+その場合はサーバには <code>.sty</code> ファイルは置かれていない
+のでこの方法は上手くいかない。
+</div>
+
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-db-biblio">
+<h3>事例 7： LaTeX 用の文献データベースを RDBS 上に構築する</h3>
+
+<p>要するに、BibTeX で行っている文献データベース管理を MySQL
+等の RDBS でやろうという話。
+文献データベースファイル（<code>*.bib</code>）
+の部分を RDBS が受け持ち、bibtex コマンドの実行の代わりに
+Lua コードが（組版中に）文献リスト（<code>*.bbl</code>）
+を出力するという形式をとる。
+ただし、飽くまで実験であるので実装は極力簡単にしていて、
+例えば、データベースには、リストに出力する LaTeX テキスト
+をそのまま登録するようになっている
+（つまり、何らかの「文献クラス」に従って整形するのではない）。
+従ってこのままの実装では実用性は非常に乏しい。
+</p>
+<p>ここでは、RDBS として、<a href="http://www.sqlite.org/">SQLite3</a>
+を用い、また SQLite と Lua の接続に
+<a href="http://www.keplerproject.org/luasql/">LuaSQL</a> ライブラリを用いる。
+SQLite は他のアプリケーションに組み込んで使用することを想定して
+作られている軽量なデータベースエンジンである
+（Lua と類似した開発目的をもっている）。
+このため、他の一般的な RDBS のように「サーバ」を介するのではなく、
+SQLite のエンジンを組み込んだソフトウェアが直接データベース
+（ファイルとして保存されている）にアクセスするという方式を採っている。
+</p>
+<p>W32TeX で以下に挙げる例を実行するために必要な準備は次の通り。
+W32TeX をインストールしたディレクトリを <u>C:\usr\local</u> とする。
+</p>
+<ul>
+<li>LuaForge の <a href="http://luaforge.net/frs/?group_id=12">LuaSQL のページ</a>から
+LuaSQL の Win32 バイナリ版
+（私が用いたのは luasql-2.1.1-sqlite3-win32-lua51.zip）
+をダウンロードし、これを展開して sqlite3.dll を得る。
+</li>
+<li>この sqlite3.dll を luasql_sqlite3.dll に改名して、
+<u>C:\usr\local</u>\bin\lib\lua に置く。
+（一般的な Lua でのインストール方法と少し異なる。）
+</li>
+<li>実は、この sqlite3.dll には SQLite3 のエンジンが「組み込まれて」
+いるので、SQLite3 のデータベースを（SQL で）作成するソフトウェアを既に
+持っている人はこれだけで十分である。
+そうでない場合は、
+<a href="http://www.sqlite.org/download.html">SQLite のダウンロードページ</a>から
+単体アプリケーションの Win32 版バイナリ
+（私が用いたのは sqlite-3_6_23_1.zip）をダウンロードしてインストールする
+（中の .exe ファイルを実行パスの通ったディレクトリに置くだけ）。
+</li>
+</ul>
+<p>SQLite で文献データベースを管理するためのライブラリ ixdbbib
+およびその使用を含む LaTeX 文書
+（ファイル名 test.tex）を以下に示す。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+%% ixdbbib ライブラリの Lua コード
+\begin{execluacodeblock}
+require "luasql_sqlite3" -- (※1)
+-- SQL の文字列リテラル(RDBS に適応させる必要あり)
+local function quote(s)
+  return "'"..s:gsub("'", "''").."'"
+end
+-- リスト cites に id を追加する
+local cites = {}; local used = {}
+local function citation(id)
+  if not used[id] then
+    used[id] = true; table.insert(cites, id)
+  end
+end
+-- 文献データを取得するSQL文
+local sql_select = [[
+SELECT id, content FROM bib_data
+WHERE id IN (?) ORDER BY skey
+]]
+-- 文献データベース db_name と cites から
+-- 文献リスト(thebibliography) を生成し、ファイルに出力
+local function bibdata(db_name)
+  assert(lfs.isfile(db_name),
+    "bibliography database '"..db_name.."' not found")
+  -- DB へ接続
+  local env = assert(luasql.sqlite3())
+  local con = assert(env:connect(db_name))
+  local t = {}; local res = {nil, nil} -- (※2)
+  for _, c in ipairs(cites) do table.insert(t, quote(c)) end
+  local sql = sql_select:gsub("?", table.concat(t, ","))
+  local cur = assert(con:execute(sql))
+  -- データ読み出し
+  local cnks = { "\\begin{thebibliography}{99}\n" }
+  while cur:fetch(res, "n") do
+    table.insert(cnks, "\\bibitem{"..res[1].."}"..res[2].."\n")
+  end
+  table.insert(cnks, "\\end{thebibliography}\n")
+  cur:close(); con:close()
+  -- ファイルに出力
+  local fh = assert(io.open(tex.jobname..".bbl", "w"))
+  fh:write(table.concat(cnks))
+  fh:close()
+end
+-- エクスポート
+ixdbbib = {
+  citation = citation; bibdata = bibdata;
+}
+\end{execluacodeblock}
+%% LaTeX コード
+\renewcommand\citation[1]{\directlua{
+  ixdbbib.citation("\luaescapestring{#1}")}}
+\renewcommand\bibdata[1]{\directlua{
+  ixdbbib.bibdata("\luaescapestring{#1}")}}
+\begin{document}
+
+% LaTeX 文書での文献参照方法は従来と同じ
+% (ただし \nocite は未対応)
+The primary reference is of course
+the imaginary bible of Lua{\TeX}~\cite{ltbook}.
+There are however rare and unfortunate cases
+where you need to consult the fictitious book
+of the source code~\cite{ltprogram}.
+
+%\bibliographystyle{} % 文献スタイルは無意味
+\bibliography{sample.db} % データベース名を指定
+
+\end{document}
+</pre>
+<p>上の例で読み込むデータベース sample.db を作成するための
+SQL を以下に掲載する。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+SQLite3 の単体アプリケーション（sqlite3.exe）を使う場合は、
+SQL の内容を sample.sql に保存して、次のコマンドを実行する。
+<pre>
+sqlite3 -batch sample.db < sample.sql
+</pre>
+</div>
+<pre>
+DROP TABLE IF EXISTS bib_data;
+CREATE TABLE bib_data (
+  id      VARCHAR(32) PRIMARY KEY,
+  skey    TEXT NOT NULL,
+  content TEXT NOT NULL
+);
+INSERT INTO bib_data VALUES
+('ltbook', 'luatexteam2013',
+'Lua{\TeX} team. \emph{The Lua{\TeX}book}, Luaddison-Wesley, 2013'
+);
+INSERT INTO bib_data VALUES
+('ltprogram', 'luatexteam2012',
+'Lua{\TeX} team. \emph{Lua{\TeX}: The Program}, Luaddison-Wesley, 2012'
+);
+</pre>
+<p>test.tex と sample.db を同じディレクトリに置いて、そこで
+<code>lualatex test</code> を 3 回実行すれば組版が完了する。
+結果は以下の通り。
+</p>
+<div class="imagebox" style="width:716px">
+<img src="sample/lualatex-example17.png" width="716" height="226"
+     alt="“LuaTeX: The program”と“The LuaTeXbook”がこの順で並んだ文献リストが出力され、文献参照に対して通常の方式で参照番号が振られる。">
+</div>
+<p>なお、LuaSQL ライブラリは SQLite3 以外のエンジン、
+例えば、Oracle、PostgreSQL、MySQL にも対応している。
+他のエンジンを用いる場合は、モジュール名と <code>env:connect</code>
+の引数を変えると同時に、<code>quote</code> 関数を適応させる
+必要がある。
+（MySQL 5.0.67 でも動作を確認した。）
+</p>
+<div class="bend"><p><span class="lbl">参考：</span> 
+BibTeX を用いる場合は、
+</p>
+<blockquote>
+<code>latex test</code> →
+<code>bibtex test</code> →
+<code>latex test</code> →
+<code>latex test</code>
+</blockquote>
+<p>のように <code>latex</code> を（最低）3 回実行する必要があった。
+ここで、<code>bibtex</code> は 1 回目の <code>latex</code>
+で出力された test.aux を基にして、文献リストを記したファイル
+test.bbl を作成する役割を持っている。
+上掲の ixdbbib を用いた文書の場合、
+2 回目の <code>lualatex</code> で test.aux が読み込まれた時に、
+SQLite3 のデータベースを読んで test.bbl を作成している
+（そしてその <code>lualatex</code> の実行の中の <code>\bibliography</code>
+の箇所で先程の test.bbl が読み込まれる）。
+3 回目が必要な理由は、BibTeX 利用の場合と同じで、
+相互参照の解決のためである。
+</div>
+<div class="bend"><p><span class="lbl">参考：</span> 
+LuaTeX ではファイルの探索を Kpathsearch を介して行っている関係で、
+C ライブラリの検索方法が通常の Lua と異なる
+（<code>package.cpath</code> は使われず、
+代わりに Kpathsearch の <code>CLUAINPUTS</code> 変数の値が使われる）。
+特に、階層化されたモジュール名をディレクトリ階層に対応付ける
+（例えば <code>foo.bar</code> → <code>$LUA_CPATH/foo/bar.dll</code>）
+ことができない。
+そのため、LuaSQL の SQLite3 用モジュールを本来の名前
+<code>luasql.sqlite3</code> で扱うことができず、
+変則的な扱いをせざるを得なくなっている。
+通常の Lua では、<code>package.cpath</code> に従って
+<code>luasql/sqlite3.dll</code> を配置し、
+test.tex の中の <code>(※1)</code> の行は
+<code>require "luasql.sqlite3"</code>
+（ <code>_</code> でなく <code>.</code> ）となる。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+<code>(※2)</code> の行の <code>res</code> の初期化は
+冗長（というより不気味）である。
+本来は <code>res = {}</code> で済むところであるが、
+これだと LuaTeX の不具合のために強制終了してしまう。
+（本家の Lua 5.1 だと大丈夫だった。）
+</div>
+
+</div><!--ssec-db-biblio-->
+
+<div class="subsection" id="ssec-template">
+<h3>事例 8： テンプレート的 LaTeX</h3>
+
+<p>ここでいうテンプレート処理とは、文書の記述の一部を
+「テンプレート言語」の記述に置き換え、
+その中にある「変数」を外部にあるデータと結びつけることで、
+文書の内容を動的に変化させる技術のことである。
+</p>
+<div style="border:1px solid #999; margin: 6px 12px; padding: 6px 12px">
+<table>
+<tr style="vertical-align:top">
+<td width="50%">
+<div class="center">テンプレート</div>
+<pre style="margin:0 5px">
+こんにちは、&lt;? if username then ?&gt;&lt;?= username
+          ?&gt;&lt;? else ?&gt;名無し&lt;? end ?&gt;さん！
+</pre>
+</td>
+<td width="10%" style="text-align:center;vertical-align:middle">
+<div style="font-size:300%">+</div>
+</td>
+<td width="40%">
+<div class="center">データ</div>
+<pre style="margin:0 5px">
+username = &#x9dd7;外
+</pre>
+</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:center;vertical-align:middle">
+<div style="font-size:200%">↓</div>
+</td>
+<td></td>
+</tr>
+<tr>
+<td colspan="3">
+<div class="center">結合した結果の文書</div>
+<pre style="margin:0 5px">
+こんにちは、&#x9dd7;外さん！
+</pre>
+</td>
+<tr>
+</table>
+</div>
+<p>ただし、ここで注目するのは、「外部のデータと結合すること」
+ではなく、「文書の中にプログラミング言語を埋め込む」
+ことである。
+よって、外部のデータを参照せずに単独で実行できる
+テンプレート（もはや「テンプレート（雛形）」でない…）
+を活用することを考える。
+特に、if 文や while 文などの制御構造の中に、コードではなく
+「単なるテキスト」が混ぜられるのが面白い。
+</p>
+<div style="border:1px solid #999; margin: 6px 12px; padding: 6px 12px">
+<table style="margin: 0 auto">
+<tr style="vertical-align:top">
+<td width="50%">
+<pre style="margin:0 5px">
+&lt;? for n = 2, 9 do
+   ?&gt;* &lt;?=n?&gt; は&lt;?
+     if n == 2 or n == 3 then
+     ?&gt;素数&lt;?
+     elseif n % 2 == 0 then
+     ?&gt;合成数&lt;?
+     else ?&gt;もしかしたら素数&lt;?
+     end
+   ?&gt;である。
+&lt;? end ?&gt;
+</td>
+<td style="text-align:center;vertical-align:middle">
+<div style="font-size:200%">→</div>
+</td>
+<td width="40%">
+<pre style="margin:0 5px">
+* 2 は素数である。
+* 3 は素数である。
+* 4 は合成数である。
+* 5 はもしかしたら素数である。
+* 6 は合成数である。
+* 7 はもしかしたら素数である。
+* 8 は合成数である。
+* 9 はもしかしたら素数である。</pre>
+</td>
+</tr>
+</table>
+</div>
+<p>ということで、本節では、テンプレートの様式を利用して
+LaTeX のテキストと Lua のコードをもっと柔軟に混在させる
+ことを目的とする。
+テンプレートエンジンの実装は既存のものを使ってもよかったが、
+なるべく単純なものが欲しかったので自分で作ってみた。
+</p>
+<ul>
+<li><a href="data/ixsst.lua">ixsst モジュール（ixsst.lua；2KB）</a>
+<span class="mdate">[2010/07/24]</span>
+</li>
+</ul>
+<p>以下のように、テンプレートの作成と出力の機能のみをもつ、
+非常に単純なモジュールである。
+</p>
+<ul>
+<li><code>ixsst.compile(<i>s</i>)</code> ： 
+テンプレート文字列 <code><i>s</i></code> を
+「テンプレートオブジェクト」に変換する。
+テンプレートの文法は以下の通りである。
+<ul>
+<li><code>&lt;? &#x2039;コード&#x203A; ?&gt;</code> ： 
+Lua のコードの断片を埋め込む。
+</li>
+<li><code>&lt;?= &#x2039;式&#x203A; ?&gt;</code> ： 
+Lua の式を評価して文字列に変換（<code>tostring()</code>）
+した結果を出力する。
+</li>
+<li><code>&lt;? ... ?&gt;</code> の代わりに
+<code>?</code> を任意の個数に増やして <code>&lt;??? ... ???&gt;</code>
+のように書くことも可能で、この場合「<code>&lt;?</code>」等を
+コードに含めることができる。
+<code>&lt;?= ... ?&gt;</code> の方も同様である。
+</li>
+<li>それ以外の部分は、改行も含めて全てそのまま出力される。
+</li>
+</ul>
+</li>
+<li><code><i>templ_obj</i>:exec(<i>env</i>)</code> ： 
+テンプレートオブジェクト <code><i>templ_obj</i></code> の
+表すテンプレートに Lua の環境（要するにテーブル）
+<code><i>env</i></code> を結合して出力した結果の文字列を返す。
+</li>
+</ul>
+<p>今までに挙げたテンプレートの例におけるテンプレート言語も
+このモジュールで定めたものである。
+プレーンテキストで用いる場合は
+<code>&lt;? ... ?&gt;</code> の外にある改行は全て出力されるので
+少し不自然な囲み方をする必要に迫られるが、
+LaTeX の中で用いる場合は <code>%</code> で改行を無効化できるので
+この点はほとんど問題にならないだろう。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+最初に挙げたように、外部のファイルに記したデータと結合する
+場合には、まずファイルを読んで <code>{ username = "&#x9dd7;外" }</code>
+のようなテーブルを作って、
+それを <code>exec()</code> の引数に渡せばよい。
+ただし、この節での目的においては、外部のデータではなく、
+いつもの Lua の機能（関数）が見える必要があるので、
+<code>exec()</code> の引数にはグローバル環境 <code>_G</code>
+を渡すことになる。
+</div>
+
+<p>それでは、ixsst モジュールを LaTeX で用いた例を紹介する。
+ここでは、1～30 までの整数の平方根と立方根の表を
+「小数点の位置で揃えて」出力している。
+勿論、2 つの関数値は Lua で計算している。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+\begin{execluacodeblock}
+-- モジュール読み込み
+require "ixsst"
+--- templatex(str): テンプレートを解釈して結果を LaTeX の入力とする
+-- @param str テンプレート文字列
+function templatex(str)
+  ixbase.print(ixsst.compile(str):exec(_G))
+end
+\end{execluacodeblock}
+
+\begin{document}
+
+%
+%↓ テンプレート開始の位置にこの文字列を書く
+\begin{execluacodeblock}templatex[==[
+&lt;?                                      -- この中は Lua コード
+-- 小数点位置で揃えるため、実数表記を 1&.41421356
+-- のように2カラム(カラム指定は r@{}l)に分けている。
+function dsplit(n)
+  return string.format("%.8f", n):gsub("%.", "&.")
+end
+?&gt;
+\begin{center}\small\begin{tabular}{r|r@{}l|r@{}l}
+\hline
+\multicolumn1{c|}{$x$}&
+\multicolumn2{c|}{$\sqrt{x}$}&
+\multicolumn2{c}{$\sqrt[3]{x}$}
+\\\hline
+&lt;? for n = 1, 30 do                     -- Lua の for ループ
+     local s, c = n ^ (1/2), n ^ (1/3) ?&gt;% ← 改行無効化
+% Lua の式の値を LaTeX で出力させるため ?= を使う
+&lt;?= n ?&gt; & &lt;?= dsplit(s) ?&gt; & &lt;?= dsplit(c) ?&gt; \\
+&lt;? end ?&gt;%
+\hline
+\end{tabular}\end{center}
+
+]==]\end{execluacodeblock}
+%↑ テンプレート終了の位置にこの文字列を書く
+
+\end{document}
+</pre>
+<p>組版結果は以下の通り。
+</p>
+<div class="imagebox" style="width:278px">
+<img src="sample/lualatex-example18.png" width="278" height="711">
+</div>
+
+<p>上の例では、「テンプレート」の部分を
+</p>
+<pre>
+\begin{execluacodeblock}templatex[==[
+  (テンプレート)
+]==]\end{execluacodeblock}
+</pre>
+<p>で囲っている
+（これは要するに <code>\directlua{templatex("(テンプレート)")}</code>
+を文字列中の Lua や LaTeX の特殊文字が通るように記述したものである）。
+もし、この機能を広範的に使うのであれば、
+もう少し整った LaTeX パッケージにして、
+例えば以下の形式で記述できる方がいいかも知れない。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+\usepackage{templatex} % コードをパッケージにまとめる
+\begin{document}
+% テンプレートを単純に 1 つの環境で表せるようにする
+\begin{templatex}
+  (テンプレート)
+\end{templatex}
+\end{document}
+</pre>
+
+<p>このようなパッケージ templatex を作ることは可能であるが、
+TeX 言語の知識を必要とし
+（verbatim 的な処理を要するので LaTeX マクロでは無理）、
+この文書の趣旨に合わないので
+ここでは前に挙げた形に留めることにした。
+</p>
+
+</div><!--ssec-template-->
+
+</div><!--sec-lua-latex-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">怯まず Lua で LaTeX してみた（仮）</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-07-24
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

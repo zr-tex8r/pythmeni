@@ -1,0 +1,1607 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>XeLaTeX で日本語する件について [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="XeLaTeX,日本語,XeTeX,Japanese,TeX,xdvipdfmx,xeCJK">
+<meta name="description" content="XeLaTeX(XeTeX上で動くLaTeX)での日本語文書の組版について現状での方法や問題点を概説する。また、pLaTeXに近い品質を目指して開発中のzxjatypeパッケージを紹介する。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=xelatex"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">XeLaTeX で日本語する件について</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>XeLaTeX で日本語する件について</h1>
+
+<div class="abstract">
+XeTeX 上で動く LaTeX である XeLaTeX について基本的な使い方を解説する。
+その際に、UTF-8 で入力して TrueType／OpenType 形式の Unicode
+フォントで出力を行うことを前提にして、従来の欧文 LaTeX／pLaTeX
+との扱いの違いを説明することに重点をおく。
+加えて、XeLaTeX
+で日本語文書を作成することについての現時点での状況と問題点について解説し、
+pLaTeX に近い品質の実現を目標として開発している zxjatype パッケージを紹介する。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2011/05/08： fontspec 2.x 版を前提とする記述に書き直した。
+</li>
+<li>2010/08/16： 一部の文章を別のページへ移動：
+<a href="./bxjscls.html">「BXjscls パッケージ」</a>
+<a href="./xelatex1.html">「XeLaTeX：欧文フォントについての補足」</a>
+</li>
+<li>2010/06/19： fontspec 2.0 版についての補足と「IPAexフォント」についての記述を追加。
+</li>
+<li>2010/02/01： <a href="#ssec-font">「欧文フォントについての補足」</a>を追加。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-xetex">
+<h2>XeTeX の紹介</h2>
+
+<div class="subsection" id="ssec-xetex">
+<h3>XeTeX とは</h3>
+
+<p>XeTeX は Jonathan Kew 氏による TeX の拡張で符号空間を Unicode 全体
+（BMP 以外も含む）に拡大したものである。
+既存の TeX の Unicode 拡張としては Omega（Ω）があるが、
+XeTeX はこれとは別の拡張となっている。
+（なお、Omega の後継にあたる Unicode 拡張 TeX が LuaTeX である。）
+</p>
+<p>XeTeX のもう一つの大きな特徴は、
+現在の標準的なフォント技術を内部に取り込んでいることである。
+元々の TeX が「特定の技術基盤に依存しない」
+という思想で設計されていることはよく知られているが、
+これはフォント関係の技術についても当てはまり、
+フォントの扱いは TeX 本体
+（すなわち TeX ソースを DVI ファイルに変換する）
+ではなく DVI ウェア（DVI ファイルを扱うソフトウェア）が行う。
+このため、TeX の機能自体は 30 年前からほとんど変わっていないにも関わらず、
+dvipdfmx と組み合わせて OpenType フォントを埋め込んだ PDF
+文書を作成するということが可能になっている。
+しかしその代償として、
+例えば新しいフォントを使えるようにするために一定の作業が必要になるなどの短所を持ち合わせている。
+XeTeX はこの点に関して「非依存性」を捨てて、
+システムで使用可能なフォントを直接扱うことで、
+何も設定しなくても好きなフォントを使うことが可能になっている。
+また、従来の TeX では難しい、
+フォントのもつ情報を利用した高度なリガチャ・アクセント付加・
+位置異形の処理も自由に使うことが可能になっている。
+</p>
+</div><!--ssec-xetex-->
+
+<div class="subsection" id="ssec-example">
+<h3>XeTeX の出力例</h3>
+
+<p>XeTeX のもつ能力の一端を示す例をあげる。
+これは XeLaTeX（XeTeX 上で動く LaTeX）の文書である。
+</p>
+<pre id="src-sample01">
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{fontspec} % これは後で解説
+\newfontfamily\fchr{Charis SIL}  % \fchr でフォント“Charis SIL”に切替
+\newfontfamily\fipm{IPA明朝}     % \fipm でフォント“IPA明朝”に切替
+  % \faru でデーヴァナーガリー文字用の設定を施した“Arial Unicode MS”に切替
+\newfontfamily\faru[Script=Devanagari]{Arial Unicode MS}
+  % \showUC は何の変哲のない LaTeX のマクロ
+\newcommand*\showUC[1]{\ \texttt{\footnotesize U+#1}}
+\begin{document}
+\begin{itemize}
+\item {\fipm 土\symbol{&quot;571F}}\showUC{571F} /
+      {\fipm &#x5721;\symbol{&quot;5721}}\showUC{5721} /
+      {\fipm &#x2123d;\symbol{&quot;2123D}}\showUC{2123D}
+\item {\fchr j}\showUC{006A} + {\fchr\symbol{&quot;0302}}\showUC{0302}
+      = {\fchr j\symbol{&quot;0302}}
+\item {\fipm か}\showUC{304B} + {\fipm\symbol{&quot;309A}}\showUC{309A}
+      = {\fipm か\symbol{&quot;309A}}
+\item {\faru \symbol{&quot;915}}\showUC{0915} + {\faru\symbol{&quot;93F}}\showUC{093F}
+      = {\faru \symbol{&quot;915}\symbol{&quot;93F}}
+\end{itemize}
+
+\end{document}
+</pre>
+<div class="bend"><span class="lbl">参考：</span>
+この例で用いたフォントで、
+<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&item_id=CharisSILfont">「Charis SIL」</a>と
+<a href="http://ossipedia.ipa.go.jp/ipafont/">「IPA明朝」</a>
+はそれぞれリンク先のサイトからダウンロード可能なフリーのフォントである。
+「Arial Unicode MS」は Microsoft Office 付属のフォントである。
+</div>
+<p>上の文書を xelatex コマンドで組版すると以下の出力を含む PDF
+文書が得られる。
+</p>
+<div align="center" class="display">
+<div class="imagebox" style="width:612px">
+<img src="sample/xetex-sample01.png" width="612" height="229">
+</div></div>
+<p>上の文書において、<code>\symbol{&quot;xx}</code> は符号位置が xx（16進）
+である文字を出力する標準 LaTeX コマンドである。
+出力 1 行目では、<code>\symbol</code> の引数に
+8 ビットを超える値を指定した結果を示しているが、
+XeLaTeX はこの値を Unicode 値とする文字を出力している
+―すなわち、XeLaTeX が Unicode 符号空間を扱えることが判る。
+また同じ行では UTF-8 で入力した Unicode 文字を出力させている
+―すなわち、XeLaTeX は UTF-8 入力を扱える。
+2 行目以下では Unicode 結合文字を用いた文字合成の例を示している。
+<code>j\symbol{&quot;0302}</code> は <code>j</code> の直後に U+0302
+の文字（結合曲アクセント）を書いたのと同じで、
+これは Unicode の規則で「&#x135;（曲アクセント付 j）」を表す。
+2 行目を見ると正しく合成が行われていることが判る。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 勿論、U+0302
+の文字をソースに直接書いても同じなのだが、
+そうするとソースを提示した時にも合成されて表示されて何のことか判らなくなるので敢えて
+<code>\symbol</code> で表記した。
+（この後に合成文字を直接書いた例を示す。）
+</div>
+<div class="alert"><span class="lbl">注意：</span>
+実はこれは XeTeX が Unicode の規則を知っているのではなく、
+フォントが合成のための情報をもっていて XeTeX がそれを使っているからである。
+従って、フォントが必要な情報を持っていない場合は合成は行われない。
+例えば、“Charis SIL”でなく
+（Windows 標準の）“Times New Roman”を使うと、
+正しい出力にならない。<br>
+（ところで、フォントによっては Windows の「メモ帳」
+では正しく見えるのに XeTeX では不正になることがある。
+「メモ帳」の方は Unicode の合成規則を直接適用しているということか？）
+</div>
+<p>上の例から、XeLaTeX では文字合成等を含んだ複雑な Unicode
+テキストをソース文書に記述しても正しい表示形で出力することがわかる。
+次の例では、文字合成が必要になる言語のテキストを UTF-8
+で直接記述している。
+</p>
+</p>
+<pre id="src-sample11">
+<img src="sample/xetex-source11.png" width="400" height="382">
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:479px">
+<img src="sample/xetex-sample11.png" width="479" height="77">
+</div></div>
+<div class="bend"><span class="lbl">参考：</span> 
+上の例では、HTML で表示する際に文字化けすることを防ぐために、ソースの
+<a href="sample/xetex-sample11.tex">XeLaTeX 文書</a>も画像で示した。
+なお、この例では書字方向が右から左であるヘブライ文字を含んでいるが、
+このような文字の列を含むプレーンテキストの表示がどうなるかは用いるソフトウェア
+（テキストエディタ等）に依存する。
+上のソース文書の表示では、
+単語中の文字の並びは正しく右→左だが単語の並びは左→右となっている
+（勿論、出力結果ではこれも正しく右→左である）。
+</div>
+
+</div><!--ssec-example-->
+
+</div><!--sec-xetex-->
+
+<div class="section" id="sec-install">
+<h2>インストール</h2>
+
+<p>ここでは W32TeX の場合のみを解説する。
+（他の環境の場合、TeX Live の 2007 以降に基づくディストリビューションであれば
+XeTeX が含まれているはずである。）
+</p>
+
+<div class="subsection" id="ssec-w32tex">
+<h3>W32TeX でのインストール</h3>
+
+<p><a href="http://w32tex.org/index-ja.html">W32TeX</a>（角藤版TeX）
+を使っている場合は、
+リンク先の「XeTeX for W32」
+の節にあるアーカイブをダウンロードしてそこにある説明に従って作業を行えばよい。
+以下に少し補足をしておく：
+</p>
+<ul>
+<li>角藤版インストーラ texinst20xx で TeX 一式をインストールする際には、
+他のアーカイブ（latex.tar.bz2 等）と同じディレクトリに XeTeX
+のアーカイブ xetex-w32.tar.bz2 を置いておくと展開の対象となるので、
+この方法で W32TeX に XeTeX を追加することもできる。
+（この場合はインストール後に手順(3)に進む。）
+角藤氏の説明での手順(1)(2)は W32TeX を部分的に上書き更新しているが、
+もしクリーンインストールが可能であればそちらの方が後のトラブルが少ないと思われる。
+</li>
+<li>手順(3)については、意味がよく解らなければ飛ばしてよい。
+この場合、XeTeX の方式で使えるフォントは「Windows にインストールされているフォント」
+に限られる。
+</li>
+<li><code>fc-list</code> コマンドの出力（文字コードは UTF-8）
+は次のような形式になっている（ようである）。
+<pre>
+IPAPGothic,IPA Pゴシック:style=Regular
+IPAPMincho,IPA P明朝:style=Regular
+Tahoma:style=Bold,Negreta,tu&#x10d;ne,fed,Fett,&#x388;ντονα,Negrita,Lihavoitu,Gras,...(略)
+Tahoma:style=Regular,Normal,oby&#x10d;ejne,Standard,Κανονικ&#x3ac;,Normaali,Normal,,...(略)
+</pre>
+最初の行が「IPA Pゴシック」に対応するもので、“style=”の左にコンマ区切りの各々が XeTeX
+で使える「フォント名」になる。
+（つまり、「IPA Pゴシック」は「IPAPGothic」という別名をもっている。）
+下の 2 行は「Tahoma」であり、これには「Regular」の他に「Bold」の「スタイル」がある。
+右にたくさん並んでいるのは「Regular」「Bold」を別の言語で記したもの。
+</li>
+</ul>
+<div class="alert"><span class="lbl">注意：</span> Mac 版、Linux 版の XeTeX
+はそれぞれの OS のフォント管理機構を用いてフォントを扱っているのに対して、
+W32TeX の XeTeX は間に Linux の機構のエミュレートを挟んでいる（ようである）。
+<code>fc-cache</code> 等も、実は Linux のフォント管理のコマンドである。
+</div>
+
+</div><!--ssec-w32tex-->
+
+</div><!--sec-install-->
+
+<div class="section" id="sec-basic-usage">
+<h2>XeLaTeX の基本的な使い方</h2>
+
+<p>まずは、基底言語が英語（および他の「欧文」の言語）である文書の書き方について説明する。
+例によって、W32TeX での使用を中心とした解説になるので、
+途中の例で用いたフォントは、フリー／無償配布のものを除き、
+WIndows（XP 以降）および Microsoft Office に付属するフォントである。
+</p>
+<div class="bend"><span class="lbl">参考：</span> さらに、
+XeTeX ではフォントのレンダリングエンジンとして AAT、ICU（OpenType ライブラリ）、
+Graphite の 3 つが使用できるが、
+ここでは ICU（つまり OpenType）の使用を前提とした。
+</div>
+
+<div class="subsection" id="ssec-preamble">
+<h3>プレアンブルの書き方</h3>
+
+<p>まずは非常に基本的な例を一つ示す。
+</p>
+<pre id="src-sample03">
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+\usepackage{xltxtra} % \XeTeX ロゴのために必要
+\setmainfont[Scale=MatchLowercase]{Palatino Linotype} % \rmfamily のフォント
+\setsansfont[Scale=MatchLowercase]{Tahoma}            % \sffamily のフォント
+\setmonofont[Scale=MatchLowercase]{Lucida Console}    % \ttfamily のフォント
+\begin{document}
+
+This document contains English, \textit{Fran&#xe7;ais}, Српски,
+and Rom\^an\u{a}.
+
+{\sffamily
+The logo {\XeTeX} can be output by \verb|\XeTeX|.}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:544px">
+<img src="sample/xetex-sample03.png" width="544" height="43">
+</div></div>
+<p>XeLaTeX 文書のプレアンブル（<code>\begin{document}</code> より前の部分）
+の書き方について、従来の (p)LaTeX と比べて注意する点を述べる。
+</p>
+<ul>
+<li>当然だが、文字コードは UTF-8 にする。
+なお、従来の欧文 LaTeX で UTF-8 入力のために必要だった
+<code>\usepackage[utf8]{inputenc}</code> は<em>指定してはいけない</em>。
+<div class="bend"><span class="lbl">参考：</span> XeTeX 自身は UTF-8
+以外のエンコーディングによる入力をサポートしている（テキスト出力は必ず UTF-8）。
+しかし、それを LaTeX
+のレベルでどういう形式でサポートするかはまだ確定していないようである。
+<!--
+とりあえず、xe-inputenc パッケージを用いると、メインのファイル
+（xelatex の引数に指定したファイル）
+のエンコーディングを指定することができる。
+この場合も、<code>\input</code> や <code>\usepackage</code>
+で読み込まれるファイルは相変わらず UTF-8 である必要がある。
+<pre>
+% このファイルの文字コードは Shift JIS
+\documentclass[a4paper]{article}
+\usepackage[shift-jis]{xe-inputenc}\relax % 'euc-jp' も可能
+% ここから Shift JIS で処理される
+\usepackage{fontspec}
+\setmainfont{IPA P明朝} % ここにも日本語がある!
+\begin{document}
+This document contains some 日本語 text.
+\end{document}
+</pre>
+-->
+</div>
+</li>
+<li>文書クラスは、従来の欧文 LaTeX 用のもの（article、book、amsart 等）
+であればほとんどの場合使用できる。
+<em>jarticle や jsarticle の類は pLaTeX 専用なので使えない。</em>
+<div class="alert"><span class="lbl">注意：</span> 欧文用の文書クラスでは
+用紙サイズの既定値がレターサイズ
+（<code>letterpaper</code>）になっていることが多いので、
+A4 判の原稿を作る場合はクラスオプション <code>a4paper</code>
+の指定を忘れないように注意。
+</div>
+</li>
+<li><p>OpenType／TrueType の Unicode フォントを使いたい場合
+（普通はそうであろう）は fontspec パッケージを読み込んでおく。
+これは XeTeX の「フォントを直接指定する機能」を LaTeX
+で使用するために必要で、
+さらに LaTeX の設定を XeTeX に適したものにする最低限の処置を行う。
+</p>
+<div class="bend"><p><span class="lbl">参考：</span> 
+LaTeX での XeTeX 拡張機能の使用のためのパッケージには
+fontspec に他に以下のようなものがある。
+</p>
+<ul>
+<li>xunicode ― 従来の LaTeX における特殊文字の表記法を
+使用するためのパッケージ。
+例えば、上の例で <code>Rom\^an\u{a}</code> → Rom&#xe2;n&#x103; という変換は
+このパッケージが実現している。
+（なお、後述の <a href="#elt-fontspec-mapping">fontspec の Mapping 指定</a>も参照されたい。）
+</li>
+<li>xltxtra ― LaTeX の設定を XeTeX
+に適したものにする追加の修正を行うパッケージ。
+XeTeX のロゴを出力する命令 <code>\XeTeX</code> はここで定義されている。
+</li>
+</ul>
+<p>fontspec 2.0 版以降では、それだけを読み込めば Unicode
+入出力を行うために十分な環境が整うことになっている
+（他の必須のパッケージ、例えば xunicode は内部で自動的に読み込まれる）。
+ただし、xltxtra は読み込まれず、
+これはそれが特に提供する機能が必要な時にのみ読み込むべきである。
+</p>
+<p>fontspec 2,0 版より前では、「全部揃えたい」
+時には xltxtra パッケージを読み込むという慣習になっていた
+（xltxtra を読み込めば「全部揃う」こと自体は今でも変わらないが）。
+</p>
+</div>
+<div class="bend"><span class="lbl">参考：</span> fontspec パッケージ
+（2.0 版以降）は etex パッケージ（LaTeX を e-TeX 拡張に適応させる）
+と fixltx2e パッケージも読み込んでいる。
+なお、XeLaTeX（および他の標準的な XeTeX 起動コマンド）では e-TeX 拡張は
+有効になっている。
+</div>
+<li>従来の 8 ビット欧文 LaTeX のパッケージについては、
+フォント関連のものを除けばそのまま使用できる可能性が高い。
+pLaTeX 専用のパッケージ（OTF パッケージ等）は使えない。
+（<a href="#ssec-driver">「DVIウェア依存のパッケージの使用」</a>の事項にも注意。）
+</li>
+</ul>
+
+</div><!--ssec-preamble-->
+
+<div class="subsection" id="ssec-compile">
+<h3>組版の方法</h3>
+
+<p>XeLaTeX 文書を組版する場合には、latex コマンドの代わりに xelatex を
+用いる。
+例えば文書ファイルの名前が sample.tex とすると
+</p>
+<pre>
+<span class="pre-in">xelatex sample.tex</span>
+</pre>
+<p>を実行すると、PDF 文章 sample.pdf に変換される。
+</p>
+<div class="bend"><span class="lbl">参考：</span> このように、
+xelatex コマンドは DVI ファイルではなく PDF ファイルを出力するのであるが、
+pdfTeX のように直接 TeX ソースを PDF に変換しているのでなく、
+一旦「XDV 形式」（DVI 形式の独自拡張）のファイルを出力して、
+それを xdvipdfmx コマンド（dvipdfmx の拡張）で PDF
+に変換するという方式をとっている。
+xdvipdfmx の呼び出しは xelatex コマンドの内部で行われるので、
+通常は XDV ファイルを目にすることはないが、
+xelatex を <code>-no-pdf</code> オプション付で実行すると、
+xdvipdfmx の呼出を行わずに XDV ファイルを出力するようになる。
+<pre>
+<span class="pre-in">xelatex -no-pdf sample.tex</span>      # sample.xdv を出力
+</pre>
+こうして生成される XDV ファイルは現状では xdvipdfmx で PDF
+に変換する以外の使い道がないので役に立たない。
+しかし、最終的な組版結果を得るまでに xelatex コマンドを複数回起動する必要がある場合
+（例えば相互参照の解決のため）、
+XDV → PDF 変換は最後の 1 回のみしか必要としないので、
+変換を分けて行うことで処理時間を短縮できる。
+<pre>
+<span class="pre-in">xelatex -no-pdf sample.tex</span>
+<span class="pre-in">xelatex -no-pdf sample.tex</span>
+#(これ以上繰り返す必要がないと判明した後)
+<span class="pre-in">xdvipdfmx sample.xdv</span>        # sample.pdf を得る
+</pre>
+</div>
+
+
+</div><!--ssec-compile-->
+
+<div class="subsection" id="ssec-fontspec">
+<h3>フォント関係の命令（fontspec パッケージ）</h3>
+
+<p>XeTeX の「フォントを直接指定する機能」を LaTeX
+で利用するためには fontspec パッケージの命令を用いる。
+このパッケージの機能は非常に多岐にわたるが、
+ここでは必要最低限のものに絞って解説する。
+</p>
+
+<h4 id="sssec-nfss">復習：従来の LaTeX のフォント管理</h4>
+
+<p>XeLaTeX の話をする前に、
+まず従来の LaTeX(2e) におけるフォント管理機構について復習しておく。
+</p>
+<p>LaTeX ではフォントをファミリ・シリーズ・シェープ・サイズ・
+エンコーディングの 5 つの属性に分けて管理している。
+このうち字形デザインに関わるのは最初の 3 つである。
+</p>
+<ul>
+<li>ファミリ：字形のデザインの全体的な特徴。
+本来は「Times New Roman」や「Helvetica」等のことであるが、
+LaTeX では少し事情が異なる。詳しくは後述。
+<ul>
+<li><code>\rmfamily</code>： セリフ。</li>
+<li><code>\sffamily</code>： サンセリフ。</li>
+<li><code>\ttfamily</code>： 等幅（通常はタイプライタ書体）。</li>
+</ul>
+</li>
+<li>シリーズ：字の幅および線の太さ。
+<ul>
+<li><code>\mdseries</code>： 基本的なシリーズ。</li>
+<li><code>\bfseries</code>： 太字。</li>
+</ul>
+</li>
+<li>シェープ：上の 2 つ以外の区別。
+<ul>
+<li><code>\upshape</code>： 直立体（基本的なシェープ）。</li>
+<li><code>\itshape</code>： イタリック体。</li>
+<li><code>\slshape</code>： 斜体。</li>
+</ul>
+</li>
+</ul>
+<p>ここで注意すべきなのは、ファミリについては、多くの場合、
+ユーザは「Times New Roman」「Helvetica」等の名前でなく「セリフ」
+等の一般的な名称―<em>総称ファミリ</em>(generic family)と呼ばれる―で指定するということである。
+この総称ファミリには実際のファミリが割り当てられていて、例えば、
+LaTeX の既定の設定では
+</p>
+<ul>
+<li><code>\rmfamily</code>： Computer Modern Roman （<code>cmr</code>）</li>
+<li><code>\sffamily</code>： Computer Modern Sans-serif （<code>cmss</code>）</li>
+<li><code>\ttfamily</code>： Computer Modern Typewriter （<code>cmtt</code>）</li>
+</ul>
+<p>であるが、times パッケージを読み込むと。
+</p>
+<ul>
+<li><code>\rmfamily</code>： Times （<code>ptm</code>）</li>
+<li><code>\sffamily</code>： Helvetica （<code>phv</code>）</li>
+<li><code>\ttfamily</code>： Courier （<code>pcr</code>）</li>
+</ul>
+<p>のように割当が変更される。
+</p>
+<p>このように、ファミリ指定には総称ファミリ命令が使われることが多いが、
+<code>\fontfamily</code> 命令を使ってファミリを直接指定することも可能である。
+例えば、既定の設定の LaTeX で
+<pre>
+% 'Courier' is output using Courier!
+Here I use the {\fontfamily{pcr}\selectfont Courier} font.
+</pre>
+<p>のようにして Courier が直接指定できる。
+</p>
+<p>既に述べたように、
+従来の LaTeX で新たなフォントファミリを使えるようにするには
+「ある一連の作業」が必要になるが、
+それが行われたファミリには「LaTeX におけるファミリ名」が与えられる。
+例えば、上の例でわかるように、Courier に対する LaTeX ファミリ名は pcr である。
+（上で挙げたファミリについて括弧内に記したのが LaTeX のファミリ名である。）
+<code>\fontfamily</code> の引数にとるのは LaTeX ファミリ名である。
+（そのように考えると、総称ファミリ <code>\ttfamily</code> に Courier が
+「割り当てられている」というのは、<code>\ttfamily</code> が
+<code>\fontfamily{pcr}\selectfont</code> と同値になっていることと解釈できる。）
+</p>
+<p>これから XeLaTeX + fontspec について解説するが、
+基本的にここで変わるのは、
+「OS にインストールされたフォントが何の前作業もなしにいきなり使える」ことと
+「本来のファミリ名で指定する」ことであり、
+総称ファミリ等の概念は変わらない。
+文書クラスにおいてファミリの変更を指定する（例えば見出しをサンセリフにする等）
+時には通常総称ファミリが使われるが、
+適切な割当を行うことで、
+新たに設定したファミリをこのような場合に適用させることができる。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 文書における
+「基本的な総称ファミリ」は通常はセリフ（<code>\rmfamily</code>）であるが、
+文書クラスによっては
+（特に seminar、beamer 等のスライド用のクラスでは）
+サンセリフ（<code>\sffamily</code>）のこともある。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 実際にはシリーズ・
+シェープの命令も「総称」であるが、
+実用でこれらの割当が変更されることはほとんどなく、
+また XeLaTeX でこれらの扱いは変わらないのでその辺りの説明は省く。
+</div>
+
+<h4>XeLaTeX のフォント関係の命令</h4>
+
+<p>fontspec の提供する命令のうち、必要最低限のものを挙げる。
+</p>
+
+<ul>
+<li><code>\fontspec[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+その場でファミリを変更する。
+使い方は <code>\rmfamily</code> 等の総称ファミリ命令と同じである
+（もちろんこの命令は総称ファミリではないが）。
+</li>
+<li><code>\newfontfamily\命令[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+<code>\命令</code> を指定のファミリに切り替える命令として定義する。
+</li>
+<li><code>\setmainfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+総称ファミリの <code>\rmfamily</code>（セリフ）に割り当てるファミリを指定する。
+</li>
+<li><code>\setsansfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+総称ファミリの <code>\sffamily</code>（サンセリフ）に割り当てるファミリを指定する。
+</li>
+<li><code>\setmonofont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+総称ファミリの <code>\ttfamily</code>（等幅）に割り当てるファミリを指定する。
+</li>
+</ul>
+<p>ここで、「ファミリ名」には、先述した通りの実際のフォントファミリ名、
+すなわち「IPA明朝」（あるいは「IPAMincho」）「Tahoma」等を指定する。
+</p>
+<p>「属性リスト」の部分には「<code>&lt;属性名&gt;=&lt;値&gt;</code>」
+の形式の属性指定をコンマ区切りで書き並べる。
+指定できる属性の種類は極めて多いのであるが、
+日本人が普通に使う場合に絞って、最低限必要になりそうなものを紹介する。
+（専ら欧文用の設定については省略している。
+全体が知りたい場合は fontspec パッケージの説明書を参照してほしい。）
+</p>
+<ul>
+<li id="fontspec-BoldFont"><code>BoldFont=&lt;フォント名&gt;</code><br>
+<code>ItalicFont=&lt;フォント名&gt;</code><br>
+<code>BoldItalicFont=&lt;フォント名&gt;</code>：
+通常、上述の命令を用いてフォントファミリを定義した場合は、
+太字やイタリックのフォントは自動的に適当なものが割り当てられる。
+例えば、
+<pre>
+\fontspec{Tahoma}
+</pre>
+の場合は、太字(<code>\bfseries</code>)のフォントは自動的に Tahoma
+の Bold 版（これのフォント名は「Tahoma Bold」）になる。
+しかし、Tahoma にはそもそも Italic がないので、
+上の指定ではイタリック（<code>\itshape</code>）が使えない。
+ここでもし代用として Verdana の Italic
+（実際はイタリックでなく斜体であるが）
+を使いたい場合は、
+<pre>
+\fontspec[ItalicFont=Verdana Italic]{Tahoma}
+</pre>
+と指定すればよい。
+同様に、<code>BoldFont</code> は太字、
+<code>BoldItalicFont</code> は太字イタリックのフォントを直接指定するのに用いる。
+</li>
+<li><code>ExternalLocation</code>：
+フォントをフォントファミリ名の代わりにフォントファイルの名前で指定する。
+指定されたファイルは Kpathsearch に従って探索される。
+（カレントディレクトリは常に検索される。
+また W32TeX の場合、Windows にインストールされたフォントも検索対象となる。）
+この指定の場合、太字とイタリックのフォントの自動的割当は機能しないので、
+必要であれば、<code>BoldFont</code> 等で指定する必要がある。
+<div class="bend"><span class="lbl">参考：</span> 
+fontspec 2.0 版以降では、
+名前が拡張子（<code>.otf</code> 等）
+を含む場合は自動的にファイル名での指定とみなされ、
+<code>ExternalLocation</code> は不要になっている。
+また、<code>Extension=&lt;拡張子&gt;</code> で拡張子を別に指定することも可能である
+（名前は拡張子を除いたファイル名で指定する）。
+従って、現在では <code>ExternalLocation</code>
+が必要なのは
+「拡張子を省略（自動判別）してファイル名で指定する場合」
+に限られる。
+</div>
+</li>
+<li><code>Path=&lt;ディレクトリ名&gt;</code>：
+<code>ExternalLocation</code> と同様だが、探索対象ディレクトリを指定のものに限る。
+<div class="bend"><span class="lbl">参考：</span> 
+2.0 版より前では
+<code>ExternalLocation=&lt;ディレクトリ名&gt;</code> であった。
+</div>
+</li>
+<li><code>Scale=&lt;値&gt;</code>：
+そのファミリの字のサイズを標準（<code>Scale</code> 無指定時）の
+<code>&lt;値&gt;</code> 倍にする。
+同じフォントサイズ（<code>\large</code> や <code>\fontsize</code> で指定するもの）
+でも書体によって異なる大きさに見えるという場合に調整するために用いる。
+</li>
+<li><code>Scale=MatchLowercase</code>：
+現在有効なフォントと「上下の突出部のない英小文字（“x”等）の高さ（x-height）」
+が一致するようにサイズを調節する。
+（一般的に、異なる欧文フォントが混在している場合には、
+x-height を合わせていると字の大きさが揃って見えるとされている。）
+</li>
+<li><code>CJKShape=&lt;値&gt;</code>：
+異体字切替。<code>&lt;値&gt;</code> は <code>JIS1978</code>、
+<code>JIS1983</code>、<code>JIS1990</code> のいずれかで、
+JIS X 0208 の各々の版の例示字体に相当する字形を選択する。
+（<code>JIS2004</code> はまだ用意されていないので後述の
+<a href="#elt-fontspec-rawfeature"><code>RawFeature</code> 指定</a>を用いる。）
+もちろん、フォントがこの機構に対応している必要がある。
+（補足。2000JIS（JIS X 0213:2000）の例示字体は 90JIS（JIS X 0208:1990）
+のそれを引き継いでいるので、「2000JIS 字形」
+にしたい場合に指定するのは <code>JIS1990</code> である。）
+</li>
+<li><code>CharacterWidth=&lt;値&gt;</code>：
+字幅の切替。<code>&lt;値&gt;</code> は <code>Proportional</code>
+（プロポーショナル）、<code>Full</code>（全角）、<code>Half</code>（半角）、
+<code>Third</code>（三分角）、<code>Quarter</code>（四分角）で、
+その幅のグリフを優先的に用いるようになる。
+<code>AlternateHalf</code> は約物のみを半角幅にする設定、
+<code>AlternateProportional</codE> は約物のメトリックをプロポーショナルにする設定。
+</li>
+<li><code>Vertical=RotatedGlyphs</code>：
+縦書き用のグリフを横転した形で出力する（書字方向は変わらない）。
+graphicx パッケージの <code>\rotatebox</code>
+命令と組み合わせることで部分的な縦書きが実現できる。
+</li>
+<li id="elt-fontspec-mapping"><code>Ligatures=TeX</code>：
+従来の LaTeX でリガチャによって実現していた特殊
+文字入力―例えば 「<code>?`</code> → <span class="lgc">&#xbf;</span>」
+「<code>---</code> → <span class="lgc">&#x2014;</span>」等―を有効にする。
+またリガチャではないが「<code>`</code> → <span class="lgc">‘</span>」
+「<code>'</code> → <span class="lgc">’</span>」（引用符）
+の変換もここに含まれる。
+<div class="bend"><span class="lbl">参考：</span> 
+全く同じ設定を
+<code>Mapping=tex-text</code> でも行えるが、
+こちらは XeLaTeX 専用で LuaLaTeX では使えない。
+<code>Ligatures=TeX</code> は XeLaTeX と LuaLaTeX
+で共通して使えるように fontspec 2.0 版以降で用意されたものである。
+（つまり、XeLaTeX では「Mapping」の機能を用いるが、
+LuaLaTeX では全く別の機構を用いて同じ機能を実現している。）
+</div>
+</li>
+<li id="elt-fontspec-rawfeature"><code>RawFeature=&lt;値&gt;</code>：
+OpenType の属性を直接指定する。
+<code>&lt;値&gt;</code> は属性名（英字 4 文字）の前に <code>+</code>（有効化）
+または <code>-</code>（無効化）を付したものをセミコロンで区切って指定する。
+例えば「<code>RawFeature=+smco;-liga</code>」
+はスモールキャピタルを有効にしリガチャを無効にする。
+以下では特に日本語文書で必要そうな値を挙げておく。
+<ul>
+<li><code>+jp04</code>： 
+JIS X 0213:2004 の例示字体に相当する字形
+（いわゆる「2004JIS 字形」）を選択する。
+<code>CJKShape=JIS2004</code> がまた用意されてないのでその代わり。
+</li>
+<li><code>-palt</code>： 
+XeTeX では（少なくとも一部のフォントで）
+<code>CharacterWidth=AlternateProportional</code> が既定で有効化されていて、
+そのため本来等幅である「和文用の約物」
+がプロポーショナル幅になることがある。
+<code>-palt</code> 指定は <code>AlternateProportional</code>
+を無効にする。
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> この指定法は OpenType
+レンダリングの時で、AAT を使用する場合は指定方法が異なる。
+Mac OS X において AAT と OpenType の両方に対応するフォントを使用する時に、
+OpenType ライブラリ（ICU）を用いることを明示する場合は、
+<code>Renderer=ICU</code> を指定すればよい。
+（Graphite が優先的に選ばれることってあるんですかね…？）
+</div>
+</li>
+</ul>
+
+<p>既に<a href="#ssec-preamble">「プレアンブルの書き方」</a>
+のところで一部の基本的な命令の使用例を紹介した。
+ここでは複雑な指定を用いた例をその出力結果とともに掲載する。
+</p>
+<pre id="src-sample04">
+% このファイルの文字コードは UTF-8
+\documentclass[a5paper]{article}
+\usepackage{fontspec}
+\usepackage{graphicx} % ドライバ名は不要
+\setmainfont[Scale=MatchLowercase]{Palatino Linotype}
+  % イタリック(実際は斜体)を Verdana で代用する
+\setsansfont[Scale=MatchLowercase,ItalicFont=Verdana Italic]{Tahoma}
+\setmonofont[Scale=MatchLowercase]{Lucida Console}
+\newfontfamily\arial{Arial} % \arial は Arial
+\begin{document}
+  % 本文(プレアンブルでなく)でも使用可能
+\newfontfamily\courier{Courier New} % \courier は Courier New
+
+  % "Scale=MatchLowercase" 指定のものは小文字の高さが揃うが
+  % 無指定のものは揃わない
+{\rmfamily Super}{\sffamily califra}{\ttfamily gilistic}%
+{\arial expiali}{\courier docious}%
+  % \fontspec で指定、"!" の前の空白が無視される
+{\fontspec[Scale=2]{Impact} !}
+
+  % Tahoma で斜体指定(\textsl)すると Verdana Italic になる
+  % どうも fontspec は \slshape と \itshape を同じように扱う
+  % ようですね
+\sffamily The oblique shape is substituted by \textsl{Verdana}.
+
+  % Ligatures=TeX の効果
+\fontspec{Times New Roman}
+``Smart'' quotes? /
+\fontspec[Ligatures=TeX]{Times New Roman}
+``Smart'' quotes!
+
+  % ファイル名指定で TeX ツリーの中にある LM Roman Dunhill を指定
+\fontspec[ItalicFont=lmromandunh10-oblique.otf]{lmromandunh10-regular.otf}
+A quick brown \textsl{firefox} jumps over the lazy dog.
+
+  % メイリオで色々と遊んでみる
+  % 小塚フォントやヒラギノフォントでも良いはず
+\fontspec{メイリオ} % メイリオは 2004 字形がデフォルト
+東京都葛飾区 /
+\fontspec[CJKShape=JIS1983]{メイリオ} % 1983 字形に切り替える
+奈良県葛城市
+  % 無理やり縦書き出力する例（\marginpar に出している）
+\newfontfamily\vmeiryo[Vertical=RotatedGlyphs,CharacterWidth=Full]{メイリオ}
+\newfontfamily\qwmeiryo[CharacterWidth=Quarter]{メイリオ} % 四分角
+\newfontfamily\hwmeiryo[CharacterWidth=Half]{メイリオ}    % 半角
+  % \addfontfeatures 命令を使った方がよいかも
+% 縦中横。(Vertical の場合、文字の中心にベースラインが来る)
+\newcommand*\HinV[1]{\rotatebox[origin=B]{90}{%
+  \raisebox{-0.38em}{\makebox[1em][c]{#1}}}}
+\marginpar{\vmeiryo
+\rotatebox[origin=r]{-90}% 右90度回転で正しい向きになる
+{「日付＝\HinV{\qwmeiryo 2009}年8月\HinV{\hwmeiryo 29}日」}}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:586px">
+<img src="sample/xetex-sample04.png" width="586" height="205">
+</div></div>
+<div class="bend"><span class="lbl">参考：</span> Windows XP
+のユーザーは
+<a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=f7d758d2-46ff-4c55-92f2-69ae834ac928&displaylang=ja">Microsoft のダウンロードセンター</a>から「メイリオ」を無償で入手できる。
+なお、上の例でメイリオを使ったのは OpenType の属性の使用例を示す「遊び」
+のためである。
+メイリオは横書き(それも画面表示)用にデザインされているので、
+縦書きでの使用には全く向かないことに注意されたい。
+</div>
+<div class="bend"><p><span class="lbl">参考：</span> Windows XP
+「IPAexフォント」の最新版（v001.02）は、
+<code>CJKShape=JIS1990</code> による 90JIS 字形への切替
+（既定は 2004JIS 字形）に対応している。
+（IPAex フォントの初版（v001.00）や IPA フォントは未対応。）
+従って、上のメイリオの例と同じことができる。
+なお、IPAex フォントに
+ついては<a href="#elt-ipaex-2">こちらの記述</a>も参照されたい。
+</p>
+<pre id="src-sample08">
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+\begin{document}
+{\fontspec{IPAexMincho}
+ 東京都葛飾区} /
+{\fontspec[CJKShape=JIS1990]{IPAexMincho}
+ 奈良県葛城市}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:271px">
+<img src="sample/xetex-sample08.png" width="271" height="23">
+</div></div>
+</div>
+<p>なお、fontspec 使用時に総称ファミリに指定される既定のファミリは、
+以下のように、TeX ツリー中の <a href="./xelatex1.html#lm-font">Latin Modern</a>（OpenType 版）となっている。
+<ul>
+<li><code>\rmfamily</code>： Latin Modern Roman
+</li>
+<li><code>\sffamily</code>： Latin Modern Sans
+</li>
+<li><code>\ttfamily</code>： Latin Modern Mono
+</li>
+</ul>
+<p>
+<!--（Latin Modern は、Knuth の Computer Modern のデザインを基に作られたフォントファミリで、
+Unicode のラテン文字の範囲を広くカバーしている。）-->
+また、fontspec を読み込まない場合は、
+既定のフォント設定は従来の LaTeX と全く変わらず Computer Modern となる。
+この状態では Unicode 文字を出力することはできない。
+</p>
+<div class="bend"><span class="lbl">参考：</span> XeLaTeX + fontspec
+の命令とそれにほぼ同じ意味の LaTeX の命令との対応を表に示した。
+ここで「ファミリ名」は fontspec では「本来のファミリ名」、
+LaTeX では前に説明した「LaTeX ファミリ名」のことである。
+<div align="center" class="display"><table class="std">
+<tr><th>XeLaTeX + fontspec</th>
+<th>従来の LaTeX</th>
+</tr>
+<tr><td><code>\fontspec{ファミリ名}</code></td>
+<td><code>\fontfamily{ファミリ名}\selectfont</code></td>
+</tr>
+<tr><td><code>\newfontfamily\命令{ファミリ名}</code></td>
+<td><code>\newcommand\命令<br>&nbsp;{\fontfamily{ファミリ名}\selectfont}</code>
+</tr>
+<tr><td><code>\setmainfont{ファミリ名}</code></td>
+<td><code>\renewcommand\rmdefault{ファミリ名}</code>
+</tr>
+<tr><td><code>\setsansfont{ファミリ名}</code></td>
+<td><code>\renewcommand\sfdefault{ファミリ名}</code>
+</tr>
+<tr><td><code>\setmonofont{ファミリ名}</code></td>
+<td><code>\renewcommand\ttdefault{ファミリ名}</code>
+</tr>
+</table></div>
+<p>これを見ると、<code>\newfontfamily\命令[属性]{ファミリ名}</code>
+は <code>\newcommand\命令{\fontspec[属性]{ファミリ名}}</code>
+と（動作としては）同じであることがわかる。
+ただし、<code>\newfontfamily</code> の方が高速に動く。
+（後者でも全く同一の内容のファミリが重複登録されることはないようだが、
+命令の解釈の手間は省ける。）
+</div>
+
+<h4 id="sssec-newfont">新しいフォントの追加（W32TeX の場合）</h4>
+
+<p>これまでに見たように、XeLaTeX では基本的に TrueType／OpenType
+形式（現代的な OS で一般的に使用される形式である）
+のフォントで、従来の 8 ビット欧文の LaTeX で用いられてきた
+Type1 や PK フォントは「使わない」。
+（ただし「使えない」訳ではない。
+<a href="xelatex1.html#ssec-tfmfont">「欧文フォントについての補足」</a>を参照。
+また、<a href="xelatex1.html#ssec-mathfont">数式フォント</a>については話が別である。）
+</p>
+<p>W32TeX の XeTeX の既定の設定では、
+Windows にインストールされたフォント
+（C:\WINDOWS\Fonts に置かれている）
+は XeTeX で使用可能な状態になっている。
+従って、新たな TrueType／OpenType フォントを入手したとして、
+それを XeTeX で使えるようにしたい場合は、
+それを（普通の方法で）Windows にインストールするというのが最も簡便な方法である。
+ただし、新しいフォントをインストールした後には、
+次のコマンドを（コマンドプロンプト等で）実行する必要がある。
+</p>
+<pre>
+<span class="pre-in">fc-cache -r -v</span>
+</pre>
+
+</div><!--ssec-fontspec-->
+
+<div class="subsection" id="ssec-driver">
+<h3>DVIウェア依存のパッケージの使用</h3>
+
+<p>XeLaTeX において
+graphicx や hyperref 等の「ドライバ（＝使用するDVIウェアの名）」
+をオプションに指定する必要のあるパッケージを使う場合は、
+ドライバとして以下のものを指定する。
+</p>
+<ul>
+<li>XeTeX の使用を意味するドライバ名は <code>xetex</code> である。
+従って、これが使える場合は、XeTeX
+用に最適化された設定が利用できることになる。
+graphicx や color は <code>xetex</code> オプションをもっている。
+（「使えない」場合は大抵はエラーになる。）
+</li>
+<li><code>xetex</code> が使えない場合は、<code>dvipdfmx</code>
+を指定すると上手くいくかもしれない。
+XeTeX は PDF を生成するのに dvipdfmx の拡張版である xdvipdfmx
+を用いるからである。
+</li>
+<li><code>dvipdfmx</code> も使えない場合、<code>dvipdfm</code>
+が使えるかもしれない。
+（dvipdfmx 自体が dvipdfm というドライバの拡張であるから。）
+</li>
+</ul>
+<p>パッケージによっては、何も設定しなくても
+（あるいは何か別のものを設定していたとしても）
+XeTeX に適したドライバを設定するものもある
+（例えば、graphicx では <code>xetex</code> に、
+hyperref では <code>dvipdfm</code> に強制的に変更される）。
+</p>
+<p>ドライバを指定するタイプ以外で特定の DVI ウェアに依存するパッケージの場合も、
+（XeTeX が dvipdfmx の拡張版を使っているという理由で）
+dvipdfm(x) で使えるものならば XeTeX でも使えることが期待できる。
+例えば、tpic 拡張（eepic 等のパッケージで必要）については
+dvipdfmx が対応しているので、XeTeX でも対応しているといえる。
+逆に、dvips 用のもの（PostScript コードを直接扱う）や
+pdfTeX 用（pdfTeX 拡張命令を用いる）のものは使えないことが多い。
+ただし、PSTricks は XeTeX にも対応しているらしい
+（まだ確認していない）。
+</p>
+<div class="alert"><p><span class="lbl">注意：</span> 
+geometry の <em>5.0 版より前の版</em>に関しては注意が必要である。
+XeTeX の配布に含まれている設定ファイルでは、
+geometry に関しては pdfTeX の為のコードを実行するように強制している。
+恐らく、XeTeX が <code>\pdfpagewidth</code> と <code>\pdfpagewidth</code>
+（pdfTeX の命令）を模倣しているからこの設定で妥当であると判断された
+のであろうが、
+少なくとも 4.2 版の geometry では <code>\mag</code> が既定値（1000）
+でない場合は XeTeX がサポートしていない pdfTeX の命令が使われているためエラーが発生し、
+今の設定ではこれを避けることができなくなっている。
+もしこれが問題になるようであれば、XeTeX 実行時に読まれる geometry.cfg
+を書き換える必要がある。
+なお、geometry の 5.0 版以降は XeTeX に正規に対応していて、
+かつ XeTeX の使用時には自動的に XeTeX 用の設定になるので、
+特に何も気にする必要がなくなっている。
+（geometry.cfg の該当の記述は 5.0 版では無害である。）
+</p>
+<p>ちなみに、後で紹介する bxjs クラスは（js クラスと同様）
+基底フォントサイズ変更に <code>\mag</code> を使っていて、
+かつページレイアウト設定に geometry を使っているが、
+古い版の場合でも、
+geometry.cfg の読込を回避する仕掛けを施すことでこの問題を避けている。
+</div>
+
+</div><!--ssec-driver-->
+
+<div class="subsection" id="ssec-font">
+<h3>欧文フォントについての補足</h3>
+
+<p>（<a href="./xelatex1.html">別のページ</a>に分離移動しました。）
+</p>
+
+</div><!--ssec-font-->
+
+</div><!--sec-basic-usage-->
+
+<div class="section" id="sec-japanese">
+<h2>日本語したい場合は</h2>
+
+<p>「基本的な使い方」の解説が随分と長くなってしまったが、
+ここから XeLaTeX で日本語を含む文書を作成する方法について解説する。
+</p>
+<p>といっても、
+既に日本語の文字が含まれる出力例を何度も出していることからもわかるように、
+XeLaTeX では特に和文（あるいは CJK）と欧文の文字の区別をしないので、
+文書に含まれた全ての文字について、
+フォントに該当の文字があればそれが出力される。
+従って、欧文の文書の中に日本語の単語を混ぜるというような使い方であれば、
+文書ファイルを UTF-8 で入力し、
+fontspec で日本語フォントを指定するだけで可能になる。
+</p>
+<div class="bend"><span class="lbl">参考：</span> XeLaTeX では pLaTeX
+のように「欧文フォント」と「和文フォント」
+を別に指定できるわけではないので、
+日本語フォントが指定されている状態では、
+欧文文字もそのフォントで出力しようとする。
+もし切り替える必要があるのであれば、手動で行う必要がある。
+（日本語対応のパッケージを用いている場合は異なるかも知れない。）
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{Times New Roman}
+\newfontfamily\jarm[Scale=0.92]{IPA明朝}
+\begin{document}
+  % 日本語フォントのままロシア語を出す訳にいかない!
+В этом документе есть {\jarm 日本語} слово.
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:322px">
+<img src="sample/xetex-sample05.png" width="322" height="21">
+</div></div>
+このように欧文フォントと和文フォントを切り替える場合は、
+和文フォントを心持ち縮小（90％～95％）
+しておくとバランスが良くなることが多い。
+この時に <code>Scale=MatchLowercase</code>
+で合わせるのはあまり良い結果にならないことが多い。
+</div>
+
+<div class="subsection" id="ssec-japanese-paragraph">
+<h3>日本語を含む段落を出力する</h3>
+
+<p>これだけで済むのであれば話は簡単であるが、
+行を跨ぐほどの分量の日本語の段落を含む場合は残念ながら上手くいかない。
+</p>
+
+<div><em>〈正しく出力されない例〉</em></div>
+<pre>
+\documentclass[a5paper]{article} % 用紙サイズを A5 にする
+\usepackage[pass]{geometry}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX,Scale=1.08]{Palatino Linotype}
+\newfontfamily\jarm{IPA明朝}
+\begin{document}
+  % 出展: D.E.Knuth, “The TeXbook” / 最後の練習問題の解答
+If this exercise isn't just a joke, the title of this appendix is a lie.
+
+\jarm
+もしこの練習問題が単なる冗談でないとしたら、この付録の標題は嘘だということになる。
+\end{document}
+</pre>
+<div class="center display">
+<img src="sample/xetex-sample06.png" width="736" height="120">
+</div>
+<div class="bend"><span class="lbl">参考：</span>
+<code>\usepackage[pass]{geometry}</code> は
+「ページレイアウトは全く変更せず、
+用紙サイズの記録のみを geometry に行わせる」
+ための設定。
+</div>
+
+<p>英文の方は行の右端で正しく折り返されるが、
+日本語はそうならずにテキスト領域をはみ出して出力されてしまう
+（Overfull の警告が表示される）。
+これは、従来の（欧文）LaTeX では
+（特別に指定する、あるいは分綴する場合を除き）
+空白のある場所のみを改行可能な箇所として扱うからである。
+</p>
+<p>日本語ではほとんどの文字の間で改行が可能であるが、
+例えば句読点の前では改行できない等の例外（「禁則」という）があり、
+日本語の段落を行分割するにはこの規則について周知している必要がある。
+幸い XeTeX にはこのような規則に従って行分割する機能が備わっていて、
+以下の手順でその機能を利用できる。
+</p>
+<p>まず、以下の内容のファイルを作成し、ファイル名を myjapanese.sty とする
+（これは LaTeX のパッケージファイルである）。
+</p>
+<pre>
+% 日本語を含む段落を行分割するための設定
+\XeTeXlinebreaklocale "ja"
+\XeTeXlinebreakskip=0pt plus 1pt
+\XeTeXlinebreakpenalty=0
+% これについては後で説明する
+\def\<{\@ifstar{\zx@hwback\nobreak}{\zx@hwback\relax}}
+\def\zx@hwback#1{\leavevmode#1\hskip-.5em\relax}
+</pre>
+<p>そして、LaTeX 文書のプレアンブルの中でそのファイルを読み込むと、
+日本語の段落も行分割されるようになる。
+</p>
+<pre>
+\documentclass[a5paper]{article}
+\usepackage[pass]{geometry}
+\usepackage{fontspec}
+\usepackage{myjapanese} % 作成したパッケージを読み込む
+\setmainfont[Ligatures=TeX,Scale=1.08]{Palatino Linotype}
+\newfontfamily\jarm{IPA明朝}
+\begin{document}
+  % 出展: D.E.Knuth, “The TeXbook” / 最後の練習問題の解答
+If this exercise isn't just a joke, the title of this appendix is a lie.
+
+\jarm
+もしこの練習問題が単なる冗談でないとしたら、この付録の標題は嘘だということになる。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:573px">
+<img src="sample/xetex-sample07.png" width="573" height="94">
+</div></div>
+
+<div class="bend"><span class="lbl">参考：</span> <code>\XeTeXlinebreaklocale</code>
+に何らかの値（言語コード）が設定されている場合、XeTeX は
+<a href="http://www.unicode.org/reports/tr14/">Unicode の行分割アルゴリズム</a>に基づいて行分割を行う。
+指定の言語によってはそれに特有の処理が加わることもあるが、
+日本語（<code>ja</code>）の場合特別の処理がある訳ではないので <code>\XeTeXlinebreaklocale "ja"</code>
+も <code>\XeTeXlinebreaklocale "en"</code> も同じ結果になるらしい。
+<code>\XeTeXlinebreaklocale ""</code> のように空文字列を指定すると従来の TeX
+の行分割方式に戻る。
+</div>
+
+<p>これで XeLaTeX で日本語を含む判読可能な文書を（体裁はともかく）
+出力できるようになった。
+ここで日本語を扱う場合の注意事項を挙げておく。
+</p>
+<ul>
+<li>行末の扱い：XeLaTeX では「欧文文字」と「和文文字」の区別をしないので、
+日本語文字の後にある改行も空白として解釈される
+（pLaTeX ではこのような改行は無視される）。
+従って、ここで空白が不必要な場合は <code>%</code> で改行を無効化する必要がある。
+<pre>
+  % 行末に % が必要
+もしこの練習問題が単なる冗談でないとしたら、この付録の標題は%  
+嘘だということになる。
+</pre>
+</li>
+<li>マクロ名： マクロ名に日本語文字（に限らず任意の Unicode 文字）
+を含めることができる。
+ただしマクロ命名規則における「英字と同じ扱い」「記号と同じ扱い」
+の区別については pLaTeX と異なる場合がある。
+（例えば <code>\メール</code> は 1 つのマクロ名（命令語）として可能である。）
+</li>
+<li>fontspec でのフォント指定では <code>\setmainfont</code> に明朝体、
+<code>\setsansfont</code> にゴシック体のフォントを当てることになる。
+pLaTeX でよく行われるように明朝体で太字（<code>\bfseries</code>）
+指定した時にゴシックになるようにするには <code>BoldFont</code> 属性を用いる。
+<pre>
+\setmainfont[BoldFont=IPAゴシック]{IPA明朝}
+</pre>
+勿論、実際に太明朝のフォントを指定することもできる。
+Microsoft Office 付属の「HG明朝E」を使う場合は次のようになる。
+<pre>
+\setmainfont[BoldFont=HG明朝E]{IPA明朝}
+</pre>
+<p>真に同じファミリのウェイト違いのフォントが入っている場合
+（Mac OS X のヒラギノとか）は自動設定が効くのかもしれない。
+</p>
+</ul>
+
+</div><!--ssec-japanese-paragraph-->
+
+<div class="subsection" id="ssec-missing">
+<h3>現状で不足しているもの</h3>
+
+<p>これまでに述べた設定で、
+日本語の段落を含む文書の組版ができることがわかった。
+以下では、今の設定での日本語組版のもつ問題点について解説する。
+「XeLaTeX の日本語組版はまともでない」といわれることがあるが、
+以下を読めばその理由が推し量れると思う。
+</p>
+
+<h4>文字間の空白の調節</h4>
+
+<div style="float:right">
+<img src="image/jismetric.png" width="472" height="302">
+</div>
+
+<p>日本語の組版を行う場合には、約物類の前後等で空白の量を調節する必要がある
+（これは禁則処理とは別の話である）。
+その規則については JIS 規格の「JIS X 4051 日本語文書の組版方法」および
+W3C のテクニカルレポート<a href="http://www.w3.org/TR/jlreq/ja/">「日本語組版処理の要件」</a>
+（正式版は英語の<a href="http://www.w3.org/TR/jlreq/">“Requirements for Japanese Text Layout”</a>）
+の中にまとめられている。
+この中の行組版の空白調節に関する内容だけとっても莫大な分量になるので、
+ここでその概略さえ紹介できるものではない。
+そのためここでは XeLaTeX が上手く処理できない例を一つだけ挙げるに止める。
+</p>
+<p>例えば、
+</p>
+<blockquote>
+ああである。（こうである。）
+</blockquote>
+<p>のように〈。〉と〈（〉が並んだ場合、
+上述の 2 つの規格で示される規則に従うとその 2 字分で 1.5 全角分（1.5em）
+を占めることになる。
+ところが、右の図で示されるように、
+フォントの設定をどうしてもこの求められる値に一致しない。
+そもそも、空きの調節量は前後の文字種によって決まるので、
+各文字の字幅を調節するだけでは JIS の規則に合わせるのは無理なのである。
+</p>
+<p>ちなみに、pLaTeX で「新ドキュメントクラス」（jsarticle 等）を用いた場合、
+JIS の規則通りの結果が得られる。
+pTeX には文字種により文字間に空白を自動的に入れる機能があり、
+新ドキュメントクラスはこの機能について JIS
+の空白調節規則に沿った設定値をもったフォントを使っているからである。
+よく「XeLaTeX の日本語組版は pLaTeX には及ばない」
+と言われている一番大きな要因はこの点にあると思われる。
+ただし、これは「現状の XeLaTeX で用意されているもの」についてのことであり、
+少なくとも横書きに限っていえば XeTeX 自身は pTeX
+に劣らない日本語組版能力があると私は考えている。
+（無論、その能力が LaTeX
+で使えなければ一般のユーザには役に立たないことは明白であるが…！）
+</p>
+
+<div class="bend"><span class="lbl">参考：</span> それでは、
+英字におけるカーニングと同様にフォントレベル（例えば OpenType の設定）
+の字間調節を用いれば実現できるのではないかとも考えられるが、
+実際のフォントではそういうアプローチは採られていないようである。
+この規則はフォント（書体）と無関係に決められているものなので、
+フォントのレンダリングのレベルでなく組版のレベルで処理すべきものということであろうか。
+</div>
+<div class="bend"><span class="lbl">参考：</span> ちなみに、
+pTeX マニア（？）の方々がよく口にする「JIS メトリック」
+という用語はここでの JIS の規則に従って文字を配置する方式のことである。
+勿論、「JIS メトリック」は JIS X 4051 で述べられた要件の中の一部でしかなく、
+またこの規格の中の要件に pTeX では簡単に実現できないものもある。
+しかし、上で述べた空白調節の件については、
+Microsoft Word でも正しい結果が得られる。
+恐らく、多くの TeX 信者にとっては、
+TeX が Word に劣る結果を出すのは我慢ならないのではないだろうか ;-)
+</div>
+
+<h4>日本語文書用の文書クラス</h4>
+
+<p>現在存在する日本語用の文書クラスは pLaTeX あるいは NTT jLaTeX 用のものである。
+日本語文書クラスの定義は当然日本語の処理方法に依存するのでこれらは XeLaTeX
+では使えない。
+（CJK-LaTeX 用の日本語文書クラス等もあるかもしれないが、これでも話は同じである。）
+従って、XeLaTeX 用の日本語文書クラスは新たに作る
+（既存の pLaTeX 用のものをアレンジするのも含め）ことをしなければ存在しない。
+残念ながら、そういうものを作って公開している人はまだいないようである。
+文書クラスを作る（アレンジする）のには相当の TeX プログラミングの能力が必要となるのだが、
+日本の TeXnician の間では XeTeX への関心は低いのかもしれない。
+</p>
+
+<h4>対処法</h4>
+
+<p>とはいえ、ここで述べたものは「一般に通用する日本語文書」
+のレベルで必要とされるものである。
+少なくとも、<a href="#ssec-japanese-paragraph">「日本語を含む段落を出力する」</a>
+で挙げた設定をすれば XeLaTeX を使って「日本語文章が紙に書かれたもの」
+が作れることは確かである。
+もし完全に自分用のプライベートな文書を作るのであれば、
+どんな酷い体裁であっても自分が満足できればそれで十分であることは否みようがないし、
+他人に公開するものであっても、
+「その範囲で」納得できる程度のものであれは問題ないであろう。
+現状の XeLaTeX に足りないものというのはそういうレベルのものである。
+</p>
+<p>以下では、「自己満足を得易くする」という観点で、
+現状の弱点を補うための方策をいくつか述べる。
+</p>
+<p>[字間空白調節について]
+</p>
+<p>これについては、方向性の違う 2 つの対処法が考えられる。
+</p>
+<ul>
+<li><p>プロポーショナルフォントを指定してそのままフォントの字幅に従って出力する。
+実は、今ある Web ブラウザの日本語表示は
+（特に等幅フォントを指定されている場合、そもそも等幅の環境である場合を除き）
+そのような体裁になっていて、この状態は 15 年以上変わっていない。
+従って、この組み方には全く違和感を覚えない人も多いと思う。
+（さらにいえば、スライド（プレゼンテーション）においてはそれが
+「現在主流の組み方」であると強弁することすら可能である。）
+</p></li>
+<li><p>等幅フォントを指定して出力する。
+この場合、約物が並んだ箇所で明らかに「空きすぎ」に見えるものが出てくる。
+<a href="#ssec-japanese-paragraph">「日本語を含む段落を出力する」</a>
+で示した myjapanese.sty には <code>\&lt;</code> という命令が用意されていて、
+これを書くと半角分空きを詰めることができる。
+（当然 pLaTeX の <code>\&lt;</code> とは全く機能が違う。）
+<code>\&lt;</code> はその箇所での行分割を禁止するが、<code>*</code>
+付きの <code>\&lt;*</code> は行分割を許可する。
+これを用いて、
+<pre>
+ああである。\&lt;*（こうである。\&lt;）
+</pre>
+とすると、JIS の空白調整規則に従った結果が得られる。
+エディタで等幅フォントを使っている場合には、
+その上で調整が必要な箇所が容易に視認できるであろう。
+</p>
+<div class="bend"><p><span class="lbl">参考：</span> 
+なお、上述の等幅フォントを使う設定において
+「IPA明朝」などの欧文も等幅（半角幅）である
+フォントを使う場合は、手動でフォントを切り替えない限り、
+欧文が等幅で組まれてしまうことに注意。
+手動での切替を省くために、
+「IPAex明朝」のように最初から「和文等幅＋欧文プロポーショナル」
+としてデザインされたフォントを使うという手もある。
+ただし、XeTeX には <code>CharacterWidtah=AlternateProportional</code>
+（OpenType 属性 palt）が既定で有効になるという「癖」があるので、
+<code>RawFeature=-palt</code> を指定しないと期待する組み方にならないことに注意。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+% \rmfamily は Latin Modern Roman
+\newfontfamily\ipamin{IPA明朝} % これは欧文が半角幅
+\newfontfamily\ipaexmin[RawFeature=-palt]{IPAex明朝} % 欧文はプロポーショナル
+% ↑ palt を無効にする必要あり
+\begin{document}
+%「IPA明朝」でそのまま組む
+\ipamin {\XeLaTeX} で Japanese を typeset する example。\par
+% 和文「IPA明朝」+ 欧文「Latin Modern Roman」
+\ipamin \textrm{\XeLaTeX} で \textrm{Japanese} を \textrm{typeset} する \textrm{example}。\par
+%「IPAex明朝」で全部組む
+\ipaexmin {\XeLaTeX} で Japanese を typeset する example。\par
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:450px">
+<img src="sample/xetex-sample09.png" width="450" height="72">
+</div></div>
+</div>
+</li>
+</ul>
+<p>[日本語用文書クラスについて]
+</p>
+<ul>
+<li>geometry（ページレイアウト設定）、
+indentfirst（節見出し直後の段落下げの有効化）、setspace（行間を拡げる）
+等のパッケージを駆使して少しでも自分の好みのものに合わせる。
+</li>
+<li>段落下げの量を示す変数 <code>\parindent</code> を「全角 1 文字分」
+に設定する。
+</li>
+</ul>
+<p>以上のような対処法を駆使して自分が納得できる設定を構築して、
+それを先に示した設定ファイル myjapanese.sty に記しておくとよいであろう。
+以下に、等幅フォント使用＋手動調整を行うための設定例
+（あくまでも例である）を掲げておく。
+</p>
+<pre>
+% myjapanese.sty
+\RequirePackage{xltxtra}
+% フォント設定
+\setmainfont[Scale=0.92,BoldFont=IPAゴシック]{IPA明朝}
+\setsansfont[Scale=0.92]{IPAゴシック}
+\setmonofont{IPAゴシック}
+\newfontfamily\engrm[Ligatures=TeX]{Times New Roman}
+\newfontfamily\engsf[Ligatures=TeX,Scale=0.92]{Arial}
+\def\en#1{{\engrm#1}} % 欧文フォントで出力
+% 日本語を含む段落を行分割するための設定
+\XeTeXlinebreaklocale "ja"
+\XeTeXlinebreakskip=0pt plus 1pt minus 0.1pt
+\XeTeXlinebreakpenalty=0
+% 半角分戻る
+\def\&lt;{\@ifstar{\zx@hwback\nobreak}{\zx@hwback\relax}}
+\def\zx@hwback#1{\leavevmode#1\hskip-.5em\relax}
+% 簡易レイアウト設定
+\RequirePackage[scale=0.8]{geometry}
+\RequirePackage{indentfirst}
+\RequirePackage{setspace}
+\setstretch{1.3}
+\parindent=1em
+% 後は名前定義を適当に
+\def\contentsname{目次}
+\def\listfigurename{図目次}
+\def\listtablename{表目次}
+\def\refname{参考文献}
+\def\bibname{参考文献}
+\def\indexname{索引}
+\def\appendixname{付録}
+% EOF
+</pre>
+<div class="bend"><span class="lbl">参考：</span> 
+こういった「自作のパッケージ」はどこに置けばよいか
+（任意の TeX 文書から読込可能になるか）について説明しておく。
+簡単に言えば、$TEXMF/tex/ 以下
+（W32TeX を <u>C:\usr\local</u> にインストールした場合は
+<u>C:\usr\local</u>\share\texmf-local\tex\ 以下：
+TeX Live 系の場合は恐らく ~/texmf/tex 以下）
+であればどこでもよい。
+「どこでもよい」では迷ってしまうという人のために例を挙げるとすると、
+<blockquote>
+$TEXMF/tex/latex/mypackage/ の下
+</blockquote>
+に置けばよい。
+この後に、必要に応じて mktexlsr を実行する。
+「必要かどうかわからない」場合はとりあえず実行しておけばよい。
+（必要かもしれないので！）
+</div>
+<p>この設定、およびプロポーショナルフォントを使用する設定の
+2 通りで、このページの文書の冒頭の部分を組版した結果を示す。
+</p>
+<ul>
+<li><a href="sample/myjapanese-example.pdf">myjapanese-example.pdf</a>
+（等幅フォント）
+</li>
+<li><a href="sample/myjapanese-p-example.pdf">myjapanese-p-example.pdf</a>
+（プロポーショナルフォント）
+</li>
+<li><a href="sample/myjapanese.zip">myjapanese.zip</a>
+（ソースファイル一式）
+</li>
+</ul>
+
+</div><!--ssec-missing-->
+
+</div><!--sec-japanese-->
+
+<div class="section" id="sec-zxjatype">
+<h2>よりよい日本語組版を目指して</h2>
+
+<p>これまで述べたように、標準の XeLaTeX（と少しの苦労）
+で手に入る設定での日本語の組版は難がある。
+何より、JIS 規格等に記されているものに近づきたいという観点で見たときに 
+pLaTeX に劣るのが残念である。
+</p>
+<p>前に述べた通り、これは XeTeX の機能不足というより、
+むしろ LaTeX のパッケージのレベルでのサポートがまだ足りていないことが理由と考えられる。
+そこで、pLaTeX の品質を目標にしてパッケージを作ってみた。
+</p>
+<ul>
+<li><a href="#ssec-zxjatype">ZXjatype パッケージ</a>：
+日本語段落組版に適した空白調整の実装。
+中国語組版のためのパッケージ xeCJK
+（Sun Wenchang 氏作）を土台にしているので、
+これのインストールも必要。
+</li>
+<li><a href="#ssec-zxjafont">ZXjafont パッケージ</a>：
+pLaTeX で一般的に行われるフォント設定を XeLaTeX + fontspec
+（あるいは ZXjatype の機構も含め）
+において実現したものを予め用意しておいて、簡単に呼び出せるようにしたもの。
+</li>
+<li><a href="#ssec-bxjscls">BXjscls パッケージ</a>：
+奥村晴彦氏による
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/jsclasses/">pLaTeX2e 新ドキュメントクラス</a>
+から日本語処理部分を分離することで、
+pLaTeX 以外の「日本語が使える LaTeX」にも適用可能にしたもの。
+現在、jsarticle に相当する bxjsarticle と「jsbook の report モード」
+に相当する bxjsreport が用意されている。
+</li>
+</ul>
+<p>詳しい説明の前に、これらのパッケージを使った文書の例を示すことにする。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{bxjsarticle} % 文書クラスは bxjsarticle
+\usepackage[oldxetex]{zxjatype}      % zxjatype パッケージ読込
+\usepackage[ipa]{zxjafont}           % zxjafont パッケージ読込
+% 上の行は下の 3 行と等価
+% \setjamainfont{IPA明朝}            % \rmfamily の和文部分のファミリ
+% \setjasansfont{IPAゴシック}        % \sffamily の和文部分のファミリ
+% \setjamonofont{IPAゴシック}        % \ttfamily の和文部分のファミリ
+\usepackage{xltxtra} % \XeTeX ロゴのために必要
+% 欧文は既定の LM フォント
+\begin{document}
+\title{{\XeLaTeX}で日本語する件について}
+\author{ZR}
+\date{2009 年\ 某月\ 某日} % 和文文字直後に空白を入れる場合は〈\ 〉
+\maketitle
+
+\section{{\XeTeX}\&gt;の紹介}
+  %〈\&gt;〉は和欧文間空白、自動挿入が上手くいかない場合に用いる
+
+\subsection{{\XeTeX}\&gt;とは}
+
+{\XeTeX}\&gt;はJonathan Kew氏による\&gt;{\TeX}\&gt;の拡張で符号空間を
+Unicode全体（BMP以外も含む）に拡大したものである。
+既存の\&gt;{\TeX}\&gt;のUnicode拡張としてはOmega（Ω）
+があるが、{\XeTeX}\&gt;はこれとは別の拡張となっている。
+（なお、Omegaの後継にあたるUnicode拡張\&gt;{\TeX}\&gt;が
+{Lua\TeX}\&gt;である。）
+
+{\XeTeX}\&gt;のもう一つの大きな特徴は、現在の標準的なフォント技術を
+内部に取り込んでいることである。
+
+%%……（中略）……
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<img src="sample/xetex-sample10.png" width="992" height="800">
+</div>
+<p>上掲の出力では、
+ページレイアウトを示すために紙面の余白部分を合わせた画像として掲載した。
+以下に PDF 文書へのリンクを挙げる。
+</p>
+<ul>
+<li><a href="sample/zxjatype-sample.pdf">zxjatype-sample.pdf</a>
+（出力結果の PDF 文書）
+</li>
+<li><a href="sample/zxjatype-sample.zip">zxjatype-sample.zip</a>
+（ソースファイル）
+コンパイルには BXjscls、ZXjatype、xeCJK の各パッケージが必要である。
+</li>
+</ul>
+
+<div class="subsection" id="ssec-zxjatype">
+<h3>ZXjatype パッケージバンドル</h3>
+
+<p>中国語組版のためのパッケージ xeCJK を土台として、
+XeLaTeX を日本語組版により適応させるためのパッケージ。
+詳しくは<a href="./zxjatype.html">「ZXjatype パッケージバンドル」のページ</a>を参照。
+</p>
+
+<h4>ダウンロード</h4>
+<ul>
+<li><a href="data/zxjatype.zip">zxjatype.zip（v0.3）ダウンロード</a>（126KB）
+<span class="mdate">[2009/11/16]</span><br>
+0.2 版[2009/10/25]にはバグがあって使い物になりませんでした。
+申し訳ありませんが、更新をお願いします。
+</li>
+<li>前提パッケージ：xeCJK v2.3.5
+<a href="data/xecjk_2.3.5.zip">xecjk_2.3.5.zip ダウンロード</a>（246KB）
+<span class="mdate">[2009/10/19]</span><br>
+<em>このパッケージのライセンスは LPPL（v1.3以降）である。</em>
+</li>
+</ul>
+
+</div><!--ssec-zxjafont-->
+
+<div class="subsection" id="ssec-zxjafont">
+<h3>ZXjafont パッケージバンドル</h3>
+
+<p>pLaTeX で一般的に行われているフォント設定
+（例えば「IPAフォント」「ヒラギノフォント」等）
+を XeLaTeX + fontspec の環境で簡単に（パッケージ読込だけで）
+実現できるようにする。
+ZXjatype の機構とも連携する。
+詳しくは<a href="./zxjafont.html">「ZXjafont パッケージバンドル」のページ</a>を参照。
+</p>
+
+<h4>ダウンロード</h4>
+<ul>
+<li><a href="data/zxjafont.zip">zxjafont.zip（v0.2）ダウンロード</a>（5KB）
+<span class="mdate">[2009/12/22]</span>
+</li>
+</ul>
+
+</div><!--ssec-zxjatype-->
+
+<div class="subsection" id="ssec-bxjscls">
+<h3>BXjscls パッケージバンドル</h3>
+
+<p>横書き日本語用の文書クラスとして定評のある奥村晴彦氏の
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/jsclasses/">pLaTeX2e 新ドキュメントクラス</a>
+（以下これを js クラスと呼ぶ）
+を pLaTeX 以外の「日本語が処理できる」LaTeX
+で使えるようにすることを目標として処理系依存となる日本語処理部分を取り除いたものである。
+処理系依存の部分を別に「連携コード」
+として用意することで pLaTeX + js クラスと同じ役割を果たす仕組みになっている。
+XeLaTeX + zxjatype パッケージについては既に連携機構が zxjatype
+に含まれているので、単に両者を読み込むだけで動作する。
+詳しくは<a href="./bxjscls.html">「BXjscls パッケージバンドル」のページ</a>を参照。
+</p>
+
+<h4>ダウンロード</h4>
+<ul>
+<li><a href="data/bxjscls.zip">bxjscls.zip（v0.3）ダウンロード</a>（219KB）
+<span class="mdate">[2010/08/15]</span>
+</li>
+</ul>
+
+<h4>対応環境</h4>
+
+<ul>
+<li>TeX 処理系： LaTeX2e、UTF-8 で書かれた日本語が直接処理できるもの
+</li>
+<li>前提パッケージ： geometry 4.2 版以降
+</li>
+</ul>
+
+</div><!--ssec-bxjacls-->
+
+<div class="subsection" id="ssec-other-zx">
+<h3>その他のパッケージ</h3>
+<ul>
+<li>OTF パッケージの <code>\CID</code> 命令
+（Adobe-Japan1 字形の出力）を使いたい → 
+<a href="zxotf.html">ZXotf パッケージ</a>
+</li>
+<li>GT フォントを使いたい → 
+<a href="zxgtfont.html">ZXgtfont パッケージ</a>
+</li>
+<li>いや、俺は ascmac や jsverb（okuverb） が使いたいんだよ → 
+<a href="bxptool.html">BXptool パッケージ</a>
+</li>
+</ul>
+
+</div><!--ssec-other-zx-->
+
+
+</div><!--sec-zxjatype-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">XeLaTeX で日本語する件について</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009&#x2013;2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-05-08
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

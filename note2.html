@@ -1,0 +1,501 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>蛇足事項、その他 [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="補足,TeX,LaTeX,pTeX,upTeX,XeTeX">
+<meta name="description" content="本サイトで配布されているLaTeXパッケージを使う上で知っておくことが望ましいTeX関係の知識を書いておく場所。">
+<style type="text/css"><!--
+#tbl-command .cmd {
+}
+#tbl-command .val {
+  font-family: 'MS UI Gothic',sans-serif;
+  text-align: center;
+}
+blockquote.cmd-list {
+  font-family: monospace;
+  font-size: x-small;
+}
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=note2"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">蛇足事項、その他</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>蛇足事項、その他</h1>
+
+<div class="abstract">
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-too-many-comamnds">
+<h2>コマンドがいっぱいです</h2>
+
+<div style="margin: 12px 10%">
+<table class="std" id="tbl-command">
+<col>
+<col width="10%" align="center">
+<col width="10%" align="center">
+<col width="10%" align="center">
+<col width="10%" align="center">
+<tr><th>pdfTeX拡張命令</th><th>pdfTeX</th><th>LuaTeX</th><th>XeTeX</th><th>e-pTeX</th></tr>
+<tr><td class="cmd"><code>\efcode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifincsname</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifpdfabsdim</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifpdfabsnum</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifpdfprimitive</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\knaccode</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\knbccode</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\knbscode</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\leftmarginkern</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\letterspacefont</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\lpcode</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfadjustinterwordglue</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfadjustspacing</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfannot</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfappendkern</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfcatalog</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfcolorstack</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfcolorstackinit</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfcompresslevel</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfcopyfont</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfcreationdate</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfdecimaldigits</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfdest</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfdestmargin</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfdraftmode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfeachlinedepth</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfeachlineheight</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfelapsedtime</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfendlink</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfendthread</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfescapehex</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfescapename</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfescapestring</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffiledump</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffilemoddate</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffilesize</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffirstlineheight</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffontattr</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffontexpand</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffontname</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffontobjnum</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdffontsize</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfforcepagebox</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfgamma</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfgentounicode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfglyphtounicode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfhorigin</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfignoreddimen</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfimageapplygamma</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfimagegamma</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfimagehicolor</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfimageresolution</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfincludechars</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfinclusioncopyfonts</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfinclusionerrorlevel</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfinfo</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastannot</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastlinedepth</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastlink</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastmatch</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastobj</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastxform</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastximage</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastximagecolordepth</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastximagepages</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastxpos</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflastypos</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdflinkmargin</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfliteral</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfmapfile</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfmapline</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfmatch</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfmdfivesum</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfminorversion</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfnames</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfnoligatures</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfnormaldeviate</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfobj</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfobjcompresslevel</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfoptionalwaysusepdfpagebox</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfoptionpdfinclusionerrorlevel</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfoutline</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfoutput</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpageattr</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpagebox</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpageheight</code>/<code>\\pageheight</code>（※1）</td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpageref</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpageresources</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpagesattr</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpagewidth</code>/<code>\pagewidth</code>（※1）</td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpkmode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpkresolution</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfprependkern</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfprimitive</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfprotrudechars</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfpxdimen</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfrandomseed</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfrefobj</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfrefxform</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfrefximage</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfresettimer</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfrestore</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfretval</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfsave</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfsavepos</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfsetmatrix</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfsetrandomseed</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfshellescape</code>/<code>\shellescape</code>（※2）</td><td class="val">○</td><td class="val"></td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfstartlink</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfstartthread</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfstrcmp</code>/<code>\strcmp</code>（※3）</td><td class="val">○</td><td class="val"></td><td class="val">○</td><td class="val">○</td></tr>
+<tr><td class="cmd"><code>\pdftexbanner</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdftexrevision</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdftexversion</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfthread</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfthreadmargin</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdftracingfonts</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdftrailer</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfunescapehex</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfuniformdeviate</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfuniqueresname</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfvorigin</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfxform</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfxformname</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfximage</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pdfximagebbox</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\quitvmode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\rightmarginkern</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\rpcode</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\shbscode</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\stbscode</code></td><td class="val">○</td><td class="val"></td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\tagcode</code></td><td class="val">○</td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+
+<tr><th>Omega/Aleph拡張命令（※4）</th><th>pdfTeX</th><th>LuaTeX</th><th>XeTeX</th><th>e-pTeX</th></tr>
+<tr><td class="cmd"><code>\AlephVersion</code> 等（※5）</td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\bodydir</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\boxdir</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\chardp</code>（※6）</td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\charht</code>（※6）</td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\charit</code>（※6）</td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\charwd</code>（※6）</td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\leftghost</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\localbrokenpenalty</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\localinterlinepenalty</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\localleftbox</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\localrightbox</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\mathdir</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\odelcode</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val">○</td></tr>
+<tr><td class="cmd"><code>\odelimiter</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\omathaccent</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\omathchar</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\omathchardef</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val">○</td></tr>
+<tr><td class="cmd"><code>\omathcode</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val">○</td></tr>
+<tr><td class="cmd"><code>\oradical</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pagebottomoffset</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pagedir</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pagerightoffset</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pardir</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\rightghost</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\textdir</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+
+<tr><th>LuaTeX拡張命令（※4）</th><th>pdfTeX</th><th>LuaTeX</th><th>XeTeX</th><th>e-pTeX</th></tr>
+<tr><td class="cmd"><code>\U</code>～ で始まる数式命令（※7）</td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\alignmark</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\aligntab</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\attribute</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\attributedef</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\catcodetable</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\clearmarks</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\crampeddisplaystyle</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\crampedscriptscriptstyle</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\crampedscriptstyle</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\crampedtextstyle</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\formatname</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\gleaders</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifabsdim</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifabsnum</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\ifprimitive</code></td><td class="val"></td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\initcatcodetable</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\latelua</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\luaescapestring</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\luastartup</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\luatexdatestamp</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\luatexrevision</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\luatexversion</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\mathstyle</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\nokerns</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\noligs</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\outputbox</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pageleftoffset</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\pagetopoffset</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\postexhyphenchar</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\posthyphenchar</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\preexhyphenchar</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\prehyphenchar</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\primitive</code></td><td class="val"></td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\savecatcodetable</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\scantextokens</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\suppressfontnotfounderror</code></td><td class="val"></td><td class="val">○</td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\suppressifcsnameerror</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\suppresslongerror</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\suppressoutererror</code></td><td class="val"></td><td class="val">○</td><td class="val"></td><td class="val"></td></tr>
+
+<tr><th>その他の拡張命令</th><th>pdfTeX</th><th>LuaTeX</th><th>XeTeX</th><th>e-pTeX</th></tr>
+<tr><td class="cmd"><code>\XeTeX</code>～ で始まる命令</td><td class="val"></td><td class="val"></td><td class="val">○</td><td class="val"></td></tr>
+<tr><td class="cmd"><code>\synctex</code></td><td class="val">○</td><td class="val">○</td><td class="val">○</td><td class="val">○</td></tr>
+</table>
+</div>
+
+<ul>
+<li>※1 「<code>pdf</code>」の付かない <code>\pageeheight</code>、<code>\pagewidth</code> は
+Omega 拡張に由来するもので、LuaTeX でのみサポートされる
+（<code>\pdfpageeheight</code>、<code>\pdfpagewidth</code> のエイリアス）。
+</li>
+<li>※2 <code>\pdfshellescape</code> は pdfTeX でのみサポートされ、
+<code>\shellescape</code> は XeTeX でのみサポートされる。
+</li>
+<li>※3 pdfTeX は <code>\pdfstrcmp</code> をサポートし、
+XeTeX は <code>\strcmp</code> をサポートする。
+現状の e-pTeX でのサポートは多少複雑で、W32TeX 版では <code>\strcmp</code> があり、
+北川氏（原作者）の版では <code>\pdfstrcmp</code> がある。
+この命令は、expl3 パッケージが必須とする（現状では e-TeX の命令以外の唯一の）命令となっているが、
+LuaTeX では Lua 関数を用いたエミュレートで対応している。
+</li>
+<li>※4 LuaTeX でサポートされているもののみを挙げた。
+なお、ΩTP／ΩCP 機能は 0.70 版で削除されることが決定しているので、
+それの関連の命令は除外した。
+</li>
+<li>※5 「<code>\AlephVersion</code> 等」に該当する命令の一覧：
+<blockquote class="cmd-list">
+\AlephVersion
+\Alephminorversion
+\Alephrevision
+\Alephversion
+\OmegaVersion
+\Omegaminorversion
+\Omegarevision
+\Omegaversion
+</blockquote>
+</li>
+<li>※6 <code>\chardp</code>、<code>\charht</code>、<code>\charit</code>、<code>\charwd</code>
+命令はそれぞれ e-TeX 拡張の <code>\fontchardp</code>、<code>\fontcharht</code>、
+<code>\fontcharic</code>、<code>\fontcharwd</code> と同義であり、
+LuaTex でのみサポートされる（エイリアスになっている）。
+</li>
+<li>※7 「<code>\U</code>～ で始まる数式命令」に該当する命令の一覧：
+<blockquote class="cmd-list">
+\Udelcode
+\Udelcodenum
+\Udelimiter
+\Udelimiterover
+\Udelimiterunder
+\Umathaccent
+\Umathaccents
+\Umathaxis
+\Umathbinbinspacing
+\Umathbinclosespacing
+\Umathbininnerspacing
+\Umathbinopenspacing
+\Umathbinopspacing
+\Umathbinordspacing
+\Umathbinpunctspacing
+\Umathbinrelspacing
+\Umathbotaccent
+\Umathchar
+\Umathchardef
+\Umathcharnum
+\Umathclosebinspacing
+\Umathcloseclosespacing
+\Umathcloseinnerspacing
+\Umathcloseopenspacing
+\Umathcloseopspacing
+\Umathcloseordspacing
+\Umathclosepunctspacing
+\Umathcloserelspacing
+\Umathcode
+\Umathcodenum
+\Umathconnectoroverlapmin
+\Umathfractiondelsize
+\Umathfractiondenomdown
+\Umathfractiondenomvgap
+\Umathfractionnumup
+\Umathfractionnumvgap
+\Umathfractionrule
+\Umathinnerbinspacing
+\Umathinnerclosespacing
+\Umathinnerinnerspacing
+\Umathinneropenspacing
+\Umathinneropspacing
+\Umathinnerordspacing
+\Umathinnerpunctspacing
+\Umathinnerrelspacing
+\Umathlimitabovebgap
+\Umathlimitabovekern
+\Umathlimitabovevgap
+\Umathlimitbelowbgap
+\Umathlimitbelowkern
+\Umathlimitbelowvgap
+\Umathopbinspacing
+\Umathopclosespacing
+\Umathopenbinspacing
+\Umathopenclosespacing
+\Umathopeninnerspacing
+\Umathopenopenspacing
+\Umathopenopspacing
+\Umathopenordspacing
+\Umathopenpunctspacing
+\Umathopenrelspacing
+\Umathoperatorsize
+\Umathopinnerspacing
+\Umathopopenspacing
+\Umathopopspacing
+\Umathopordspacing
+\Umathoppunctspacing
+\Umathoprelspacing
+\Umathordbinspacing
+\Umathordclosespacing
+\Umathordinnerspacing
+\Umathordopenspacing
+\Umathordopspacing
+\Umathordordspacing
+\Umathordpunctspacing
+\Umathordrelspacing
+\Umathoverbarkern
+\Umathoverbarrule
+\Umathoverbarvgap
+\Umathoverdelimiterbgap
+\Umathoverdelimitervgap
+\Umathpunctbinspacing
+\Umathpunctclosespacing
+\Umathpunctinnerspacing
+\Umathpunctopenspacing
+\Umathpunctopspacing
+\Umathpunctordspacing
+\Umathpunctpunctspacing
+\Umathpunctrelspacing
+\Umathquad
+\Umathradicaldegreeafter
+\Umathradicaldegreebefore
+\Umathradicaldegreeraise
+\Umathradicalkern
+\Umathradicalrule
+\Umathradicalvgap
+\Umathrelbinspacing
+\Umathrelclosespacing
+\Umathrelinnerspacing
+\Umathrelopenspacing
+\Umathrelopspacing
+\Umathrelordspacing
+\Umathrelpunctspacing
+\Umathrelrelspacing
+\Umathspaceafterscript
+\Umathstackdenomdown
+\Umathstacknumup
+\Umathstackvgap
+\Umathsubshiftdown
+\Umathsubshiftdrop
+\Umathsubsupshiftdown
+\Umathsubsupvgap
+\Umathsubtopmax
+\Umathsupbottommin
+\Umathsupshiftdrop
+\Umathsupshiftup
+\Umathsupsubbottommax
+\Umathunderbarkern
+\Umathunderbarrule
+\Umathunderbarvgap
+\Umathunderdelimiterbgap
+\Umathunderdelimitervgap
+\Uoverdelimiter
+\Uradical
+\Uroot
+\Ustack
+\Ustartdisplaymath
+\Ustartmath
+\Ustopdisplaymath
+\Ustopmath
+\Usubscript
+\Usuperscript
+\Uunderdelimiter
+</blockquote>
+</li>
+</ul>
+
+</div><!--sec-too-marny-commands>
+
+</div><!--ssec-dtx-->
+
+</div><!--sec-sample-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">蛇足事項、その他</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-08-21
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

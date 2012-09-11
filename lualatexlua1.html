@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>Lua 内で TeX コードの実行を完了させる ～LuaTeX で call/cc しない件について～</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="LuaTeX,LuaLaTeX,Lua,コルーチン,coroutine,プログラミング,マクロ,TeX">
+<meta name="description" content="Lua コードブロック中で、それまでに tex.print 等で書き出した TeX 命令を実行させた状態で以降の処理に進むという処理を Lua のコルーチンを用いて実現する。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=lualatexlua1"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">Lua 内で TeX コードの実行を完了させる</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/lualatexlua1.html">http://zrbabbler.sp.land.to/lualatexlua1.html</a>
+</div>
+<div id="maintext">
+<h1>Lua 内で TeX コードの実行を完了させる<br>
+<span class="subtitle">～LuaTeX で call/cc しない件について～</span></h1>
+
+<div class="abstract">
+1 つの Lua コードブロック中で、
+それまでに <code>tex.print()</code> 等で書き出した TeX 命令を
+実行させた状態で以降の処理に進むという
+処理を簡単に記述できる枠組みを構築する。
+この実現には Lua のコルーチン機能を利用している。
+</div>
+
+<div id="changelog" class="hdn">
+<div class="lbl">変更履歴</div>
+<ul>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-problem">
+<h2>問題の説明</h2>
+
+<p><a href="lualatexlua.html#ssec-truncate">「思わず Lua で LaTeX してみた（仮）」の「事例 4： 文字列を指定の字幅で切り捨てる」節</a>で
+扱った例題をここでも例に用いる。
+（従って、<a href="data/ixbase0.sty">ixbase0 パッケージ</a>の使用を前提とする。）
+</p>
+<pre>
+\usepackage{ixbase0}
+
+%% 普通の Lua コード(になるはず)
+\begin{execluacodeblock}
+function truncate_to_width(str)
+  local wdt = ixbase.length.ttwTarget.width
+  local l, u = 0, str:len()
+  while l < u do
+    local m = math.ceil((l + u) / 2)
+    -- str:sub(1,m) を組版しその幅を \ttwMeasured に代入する
+    tex.print([[\settowidth{\ttwMeasured}{]]..str:sub(1, m)..[[}%]])
+    <span style="color:#9FC">【前行の TeX コードの実行が完了した後で以降の処理に進みたい】</span>
+    local wdm = ixbase.length.ttwMeasured.width
+    if wdm <= wdt then l = m
+    else               u = m - 1
+    end
+  end
+  tex.print(str:sub(1, l))
+end
+
+\end{execluacodeblock}
+
+%% 簡単な LaTeX コード
+\newlength{\ttwTarget}
+\newlength{\ttwMeasured}
+\newcommand*{\truncatetowidth}[2]{% {width}{string}
+  \setlength{\ttwTarget}{#1}%
+  \directlua{
+    truncate_to_width("\luaescapestring{\detokenize{#2}}")
+  }%
+}
+</pre>
+<p>ここでの問題は、上のソースの【】内に書いたように、
+「それまでに <code>tex.print</code> で書き出した TeX コードを
+実行させた状態で次の処理に進みたい」ということである。
+通常は、現在実行中の Lua コードブロック
+（<code>\directlua</code> の引数）の実行が終わらないと
+TeX コードの実行は始まらない。
+</p>
+
+</div><!--sec-problem-->
+
+<div class="section" id="sec-tangle">
+<h2>tangle ライブラリ（仮称）</h2>
+
+<p>この問題を解決するためのライブラリ tangle（仮称）を作成してみた。
+（今のところ、<a href="data/ixbase0.sty">ixbase0 パッケージ</a>に一緒に含めている。）
+これは次のような関数からなる。
+</p>
+<ul>
+<li><code>tangle.execute(func, ...)</code> ： 
+<code>...</code> を引数にして関数 <code>func</code> を呼び出す。
+その <code>func</code> の実行の中の任意の時点で
+（そこから呼ばれた関数の実行中も服務）、
+次項以降の機能を使うことができる。
+重要な制限として、<code>tangle.execute()</code> の呼び出しは
+<code>\directlua</code> 中で最後に実行される文で
+なければならない。
+<li><p><code>tangle.run_tex()</code> ： 
+一旦 Lua の実行コンテキストを抜け出し、それまでに
+<code>tex.print()</code> 等で書き出された TeX コードを実行した後、
+直ちに <code>run_tex()</code> の次の文から Lua 実行を再開する。
+</p>
+<p>実際には、この関数は <code>\directlua{tangle.resume()}</code> を
+<code>tex.print()</code> で書き出してから <code>tangle.suspend()</code>
+を実行するという処理をしている。
+そのため、以前に <code>tex.print</code> で書いた TeX コードの
+内容によっては正しく動作しない可能性がある。
+</p>
+</li>
+<li><code>tangle.suspend()</code> ： 
+Lua コードの実行を中断して TeX に戻る。
+中断されたコードがある時に新たに <code>tangle.execute()</code>
+を実行するとエラーになる。
+</li>
+<li><code>tangle.resume()</code> ： 
+<code>tangle.suspend()</code> により中断していた Lua コードの
+実行を次の文から再開させる。
+呼び出しの箇所について、<code>tangle.execute()</code> と同じ制限がある。
+</li>
+</ul>
+<p>つまり、基本的には、途中で <code>tangle.run_tex()</code>
+を使いたいような Lua の実行について、その大元の呼び出しである
+<code>\directlua</code> が例えば
+</p>
+<pre>
+\directlua{
+  local x = A(); B(); C(x)
+}
+</pre>
+<p>であったら、それを
+</p>
+<pre>
+\directlua{
+  tangle.execute(function()
+    local x = A(); B(); C(x)
+  end)
+}
+</pre>
+<p>に変えればよい。
+もしこの呼び出しが偶然単一の関数呼び出し、例えば
+</p>
+<pre>
+\directlua{
+  some_func(a, b, c)
+}
+</pre>
+<p>であある場合は
+</p>
+<pre>
+\directlua{
+  tangle.execute(some_func, a, b, c)
+}
+</pre>
+<p>という形に置き換えることもできる。
+</p>
+
+<div class="subsection" id="ssec-solution">
+<h3>tangle を用いた実装</h3>
+
+<p>tangle を使って実現したのが以下のものである。
+上掲の「構想」の記述と比べるとコードの変更が最小限になっていることがわかる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8 （日本語コメントを通すため）
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+
+%% 普通の Lua コード
+\begin{execluacodeblock}
+function truncate_to_width(str)
+  local wdt = ixbase.length.ttwTarget.width
+  local l, u = 0, str:len()
+  while l &lt; u do
+    local m = math.ceil((l + u) / 2)
+    -- str:sub(1,m) を組版しその幅を \ttwMeasured に代入する
+    tex.print([[\settowidth{\ttwMeasured}{]]..str:sub(1, m)..[[}%]])
+    tangle.run_tex() -- TeX の実行を完了させる
+    local wdm = ixbase.length.ttwMeasured.width
+    if wdm &lt;= wdt then l = m
+    else               u = m - 1
+    end
+  end
+  tex.print(str:sub(1, l))
+end
+
+\end{execluacodeblock}
+
+%% 簡単な LaTeX コード
+\newlength{\ttwTarget}
+\newlength{\ttwMeasured}
+\newcommand*{\truncatetowidth}[2]{% {width}{string}
+  \setlength{\ttwTarget}{#1}%
+  \directlua{ % ここで tangle.execute() を呼び出す
+    tangle.execute(truncate_to_width, "\luaescapestring{\detokenize{#2}}")
+  }%
+}
+
+\begin{document}
+\begin{itemize}
+\item \truncatetowidth{10pt}{Hello world!}
+\item \truncatetowidth{20pt}{Hello world!}
+\item \truncatetowidth{30pt}{Hello world!}
+\item \truncatetowidth{40pt}{Hello world!}
+\item \truncatetowidth{50pt}{Hello world!}
+\item \truncatetowidth{60pt}{Hello world!}
+\item \truncatetowidth{70pt}{Hello world!}
+\end{itemize}
+\end{document}
+</pre>
+<p>（出力は<a href="lualatexlua.html#ssec-truncate">元の版</a>と同じである。）
+</p>
+
+</div><!--ssec-solution-->
+
+</div>
+
+<div class="section" id="sec-inside">
+<h2>tangle の中身</h2>
+<p>実際の ixbase0 を簡略化したもの。
+（簡略化の際にバグを入れているかも…。）
+</p>
+<pre>
+tangle = {
+  -- 子スレッドの状態定数
+  _DONE = 0, -- 正常終了
+  _TEX = 1,  -- run_tex() で中断
+  _STOP = 2  -- suspend() で中断
+  -- _current_co : 現在有効な子スレッド
+}
+-- 子スレッドを生成・起動
+function tangle.execute(func, ...)
+  if tangle._current_co then
+    error("tangle is going now")
+  end
+  -- 子スレッド生成
+  local args = { ... }
+  local co = coroutine.create(function()
+    return tangle._DONE, func(unpack(args)) }
+  end)
+  tangle._current_co = co
+  -- 子スレッド起動
+  return tangle._check(coroutine.resume(co))
+  -- execute() は Lua 呼出(親スレッド)の末尾と決められて
+  -- いるので子スレッドが終了/中断すると _check 処理の後
+  -- 実行は TeX に戻る
+end
+
+-- 子スレッドを再開
+function tangle.resume()
+  if not tangle._current_co then
+    error("tangle is not going")
+  end
+  return tangle._check(coroutine.resume(tangle._current_co))
+  -- execute() と同様、実行は TeX に戻る
+end
+
+-- (子スレッドが呼ぶ) TeX を実行させる
+function tangle.run_tex()
+  -- この引数が中断時の「戻り値」となる
+  coroutine.yield(tangle._TEX)
+end
+
+-- (子スレッドが呼ぶ) 実行を中断する
+function tangle.suspend()
+  coroutine.yield(tangle._STOP)
+end
+
+-- 子スレッド終了／中断時の後処理
+function tangle._check(costat, tstat, ...)
+  -- この引数は execute()/resume() の戻り値である。
+  -- 子スレッドの戻り値は tstat 以降で、costat は Lua で
+  -- 付加された、スレッドの正常終了を示すステータス値。
+  if not costat then  -- 子スレッドでエラー発生
+    tangle._current_co = nil
+    error(tstat) -- この場合、第2引数はメッセージ
+  elseif tstat == tangle._DONE then -- 正常終了
+    tangle._current_co = nil -- もう子スレッドはない
+  elseif tstat == tangle._TEX then -- TeX 戻り
+    -- resume() を呼び出しを書き込む
+    tex.print("\\directlua{tangle.resume()}\\relax")
+  end             -- _STOP(中断)の場合は処理なし
+  return ...      -- これは正常終了時の func の戻り値
+end
+</pre>
+
+</div><!--sec-inside-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">Lua 内で TeX コードの実行を完了させる</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-07-11
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

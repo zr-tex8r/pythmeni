@@ -1,0 +1,977 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>BXptool パッケージ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="description"
+  content="pLaTeX 用のパッケージについて、欧文 LaTeX／XeLaTeXでも使用可能な改変版を作る試みである。">
+<meta name="keywords"
+  content="TeX,LaTeX,多言語,Babel,upTeX,upLaTeX,Unicode,UCS">
+<style type="text/css"><!--
+
+table.mytt {
+  border-collapse: collapse;
+  border: 1px solid #99FF99;
+  border-width: 2px 0px;
+  text-align: center;
+}
+table.mytt tbody, table.mytt tfoot {
+  border-top-width: 2px; border-bottom-width: 2px; 
+}
+table.mytt td, table.mytt th {
+  border-collapse: collapse;
+  border: 1px solid #66CC66;
+  border-width: 1px 0px;
+  padding: 2px 6px;
+}
+table.mytt td {
+  font-family: 'MS UI Gothic',sans-serif
+}
+
+
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=bxptool"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXptool パッケージ</span>
+</div><!--navibar-->
+
+<div id="maintext">
+<h1>BXptool パッケージ</h1>
+
+<div class="abstract">
+pLaTeX 用のパッケージについて、欧文 LaTeX／XeLaTeXでも使用可能な改変版を作る試みである。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/05/16：一部の文章を修正。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>ascmac や jsverb 等の
+pLaTeX 用のパッケージについて、欧文 LaTeX／XeLaTeX
+でも使用可能な改変版を作る試みである。
+特に和文処理に関係ない機能はそのまま取り込み、
+和文に関連するものは XeLaTeX での対応を試みる。
+</p>
+
+<div class="subsection" id="ssec-package">
+<h3>パッケージ</h3>
+
+<ul>
+<li>bxascmac パッケージ： ascmac 改変版
+</li>
+<li>bxjsverb パッケージ： jsverb、okuverb 改変版
+</li>
+<li>bxokumacro パッケージ： okumacro 改変版
+</li>
+</ul>
+
+</div><!--ssec-package-->
+
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<p>基本的に、LaTeX2e であれば欧文・和文を問わず利用できる。
+一部の日本語関連の機能については XeLaTeX か（u）pLaTeX
+を必要とすることがある。
+</p>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/bxptool.zip"><!--
+-->圧縮ファイルbxptool.zip (v0.2)のダウンロード</a>
+</li>
+</ul>
+<p>インストール方法については、
+パッケージ付属の説明書を参照。
+</p>
+</div><!--ssec-download-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-bxascmac">
+<h2>bxascmac パッケージ</h2>
+
+<p>(株)アスキー・メディアワークスによる 
+pTeX の配布に付属するパッケージ ascmac の改変版。
+原版のファイル（tascmac.sty）自身に記載された著作権者は
+「ASCII Corporation & Impress Corporation」
+となっている。
+</p>
+<div class="bend"><span class="lbl">参考：</span>
+現在の pLaTeX の構成では、ascmac.sty は単に tascmac.sty
+を読むだけで、tascmac.sty に全てのマクロ記述がある
+（元々は横書き専用の ascmac と縦書き対応の tascmac
+があったのであろう）。
+tascmac は pTeX の縦書き制御命令を含むので (u)pTeX
+以外では使えない。
+ただし、W32TeX では欧文 LaTeX で ascmac を読み込もうとすると
+pLaTeX 2.09 用の古い版が使われるようである。
+この版は縦書き対応を施す前のものであるから、
+古い版であるということを除けば特に問題なく動作する。
+</div>
+
+<div class="subsection" id="ssec-ascmac-environ">
+<h3>対応環境</h3>
+
+<p>一部の機能は（欧文）フォント ascgrp を必要とする。
+pTeX が正常にインストールされていれば、
+ascgrp も使える状態になっているはずである。
+</p>
+
+</div><!--ssec-ascmac-environ-->
+
+<div class="subsection" id="ssec-ascmac-function">
+<h3>機能</h3>
+<p>縦書き対応を除去したことと以下で相違を明示している点を除けば原版と同じである。
+</p>
+<ul>
+<li><code>\keytop[&lt;位置&gt;]{&lt;テキスト&gt;}</code>：
+テキストを角丸四角で囲みキートップを表す。
+<code>&lt;位置&gt;</code> は d（既定値）、t、b のいずれかで
+枠の内外のベースラインの合わせ方を指定する。
+枠の大きさは中のテキストの縦横幅に従い変化する。
+</li>
+<li><code>\return</code>、<code>\Return</code>：
+リターン記号。
+</li>
+<li><code>\begin{screen}[&lt;値&gt;]～\end{screen}</code>：
+角丸四角枠でテキストを囲む。
+<code>&lt;値&gt;</code> は 0～9 の値（既定値は 0）
+で枠の形状が変化する。
+</li>
+<li><code>\begin{itembox}[&lt;位置&gt;]{&lt;見出し&gt;}～\end{itembox}</code>：
+太線の角丸四角枠でテキストを囲み、上部に見出しをつける。
+<code>&lt;位置&gt;</code> は l（左）、c（中央；既定値）、r（右）
+のいずれかで見出しの水平位置を表す。
+</li>
+<li><code>\begin{boxnote}～\end{boxnote}</code>
+ノートページ様の枠でテキストを囲む。
+</li>
+<li><code>\mask{&lt;テキスト&gt;}{&lt;網種&gt;}</code>：
+飾り網掛け。
+<code>&lt;網種&gt;</code> は <code>A</code>～<code>K</code>
+の文字で指定。
+</li>
+<li><code>\maskbox{&lt;幅&gt;}{&lt;高さ&gt;}{&lt;網種&gt;}{&lt;位置&gt;}{&lt;文字列&gt;}</code>：
+幅と高さを指定した飾り網掛け。
+<code>&lt;位置&gt;</code> は l（左）、c（中央；既定値）、r（右）
+のいずれかでテキストの箱内の水平位置を表す。
+</li>
+<li><code>\Maskbox{&lt;幅&gt;}{&lt;高さ&gt;}{&lt;網種&gt;}{&lt;位置&gt;}{&lt;線幅&gt;}{&lt;文字列&gt;}</code>
+<code>\maskbox</code> に <code>&lt;線幅&gt;</code> の幅の外枠を加えたもの。
+<div class="alert"><span class="lbl">注意：</span>
+本家の ascmac の <code>\maskbox</code>／<code>\Maskbox</code>
+には段落の先頭では正しく働かないという不具合があった。
+bxascmac ではこの点は修正されている。
+</div>
+</li>
+<li><code>\yen</code>：欧文の円記号。
+これは単に LaTeX 標準の <code>\textyen</code> に展開されるようにしている。
+XeLaTeX では xunicode パッケージ、従来の LaTeX／pLaTeX
+では textcomp パッケージが必要である。
+</li>
+</ul>
+
+</div><!--ssec-ascmac-function-->
+
+<div class="subsection" id="ssec-bxascmac-sample">
+<h3>サンプル</h3>
+
+<p>この文書中のサンプル（以降の節を含めて）は、
+<a href="xelatex.html#ssec-bxjscls">BXjscls バンドル</a>、
+<a href="zxjatype.html">ZXjatype バンドル</a>、
+<a href="zxjafont.html">ZXjafont バンドル</a>に含まれる
+文書クラスやパッケージを使用する。
+</p>
+
+<pre>
+\documentclass[a4paper,twocolumn]{bxjsarticle}
+\usepackage{zxjatype}
+\usepackage[ipa]{zxjafont}
+\usepackage{bxascmac}
+\begin{document}
+
+\newcommand*{\KEY}[1]{\keytop{\sffamily\footnotesize
+  \rule[-.1em]{0pt}{.8em}\smash{#1}}}
+\KEY{Ctrl}+\KEY{Tab}+\KEY{F9}+\KEY{→} を押すだけです。
+
+\begin{screen}[4]
+\begin{verbatim}
+C:\>dri
+コマンドまたはファイル名が違います.
+\end{verbatim}
+\end{screen}
+
+\begin{itembox}[r]{定理}
+自然数$n$について$n&lt;n+1$。
+\end{itembox}
+
+\begin{boxnote}
+自然数$n$について$0\leq n$。
+\end{boxnote}
+
+\newpage
+
+\begin{shadebox}
+$a_1,\ldots,a_n$を単調増加数列とする。
+この時、以下の式の値は$k$（$\in\{1,\ldots,n\}$）
+に依らず一定である。
+\[
+  \prod_{j=1}^n (a_j - a_k)
+\]
+\end{shadebox}
+
+\begin{center}
+\mask{網掛1}{A} \mask{網掛2}{C} \mask{網掛3}{E}
+\mask{網掛4}{G} \mask{網掛5}{I} \mask{網掛6}{K}
+\par\medskip
+\mbox{}\maskbox{12em}{4em}{E}{c}
+{$\displaystyle\sum_{k=1}^n k = \frac{n(n+1)}{2}$}
+\par\medskip
+\mbox{}\Maskbox{12em}{4em}{A}{c}{1pt}
+{$\displaystyle\sum_{k=1}^n k^3 =
+  \biggl(\sum_{k=1}^n k\biggr)^2$}
+\end{center}
+
+\end{document}
+</pre>
+
+<div align="center" class="display">
+<div class="imagebox" style="width:919px">
+<img src="sample/bxascmac-sample01.png" width="919" height="403">
+</div></div>
+
+</div><!--ssec-bxascmac-sample-->
+
+</div><!--sec-bxascmac-->
+
+<div class="section" id="sec-bxjsverb">
+<h2>bxjsverb パッケージ</h2>
+
+<p>奥村晴彦氏の「新ドキュメントクラス」のアーカイブに含まれる、
+verbatim 出力を改良するための 2 つのパッケージ、
+okuverb と jsverb と統合したものである。
+また、主に XeLaTeX のサポートのために、bxjsverb 独自の機能も追加されている。
+</p>
+<p>2 つの原版との関係は、基本的に以下のようになる。
+</p>
+<ul>
+<li><code>\usepackage[noascii,&lt;他オプション&gt;,...]{bxjsverb}</code> ：
+okuverb と互換の動作
+</li>
+<li><code>\usepackage[ascii,&lt;他オプション&gt;,...]{bxjsverb}</code> ：
+jsverb と互換の動作
+</li>
+</ul>
+<p>（<code>noascii</code> の方が既定である。）
+以下で bxjsverb の機能を紹介するが、特に断りのない限り、
+そこでの記述は okuverb／jsverb にも当てはまることに注意されたい。
+</p>
+
+<div class="subsection" id="ssec-bxjsverb-layout">
+<h3>レイアウト上での改良点</h3>
+<p>以下は奥村氏による okuverb／jsverb の改良点で、
+当然 bxjsverb にも引き継がれている。
+</p>
+<ul>
+<li>verbatim(*) 環境内のフォントサイズと行送りが <code>\verbatimfontsize</code>
+で設定されたものになる。
+これの既定値は「<code>\fontsize{9}{11pt}\selectfont</code>」だが
+<code>\renewcommand*</code> で変更できる。
+</li>
+<li>verbatim(*) 環境の左側に <code>\verbatimleftmargin</code>
+のインデントが取られる。
+この長さ変数の既定値は 2zw（（u）pLaTeX または XeLaTeX + bxjs クラスの場合）
+または 2em（それ以外）である。
+</li>
+</ul>
+
+</div>
+
+<div class="subsection" id="ssec-bxjsverb-char">
+<h3>特定の文字の扱い</h3>
+
+<p>基本的に入力の文字列自身をそのまま出すのが verbatim 出力なのであるが、
+ASCII 文字に関しては複雑な事情があって、「そのまま」にならない、
+あるいはしたくない場合が存在する。
+bxjsverb では各場合について処理の選択肢を与えている。
+（以下の説明で「0x」は 16 進数を表す。）
+</p>
+
+<h4>符号位置 0x5C の文字（バックスラッシュ／円記号）</h4>
+
+<p>ASCII の符号位置 0x5C の文字はバックスラッシュ〈<span class="lgc">\</span>〉
+であり、一方 JIS X 0201 の符号位置 0x5C の文字は円記号〈<span class="lgc">&#xa5;</span>〉
+である。
+旧来の日本語コードでは「半角」の 0x5C の表示は環境によりバックスラッシュの場合も
+円記号の場合もあった。
+かつこの 0x5C の文字は様々な文法体系で特別な意味をもつ文字
+―例えば Windows のパス区切り文字、LaTeX の制御綴りを開始するための文字、等―
+として扱われていて、そこでは「符号位置 0x5C」であることに意味があるので、
+日本において、そういう文脈では「バックスラッシュ」と「円記号」は一般的に同一視されてきた。
+Unicode ではバックスラッシュは U+005C、円記号は U+00A5 と明確に分離されているが、
+これは「『円記号の外見』と『0x5C の機能』をもった文字」がもはや存在しないことを意味する。
+Windows では、内部処理を Unicode に移行する際にこの非互換性を回避するために、
+「旧来の日本語文字符号の 0x5C は U+005C（つまりバックスラッシュ）に対応させるが、
+日本語用のフォントでは U+005C の字形を円記号とする」という方策をとった。
+結果として、日本語 Windows では未だに U+005C（つまり ASCII の 0x5C）
+は円記号として表示される状態が継続している。
+</p>
+<p>一方、LaTeX で verbatim 出力に使われるフォント
+（「等幅の OT1」や「T1」のエンコーディング）では 0x5C はバックスラッシュである。
+そこで次のような要望が考えられる。
+</p>
+<ul>
+<li>LaTeX の verbatim 出力でも欧文の 0x5C を円記号として出力したい。
+</li>
+<li>XeLaTeX の verbatim 出力では入力した Unicode 文字がそのまま出力される。
+そうすると、等幅フォントに日本語フォントを指定していると、
+U+005C が円記号になってしまうが、これをバックスラッシュとして出力したい。
+</ul>
+
+<p>bxjsverb ではパッケージオプションで符号位置 0x5C の文字の表示を制御できる。
+</p>
+<ul>
+<li>既定： 
+「内部処理でバックスラッシュと見なされる文字（<code>\textbackslash</code>）」
+を出力する。
+通常、これは外見もバックスラッシュであるが、先述の通り XeLaTeX では円記号
+の字形である場合がある。
+</li>
+<li><code>yen</code>： 
+「内部処理で円記号と見なされる文字（<code>\textyen</code>）」
+を出力する。円記号として出力したい場合に用いる。
+（OT1 エンコーディングでは Y と = から合成される。）
+</li>
+<li><code>fakebsl</code> <em>［bxjsverb 追加機能］</em>： 
+スラッシュを graphicx の <code>\reflectbox</code>
+で反転させたものを出力する。
+XeLaTeX で U+005C が円記号になる場合に、バックスラッシュとして表示させたい場合に用いる。
+表示上は違和感がないが、PDF でのテキスト情報は不正になる（スラッシュ（U+002F）と扱われる）。
+
+</li>
+<li><code>cmttbsl</code> <em>［bxjsverb 追加機能］</em>： 
+Computer Modern Typewriter フォントのバックスラッシュ文字を出力する。
+これも XeLaTeX で U+005C が円記号になる場合の対処である。
+テキスト情報は正しく U+005C となるが、他の文字と調和しないかもしれない。
+
+</li>
+</ul>
+
+<h4>符号位置 0x60／0x27 の文字（一重引用符対／ASCII 準拠）</h4>
+
+<p>ASCII において、符号位置 0x60／0x27 の文字は
+</p>
+<ul>
+<li>0x60 = U+0060 GRAVE ACCENT： 字上符の単独形〈`〉。あまり有用でない。
+</li>
+<li>0x27 = U+0027 APOSTROPHE： 向きのない一重引用符〈'〉。ASCII ではこの文字を一重引用符の
+「開き」と「閉じ」両方に用いる。
+</li>
+</ul>
+<p>となっている。
+ところが、過去の一時期の米国において、この0x60／0x27 の文字の対を
+一重引用符の「開き」〈‘〉と「閉じ」〈’〉（Unicode では U+2018 と U+2019）
+として用いる習慣があった。
+（U+0027 は「開き」と「閉じ」両方で通用するような曖昧な字形に
+せざるを得ないので、まともな字形の引用符を用いたい
+という要望を満たすための方法である。）
+</p>
+<p>TeX ではこの習慣に倣って、〈‘〉を 0x60〈`〉、〈’〉を 0x27〈'〉
+で入力するようになっている。
+これ自体は便利なのだが、問題なのは、文字をそのまま出るはずの
+verbatim 出力においてもこの「変換」が適用され、
+0x60 と 0x27 だけ本来の ASCII
+文字ではなく一重引用符に「文字化け」して出力されることである。
+（先述の習慣に従えばこれで「正しい」出力ということになるのだが…。）
+この「文字化け」の影響は、PDF に変換した場合により深刻になる。
+プログラムソースを LaTeX の verbatim 環境で組版し、
+その出力を PDF に変換した時、テキスト情報の上でも
+0x60／0x27 が一重引用符に化けているので、
+そこからコピー＆ペーストしたソースが不正なものになってしまう。
+</p>
+<p>bxjsverb ではパッケージオプションで符号位置 0x60／0x27
+の文字の表示を制御できる。 
+（このオプション自身は bxjsverb で追加されたものであるが、
+制御機能そのものは原版で既に存在する。）
+</p>
+<ul>
+<li><code>noascii</code> （既定）<em>［bxjsverb 追加機能］</em>： 
+LaTeX の verbatim 出力の既定の動作のままであり、
+フォントの符号位置 0x60／0x27 の文字を出力する。
+8 bit 欧文の LaTeX 用のエンコーディングでは
+これは一重引用符〈‘&nbsp;’〉（U+2018／U+2019）である。
+XeLaTeX の場合、フォントの 
+<a href="./xelatex.html#elt-fontspec-mapping">tex-text マッピング</a>が有効ならば
+8 bit 欧文の場合と同じになり、
+無効ならば正しい ASCII 文字になる。
+</li>
+<li><code>ascii</code> <em>［bxjsverb 追加機能］</em>： 
+正しい ASCII 文字〈`&nbsp;'〉（U+0060／U+0027）を出力する。
+PDF 中の文字情報も正しいものとなる。
+</li>
+</ul>
+<p>奥村氏による原版では、okuverb は <code>noascii</code>、jsverb は
+<code>ascii</code> の動作になり、この 2 つの相違点はそれだけである。
+（つまり、okuverb に 0x60／0x27 の対処を加えたのが jsverb
+だというわけである。）
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+XeLaTeX で等幅ファミリに日本語フォントを指定している場合は、
+U+2018／U+2019 の文字は通常全角幅をもつので、
+半角幅の U+0060／U+0027 の代わりに用いると水平位置がずれてしまう。
+</div>
+
+<h4>空白記号の扱い</h4>
+<p>「* 付の verbatim 出力」（<code>\verb*</code> と <code>verbatim*</code> 環境）
+では ASCII の空白文字（符号位置 0x20）は
+「空白記号」〈<span class="lgc">&#x2423;</span>〉
+（U+2423 OPEN BOX）として出力される。
+XeLaTeX では一般的な（TeX 用に作られたものでない）
+欧文フォントが使われうるが、
+そのようなフォントでは U+2423 の字形をもっていないことがある。
+そこで、bxjsverb では空白記号の出力方法も
+パッケージオプションで制御できるようにしている。
+（<em>bxjsverb 追加機能</em>である。）
+</p>
+<ul>
+<li>既定： 
+8 bit 欧文の LaTeX では従来と同じ。
+XeLaTeX では U+2423 の文字を出力するが、
+フォントにこの字形がない場合は <code>cmttvsp</code> の動作をする。
+</li>
+<li><code>fakevsp</code>： 
+<code>\rule</code> を使って空白記号を合成する。
+PDF 出力でのテキスト情報は不正になる（文字と見なされない）。
+</li>
+<li><code>cmttvsp</code>： 
+Computer Modern Typewriter フォントの空白記号を出力する。
+</li>
+</ul>
+<div class="alert"><span class="lbl">注意：</span> 
+先述の一重引用符の話と同様、
+日本語フォントでは U+2423 の文字が全角幅になっていることがあるので注意。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+LaTeX 標準（bxjsverb なし）の「* 付の verbatim 出力」の定義は、
+XeLaTeX では正常動作しない。
+この不具合は xltxtra パッケージを読み込んで解消するものとされている。
+なお、bxjsverb 読込時は xltxtra パッケージはあってもなくても
+正しい出力になる。
+</div>
+
+</div><!--ssec-bxjsverb-char-->
+
+<div class="subsection" id="ssec-bxjsverb-other">
+<h3>その他の機能</h3>
+
+<ul>
+<li><code>\yen</code>： 
+欧文の円記号。
+この命令自体は単に LaTeX 標準の <code>\textyen</code> に展開される。
+従って本来なら適切なパッケージ
+（欧文 Unicode 非対応 LaTeX なら textcomp、XeLaTeX なら xunicode）
+が必要なはずだが、bxjsverb では通用のエンコーディングについて
+他の場所で定義されていない場合は自前の定義を与えている。
+</li>
+<li><code>\ttyen</code>： 
+等幅フォントの円記号。
+<code>yen</code> オプション指定時に 0x5C に対応する出力。
+</li>
+<li><code>\ttbslash</code>： 
+等幅フォントのバックスラッシュ（正確には「符号位置 0x5C の文字」）。
+0x5C 関係のオプションが無指定の場合に 0x5C に対応する出力。
+</li>
+<li><code>\BS</code>： 
+<code>yen</code> オプションが有効なら <code>\ttyen</code>、無効なら
+<code>\ttbslash</code> になる。
+</li>
+</ul>
+
+
+
+</div><!--ssec-bxjsverb-other-->
+
+<div class="subsection" id="ssec-bxjsverb-sample">
+<h3>サンプル</h3>
+
+<p>まずは次のような簡単な <code>\verb*</code>
+を出力することで各々のパッケージオプションの動作を見ることにする。
+等幅フォントとして「TeX Gyre Cursor」と「ＭＳ 明朝」を用いる。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{xltxtra}
+\usepackage[<u>&lt;オプション&gt;</u>]{bxjsverb}
+%% 以下の 3 つの等幅フォント設定の中の 1 つを用いる
+\setmonofont{TeX Gyre Cursor}
+%\setmonofont[Mapping=tex-text]{TeX Gyre Cursor} %(*)
+%\setmonofont{ＭＳ 明朝}
+\begin{document}
+\noindent
+\verb*|``Hello, \TeX\ chaos!''|
+\end{document}
+</pre>
+
+<p>結果は以下のようになる。
+ここで「tex-text マッピング有効」とは上のソースの <code>(*)</code>
+の行を有効にした状態である。
+</p>
+<div align="center" class="display">
+<div class="imagebox" style="width:648px">
+<img src="sample/bxjsverb-sample01.png" width="648" height="534" alt="結果">
+</div></div>
+<p>これは XeLaTeX の出力なので、tex-text マッピングをわざわざ有効にしない限り、
+0x60／0x27 が一重引用符対に化けることはない。
+（念のため補足しておくと、ここでは LaTeX のコードを出力しよう
+としているので、一重引用符対でない方が「正しい」出力である。）
+しかし 8 bit 欧文 LaTeX では化ける方が普通の動作になるので注意が必要である。
+次は pLaTeX での例であり、文字化けを防ぐために <code>ascii</code>
+オプションを指定している。
+</p>
+<pre>
+\documentclass[b5paper,papersize]{jsarticle}
+\usepackage{lmodern}      %+ 等幅フォントを
+\usepackage[T1]{fontenc}  %+ T1/lmttとする
+\usepackage[ascii]{bxjsverb}
+%\usepackage{jsverb}     % これと同じ結果
+\begin{document}
+以下に \verb|\DeclareTextComposite| の使用例を示す。
+\begin{verbatim}
+\DeclareTextComposite{\'}{ZR2}{Q}{'016} % Q-acute
+\DeclareTextComposite{\&quot;}{ZR2}{Q}{'017} % Q-umlaut
+\DeclareTextComposite{\`}{ZR2}{Q}{`@}   % Q-grave
+\end{verbatim}
+% 上のコードの意味が何かは気にしないことにしよう ;-)
+\end{document}
+</pre>
+<p>出力を PDF に変換したものを掲載する。
+併せて、<code>ascii</code> 非指定の場合の結果も掲載しておく。
+文書中の TeX コード部分をコピー＆ペーストして
+テキスト情報を調べてみてほしい。
+</p>
+<ul>
+<li><a href="sample/bxjsverb-sample02-ascii.pdf">ascii 指定時の出力結果（PDF）</a>
+</li>
+<li><a href="sample/bxjsverb-sample02-noascii.pdf">ascii 非指定時の出力結果（PDF）</a>
+</li>
+</ul>
+
+
+</div><!--ssec-bxjsverb-sample-->
+
+</div><!--sec-bxjsverb-->
+
+<div class="section" id="sec-bxokumacro">
+<h2>bxokumacro パッケージ</h2>
+
+<p>原版のパッケージ okumacro は、
+奥村晴彦氏の<a href="http://oku.edu.mie-u.ac.jp/~okumura/jsclasses/">「新ドキュメントクラス」</a>
+のアーカイブに入っている、おまけ的何か。
+</p>
+
+<div class="subsection" id="ssec-bxokumacro-environ">
+<h3>対応環境</h3>
+
+<p>一部の機能について（u）pLaTeX または XeLaTeX
+を必要とするものがある（詳しくは後述）。
+なお、パッケージのファイルの文字コードは UTF-8 となっているので
+pLaTeX で利用するには入力漢字コードの指定（<code>-kanji=utf8</code>）
+が必要である。
+もっとも、pLaTeX では本家の okumacro パッケージが使えるので
+わざわざこちらを用いる必要性は小さい。
+</p>
+
+</div><!--ssec-bxokumacro-environ-->
+
+<div class="subsection" id="ssec-bxokumacro-function">
+<h3>機能</h3>
+
+<p>機能の一部を紹介する。
+ここに挙げたもの以外でも、okumacro にあるものは後に述べる例外を
+除いて全て用意されている。
+okumacro.dtx（pLaTeX 文書）のプログラムコメントに奥村氏による解説が
+含まれているので併せて参照されたい。
+なお、和文処理が必要な機能について、
+以下の注釈を付して示した。
+</p>
+<ul>
+<li>【★】のものは (u)pLaTeX または XeLaTeX を必要とする
+</li>
+<li>【★★】のものは (u)pLaTeX または XeLaTeX + zxjatype を必要とする。
+</li>
+</ul>
+<p>（マクロ）
+</p>
+<ul>
+<li><code>\ruby{&lt;親字&gt;}{&lt;ルビ&gt;}</code>：ルビ振り。
+</li>
+<li><code>\kenten{&lt;和文文字列&gt;}</code>：【★】圏点付加。
+</li>
+<li><code>\kintou[&lt;幅&gt;]{&lt;和文文字列&gt;}</code>：【★★】均等割り。
+</li>
+<li><code>\曜</code>：【★】今日の曜日（日～土）を出力する。
+</li>
+<li><code>\mytt</code>：全てのASCII文字が容易に出力可能な「myttモード」に切り替える
+（通常はグルーピングの中で用いる）。
+このモードでは <code>$ % \ { }</code> は前に <code>\</code> を付し、残りの ASCII 文字はそのまま
+入力することで出力できる。
+空白および <code>/ \ @ - .</code> の直後で行分割可能である。
+なお、<code>\verb</code> 等と同じく、マクロの引数中では直接入力が機能しなくなる
+（<a href="#ssec-bxokumacro-extra">後の小節中の記述</a>も参照）。
+</li>
+<li><code>\yen</code>：欧文の円記号。bxjsverb の <code>\yen</code> の定義と同じ。
+</li>
+<li><code>\BS</code>：等幅フォントのバックスラッシュ。
+bxjsverb 併用の場合はそちらの定義が優先され、
+バックスラッシュと円記号が切り替わるようになる。
+</li>
+<li><code>\asciibar</code>：〈<span class="lgc">&#xa6;</span>〉の文字（U+00A6）。
+<code>\yen</code> の処理と同様で、
+一旦 LaTeX 標準表現の <code>\textbrokenbar</code> に展開する。
+結果的に OT1 では合成文字、T1 では TS1 に切替、
+XeLaTeX + xunicode では U+00A6 として出力される。
+<div class="bend"><span class="lbl">参考：</span>
+現在はこの文字は ASCII にあるとは見なされないが、
+かつて ASCII 規格で 0x7C の文字が 
+〈<span class="lgc">&#x7c;</spann>〉（U+007C）と
+〈<span class="lgc">&#xa6;</spann>〉（U+00A6）
+の間で何度も入れ替わったという経緯がある。
+</div>
+</li>
+<li><code>\<span class="ja">――</span></code>：倍角ダーシ。この〈―〉の部分は JIS 符号では
+「01-29 ダッシュ（全角）」
+「01-61 減算記号」、
+Unicode では
+「U+2014 EN DASH」
+「U+2015 HORIZONTAL BAR」
+「U+2212 MINUS SIGN」
+「U+FF0D FULLWIDTH HYPHEN-MINUS」のいずれかが使える。
+（ただし、その〈―〉がマクロ命名規則に関して英字と同じ扱いになっている場合、
+<code>\<span class="ja">――</span></code>
+の直後に区切りの空白文字が要ることに注意。）
+</li>
+<li><code>\keytop{&lt;テキスト&gt;}</code>：キートップ記号。
+bxascmac のものと異なり縦幅が一定である。
+</li>
+<li><code>\return</code>：Enterキー（リターンキー）記号。
+</li>
+<li><code>\upkey</code>、<code>\downkey</code>、<code>\rightkey</code>、<code>\leftkey</code>：矢印キー記号。
+</li>
+<li><code>\MARU{&lt;テキスト&gt;}</code>：丸囲み文字を合成する。
+</li>
+<li><code>\PiCTeX</code>、<code>\JTeX</code>、<code>\JLaTeX</code>、<code>\JBibTeX</code>：ロゴ。
+<li><code>\LEQQ</code>、<code>\GEQQ</code>、<code>\APPROX</code>：横線が 2 本の ≦ と ≧、および上下点付＝。
+</li>
+<li><code>\FRAC{&lt;分子&gt;}{&lt;分母&gt;}</code>：欧文の vulgar fraction。
+</li>
+<li><code>\ANGLE{&lt;テキスト&gt;}</code>：欧文の山括弧。
+</li>
+</ul>
+<p>（環境）
+</p>
+<ul>
+<li><code>\begin{namelist}{&lt;テキスト&gt;}～\end{namelist}</code>：
+見出し幅を <code>&lt;テキスト&gt;</code> の自然長に設定したリスト。
+</li>
+<li><code>\begin{mybibliography}{&lt;テキスト&gt;}～\end{mybibliography}</code>：
+カウンタをリセットしない thebibliography 環境。
+</li>
+<li><code>\begin{FRAME}～\end{FRAME}</code>：枠です。
+</li>
+<li><code>\begin{screen}[&lt;倍率&gt;]～\end{screen}</code>：ascmac の screen の改造版。
+<code>&lt;倍率&gt;</code> で中のテキストを横方向に伸縮できる
+（長い行を含む出力結果を無理に収めるために使う）。
+現在の ascmac とはオプションの意味が異なるので注意。
+</li>
+<li><code>\begin{shadebox}～\end{shadebox}</code>：影付きの箱。ascmac の shadebox の改造版。
+</li>
+<li><code>\begin{sankou}～\end{sankou}</code>： 参考の環境。
+</li>
+<li><code>\begin{toi}～\end{toi}</code>；問いの環境。
+</li>
+</ul>
+<p>補足事項：
+</p>
+<ul>
+<li><code>\keytop</code>、<code>\return</code>、screen 環境、shadebox 環境の
+4 つは bxascmac に同名の機能があるが、bxascmac と併用した場合は bxascmac
+の機能が優先される。
+これらの機能は前に oku- を付した
+<code>\okukeytop</code>、<code>\okureturn</code>、okuscreen 環境、
+okushadebox 環境としても定義されていてこちらはいつでも使える。
+なお、<code>\yen</code> は bxascmac／bxjsverb／bxokumacro の何れも同じ定義
+（<code>\textyen</code> に展開）であり、
+bxjsverb／bxokumacro は <code>\textyen</code> にも定義を与えている。
+</li>
+<li><code>\eps</code>、<code>\hk</code>、<code>\hx</code>、<code>\3</code>、<code>\5</code>、<code>\株</code>
+は <code>\enableokumacroshorthands</code> 命令を実行すると
+定義される。後ろの 5 つは (u)pLaTeX 専用である。
+</li>
+<li><code>\whichpage</code> は現在の定義に問題があるので省いた。
+その他の okumacro の命令は使えるはずである。
+</li>
+</ul>
+
+</div><!--ssec-bxokumacro-function-->
+
+<div class="subsection" id="ssec-bxokumacro-sample">
+<h3>サンプル</h3>
+
+<pre>
+\documentclass[a4paper]{bxjsarticle}
+\usepackage{zxjatype}
+\setjamainfont{IPAMincho}
+\setjasansfont{IPAGothic}
+\setjamonofont{IPAGothic}
+\usepackage{bxokumacro}
+\usepackage{xltxtra}
+\begin{document}
+\begin{dangerous}
+\item {\mytt\\ruby} 命令：\quad
+  \ruby{組}{くみ}\ruby{版}{はん}\quad
+  \ruby{表}{ひょう}\ruby{彰}{しょう}\ruby{状}{じょう}\quad
+  \ruby{百舌鳥}{もず}\quad
+  \ruby{仮想現実}{バーチャル・リアリティ}
+\item {\mytt\\kenten} 命令：\quad
+  和文で強調を示す方法として\kenten{圏点}があります。
+\item {\mytt\\kintou} 命令：\quad
+  \parbox[t]{6\jsZw}{%\def\kintou#1#2{#2}%
+  \kintou{6\jsZw}{均等割り}\\
+  \kintou{6\jsZw}{きんとうわり}}
+\item {\mytt\\mytt} 命令：\quad
+  \begin{minipage}[t]{30\jsZw}
+  この記事のURL ：
+  {\mytt http://hogeblog.jp/tex-hoge/cat/\%E3\%81\%BB\%E3\%81\%92/13?_tc=86311#top}
+  \end{minipage}
+\item {\mytt\\keytop} 命令：\quad
+  \keytop{Ctrl}+\keytop{Tab}+\keytop{F9}+\downkey を押すだけです。
+\end{dangerous}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:673px">
+<img src="sample/bxokumacro-sample01.png" width="673" height="246">
+</div></div>
+
+</div><!--ssec-bxokumacro-sample-->
+
+<div class="subsection"  id="ssec-bxokumacro-extra">
+<h3>さらにオマケ</h3>
+
+<ul>
+<li><code>\textmytt{&lt;テキスト&gt;}</code>： 
+動作は <code>{\mytt &lt;テキスト&gt;}</code> と同じであるが、
+<code>\mytt</code> がマクロの引数の中で
+（一部の記号の直接入力が）使えないのに対し、
+<code>\textmytt</code> は <em>e-TeX 拡張をもつ LaTeX
+を使った場合には</em>マクロの引数の中でもほぼ制限なく使える。
+引数内使用での唯一の制限は <code>#</code> が直接書けない
+（<code>\#</code> と書く必要がある）ことである。
+</li>
+</ul>
+<p>（u）pLaTeX 以外の LaTeX は e-TeX 拡張をもっている。
+通常の（u）pLaTeX は e-TeX 拡張をもたないが、
+e-TeX 拡張をもつ版は存在し、W32TeX では標準で用意されている
+（コマンド名は eplatex／euplatex）ので、これを用いれば
+<code>\textmytt</code> の機能を活かすことができる。
+</p>
+<p>以下の例では <code>\fbox</code> の引数中で <code>\textmytt</code>
+を使っている。
+<code>{\mytt ...}</code> だと <code>_</code> や <code>&</code>
+の直接入力が機能せずエラーになる。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{bxokumacro}
+\begin{document}
+The reference URL:
+\fbox{\textmytt{http://example.com/phoo_barr/indexx.php?pi=81035&li=ja}}
+\end{document}
+</pre>
+
+<div class="bend"><span class="lbl">参考：</span> 
+下の表は ASCII の記号での LaTeX での直接入力の可否を示したものである。
+<code>\mytt</code> は直接入力可能（<code>?</code> で ? の入力）
+な記号の範囲を増やしている（①→③）とともに、<code>\</code> 付で入力可能
+（<code>\$</code> で $ の入力）な記号の範囲を増やしている（②→④）。
+特に普通に直接入力可能でない（①の×）の全てを <code>\</code> 付で入力可能
+にしていることに注意すべきである。
+<code>\mytt</code> をマクロの引数中で用いた場合、直接入力可能な記号の範囲は
+通常と同じ①に戻ってしまうが、それでも <code>\</code> 付で入力可能な範囲は
+④のままであるので、②で入力できない記号を扱うのには有用である。
+<div align="center" style="margin:6px 0px;">
+<table class="mytt">
+<thead>
+<tr>
+<th>&nbsp;</th>
+<th>入力</th>
+<th><code>!&quot;&#x27;()+,-./:;<=>?@[]`</code></th>
+<th><code>&lt;&gt;|</code></th>
+<th><code>#&</code></th>
+<th><code>$%</code></th>
+<th><code>_</code></th>
+<th><code>{}</code></th>
+<th><code>^~</code></th>
+<th><code>\</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<th><code>X</code></th>
+<td>○</td>
+<td>○<small>*1</small></td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>②</td>
+<th><code>\X</code></th>
+<td>×</td>
+<td>×</td>
+<td>○</td>
+<td>○</td>
+<td>△<small>*2</small></td>
+<td>△<small>*2</small></td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>③</td>
+<th><code>X</code>（<code>\mytt</code>）</th>
+<td>○</td>
+<td>○<small>*1</small></td>
+<td>○</td>
+<td>×</td>
+<td>○</td>
+<td>×</td>
+<td>○</td>
+<td>×</td>
+</tr>
+<tr>
+<td>④</td>
+<th><code>\X</code>（<code>\mytt</code>）</th>
+<td>×</td>
+<td>×</td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div style="width:34em;font-size:small;margin:4px auto 6px;">
+<dl compact style="margin-bottom:2px;">
+<dt>*1</dt>
+<dd>OT1 エンコーディングの場合は等幅フォントのみ。</dd>
+<dt>*2</dt>
+<dd>OT1 エンコーディングの場合は本来のフォントにならない。</dd>
+</dl>
+<div>マクロの引数内では以下のようになる。<br>
+<code>\mytt</code> の <code>X</code> ： ①と同じ。 ／
+<code>\mytt</code> の <code>\X</code> ： ④と同じ。<br>
+<code>\textmytt</code> の <code>X</code> ： ③から <code>#</code> を除いた範囲。 ／
+<code>\textmytt</code> の <code>\X</code> ： ④と同じ。<br>
+</div>
+</div>
+なお、<code>^</code> と <code>~</code> の <code>\</code> 付入力を可能にしたのは
+bxokumacro の変更であって、原版の okumacro は <code>\^</code> と <code>\~</code>
+はアクセント命令のままである。
+bxokumacro でも <code>\^</code> と <code>\~</code> の直後が <code>{</code>
+の場合はアクセント命令とみなすようにしている。
+<code>{\~}</code> とすれば確実に単独の文字となる。
+（T1 エンコーディングでは単独の〈<code>~</code>〉文字と
+<code>\~{}</code> の出力は字形が異なることに注意。）
+</div>
+
+
+</div><!--ssec-bxokumacro-extra-->
+
+</div><!--sec-bxokumacro-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXptool パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-05-16
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

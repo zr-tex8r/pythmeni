@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>LaTeX による多言語文書処理の基本 [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=babel"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">LaTeX による多言語文書処理の基本</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>LaTeX による多言語文書処理の基本</h1>
+
+<div class="abstract">
+LaTeX による多言語文書処理の基本
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-babel">
+<h2>Babel パッケージ</h2>
+
+<div class="subsection" id="ssec-babel-goal">
+<h3>パッケージの目的</h3>
+
+<p>Babel パッケージは「英語以外の言語」および「英語を含む多言語」
+の文書の組版を支援する。
+具体的に Babel が提供する機能を私の主観で重要な順に挙げると
+以下のようになる。
+</p>
+<ul>
+<li>言語情報の統一的なマークアップ。
+</li>
+<li>ハイフネーション（分綴）の切替。
+</li>
+<li>各言語に特有の（段落内のレベルの）組版規則の実現。
+</li>
+<li>キャプション中の定型文字列（“Fig.”や“Chapter”等）
+の多言語化。
+</li>
+<li>各言語に特有の特殊文字の入力の支援。
+</li>
+</ul>
+
+</div><!--ssec-babel-goal-->
+
+<div class="subsection" id="ssec-babel-usage">
+<h3>使用法</h3>
+
+<p>Babel を使うには、次のように、文書内で使用する全ての言語を
+オプションで指定して <code>babel</code> を読み込めばよい。
+</p>
+<pre>
+\usepacakge[&#x2039;言語オプション&#x203a;,...]{babel}
+</pre>
+
+<p>主要な言語に対するオプション名は次の通り。
+</p>
+<div align="center">
+<table class="std">
+<col width="30%">
+<col width="30%">
+<thead align="center">
+<tr><th>言語オプション</th><th>言語</th>
+</thead>
+<tbody align="center">
+<tr><td><code>english</code></td> <td>英語</td></tr>
+<tr><td><code>french</code></td> <td>フランス語</td></tr>
+<tr><td><code>german</code></td> <td>ドイツ語（旧正書法）</td></tr>
+<tr><td><code>ngerman</code></td> <td>ドイツ語（現正書法）</td></tr>
+<tr><td><code>greek</code></td> <td>ギリシャ語</td></tr>
+<tr><td><code>hebrew</code></td> <td>ヘブライ語</td></tr>
+<tr><td><code>italian</code></td> <td>イタリア語</td></tr>
+<tr><td><code>latin</code></td> <td>ラテン語</td></tr>
+<tr><td><code>russian</code></td> <td>ロシア語</td></tr>
+<tr><td><code>spanish</code></td> <td>スペイン語</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>その他の使用可能な言語についてはマニュアルを参照。
+</p>
+<div class="bend">
+<p><span class="lbl">参考：</span> LaTeX の起動時に
+現在の設定（フォーマット）で有効なハイフネーションの
+一覧が表示される。
+（下は W32TeX で「<code>latex x</code>」を実行した時の表示。）
+ハイフネーションの名前と言語オプションの名前は
+必ずしも一致しないが、一致することが多いということを
+注意しておく。
+</p>
+<pre>
+This is e-TeX, Version 3.1415926-2.2 (Web2C 7.5.6)
+entering extended mode
+(c:/usr/local/share/texmf/tex/latex/tools/x.tex
+LaTeX2e &lt;2005/12/01&gt;
+Babel &lt;v3.8h&gt; and hyphenation patterns for english, usenglishmax, ukenglish, ba
+sque, bulgarian, coptic, welsh, czech, slovak, german, ngerman, danish, esperan
+to, spanish, catalan, galician, estonian, farsi, finnish, french, irish, greek,
+ monogreek, ancientgreek, croatian, hungarian, interlingua, ibycus, bahasa, ice
+landic, italian, latin, mongolian, dutch, norsk, polish, portuguese, pinyin, ro
+manian, russian, slovenian, samin, uppersorbian, serbian, swedish, turkish, ukr
+ainian, dumylang, nohyphenation, loaded.
+</pre>
+</div>
+<p>なお、ギリシャ語については、
+既定では（現代ギリシャ語の標準的表記である）「単式アクセント」
+（μονοτονικ&#x3cc;）の為の設定になる。
+これを「複式アクセント」（πολυτονικ&#x3cc;）
+の設定に変えるには <code>babel</code> の読込の直後に
+</p>
+<pre>
+\languageattribute{greek}{polutoniko}
+</pre>
+<p>を実行すればよい。
+</p>
+
+
+
+</div><!--ssec-babel-usage-->
+
+</div><!--sec-babel-->
+
+<div class="section" id="sec-inputenc">
+<h2>入力エンコーディング(inputenc)</h2>
+
+</div><!--sec-inputenc-->
+
+<div class="section" id="sec-fontenc">
+<h2>フォントエンコーディング(fontenc)</h2>
+
+</div><!--sec-fontenc-->
+
+</div><!--maintext-->
+
+
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">LaTeX による多言語文書処理の基本</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2008-04-15
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

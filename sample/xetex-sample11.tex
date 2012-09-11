@@ -1,0 +1,22 @@
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage{xltxtra}
+\usepackage{bidi} % right-to-left モードを使う
+\newfontfamily\fchr{Charis SIL}
+\newfontfamily\fman{Mangal}
+\newfontfamily\ftah{Tahoma}
+\begin{document}
+
+\Large
+\fchr % ヨルバ語で「すみませんが」
+Ẹ ṣe fun mi. % <ṣ> は <0073 0323>
+
+\fman % ヒンディー語でホバークラフト文
+मेरी मँडराने वाली नाव सर्पमीनों से भरी ह।
+
+\ftah % イディッシュ語で「わかりません」
+\setRL % right-to-left モードに切替
+איך פֿאַרשטיי דאָס ניט.
+\setLR % left-to-right モードに切替
+
+\end{document}

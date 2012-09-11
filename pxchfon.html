@@ -1,0 +1,798 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXchfon パッケージ ～pLaTeX文書のフォントを簡単に変更～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="フォント,変更,TeX,dvipdfmx,upTeX,dviout,OpenType,LaTeX,pTeX,pLaTeX,upLaTeX">
+<meta name="description"
+  content="PXchfon パッケージは、pLaTeX／upLaTeX の文書の標準和文フォント（明朝・ゴシック）を文書中で指定する機能を提供する（dvipdfmx 専用）。インストールおよび使用がなるべく簡単になることを目指している。">
+<style type="text/css"><!--
+table.flst {
+  border-collapse: collapse;
+  border: 1px solid #99FF99;
+  border-width: 2px 0px;
+  text-align: center;
+}
+table.flst tbody, table.flst tfoot {
+  border-top-width: 2px; border-bottom-width: 2px; 
+}
+table.flst td, table.flst th {
+  border-collapse: collapse;
+  border: 1px solid #66CC66;
+  border-width: 1px 0px;
+  padding: 2px 6px;
+}
+table.flst td {
+  font-family: 'MS UI Gothic',sans-serif
+}
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxchfon"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXchfon パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/pxchfon.html">http://zrbabbler.sp.land.to/pxchfon.html</a>
+</div>
+<div id="maintext">
+<h1>PXchfon パッケージ<br>
+<span class="subtitle">～pLaTeX文書のフォントを簡単に変更～</span></h1>
+
+<div class="abstract">
+PXchfon パッケージは、pLaTeX／upLaTeX の文書の標準和文フォント（明朝・ゴシック）
+を文書中で指定する機能を提供する（dvipdfmx 専用）。
+インストールおよび使用がなるべく簡単になることを目指している。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/05/16：0.5 版で PXjafont パッケージと統合したのに伴い、
+PXjafont のページにあったプリセット指定の説明をこちらに移動。
+その他、色々と説明を追加。
+</li>
+<li>2009/11/16：<a href="#ex-otf-01">例</a>の中の otf の bold オプションを削除。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>pLaTeX / upLaTeX の文書の標準のフォント（明朝・ゴシック）を
+ユーザ指定のものに置き換える。
+dvipdfmx 専用である。
+他のフォント追加パッケージと異なり、
+使用するフォントを LaTeX 文書中で指定するので、
+一度パッケージ（ファイル 1 つのみ）をインストールするだけで、
+任意の日本語フォント（ただし等幅に限る）を使うことができる。
+UTF / OTF パッケージにも対応している。
+欧文部分を同じ日本語フォントで置き換えることも可能である。
+（ただしこの場合は複数のファイルのインストールが必要。）
+</p>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<ul>
+<li>TeX 処理系： pLaTeX2e ／ upLaTeX2e
+</li>
+<li>DVI ウェア： dvipdfmx
+</li>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li id="elt-lite"><a href="data/pxchfon-lite.zip"><!--
+-->Lite 版圧縮ファイル pxchfon-lite.zip (v0.5)のダウンロード（12KB）</a>
+<span class="mdate">[2010/05/15]</span>
+</li>
+<li><a href="data/pxchfon.zip"><!--
+-->Full 版圧縮ファイル pxchfon.zip (v0.5)のダウンロード（80KB）</a>
+<span class="mdate">[2010/05/15]</span>
+</li>
+</ul>
+<p>和文フォントのみを置き換える場合は Lite 版で十分である
+（インストール方法は後述）。
+欧文フォントも置き換えたい場合は Full 版を使う必要がある。
+</p>
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-related">
+<h3>関連パッケージ</h3>
+<ul>
+<li>文書内の一時的な指定でなく、dvipdfmx の正式な(?)
+設定として IPA フォントや MS フォントを指定したい場合は
+<a href="data/pxwjmap.zip">PXwjmap パッケージ</a>を使うという選択肢もある。
+</li>
+<li>XeLaTeX において IPA フォント等の一括指定（プリセット指定）を行うには
+<a href="./zxjafont.html">ZXjafont パッケージ</a>を用いる。
+</li>
+<li>プリセット指定は元々 PXjafont という別のパッケージの機能であった
+のをこのパッケージに統合したものである（0.5 版において）。
+よって 0.5 版以上の PXchfon がある場合は PXjafont はもはや不要
+であるが、何らかの理由で PXjafont の使用を続けたい場合は、
+<a href="./pxjafont.html">PXjafont のページの解説</a>を参照すること。
+</li>
+</ul>
+</div><!--ssec-related-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-jfont">
+<h2>和文フォントのみの設定</h2>
+
+<p>ここでは、欧文フォントは変更せず、和文フォントのみを
+変更する場合の使い方について説明する。
+</p>
+
+<div class="subsection" id="ssec-install">
+<h3>インストール</h3>
+
+<p>この利用法の場合、
+<a href="#elt-lite">Lite版</a>のインストールで十分である。
+このパッケージに含まれるファイルは実質的に pxchfon.sty
+1 つだけである。
+これを TeX システム中の適切なディレクトリに移動すればよい。
+フォント関連のパッケージはインストール・設定が非常に煩雑で
+あることが多いので、このパッケージではできるだけ単純に
+なるよう目指している。
+</p>
+<p>W32TeX を <u>C:\usr\local</u> にインストールした場合は、
+次のフォルダ（新たに作る）に移動する。
+移動した後 mktexlsr を実行する。
+</p>
+<ul>
+<li>pxchfon.sty
+→ <u>C:\usr\local</u>\share\texmf-local\tex\platex\PXchfon
+</li>
+</ul>
+<p>あるいは、もっと簡単に、pxchfon.sty を文書ファイルと
+同じ場所に置いてもよい。
+</p>
+<div class="bend">
+<span class="lbl">参考：</span> Full 版のアーカイブをダウンロード
+してその中の pxchfon.sty だけをインストールしてもよい。
+また、Full 版を完全にインストールした場合も、この節に示されて
+いる使用法は可能である。
+</div>
+<div class="alert">
+<span class="lbl">注意：</span> 既に Full 版をインストールして
+ある（すなわち「Full 版または 0.4a 版以前について全部のファイル
+をインストールしてある」）場合に更新するには、バージョンの不整合を防ぐため、
+必ず Full 版を使うか、古いバージョンをアンインストールしてから
+Lite 版を入れる必要がある。
+</div>
+<div class="alert">
+<span class="lbl">注意：</span> 以前のこのページでは PXcjk0.sfd
+も必要であると書いていたが、実際には和文での使用にはこのファイルは
+不要であったので訂正した。
+</div>
+
+</div><!--ssec-install-->
+
+<div class="subsection" id="ssec-usage">
+<h3>使い方</h3>
+<p>pxchfon パッケージをオプション <code>noalphabet</code> 付きで
+読み込む。
+</p>
+<pre>
+\usepackage[noalphabet]{pxchfon}
+</pre>
+<p>この後、プレアンブルで
+</p>
+<pre>
+\setminchofont{&#x2039;ファイル名&#x203A;}
+\setgothicfont{&#x2039;ファイル名&#x203A;}
+</pre>
+<p>で、明朝とゴシックに対応するフォントを指定する。
+ここで指定するのはフォント名（例えば「IPA明朝」）ではなく
+ファイル名（例えば「ipam.ttf」）であることに注意。
+なお、フォントファイルが TTC 形式（複数の TTF 形式のフォント
+を 1 つにまとめた形式；拡張子 <code>.ttc</code>）
+の場合は、使いたいフォントの
+番号（例えば「ＭＳ 明朝」は msmincho.ttc の 0 番）を
+指定する必要がある。
+この場合は次のように指定する。
+</p>
+<pre>
+\setminchofont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}
+\setgothicfont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}
+</pre>
+<p>このページの末尾に、MS フォントと Microsoft Office 付属の
+フォントについてのファイル名を挙げておく。
+Web 上で配布されているフリーフォントの場合、多くはアーカイブ展開後に
+フォントファイルを手動でインストールする方式になっているので、
+元のアーカイブを調べればフォントファイルの名前が判ると思われる。
+</p>
+</div><!--ssec-usage-->
+
+<div class="subsection" id="ssec-example">
+<h3>例</h3>
+<p>IPA フォントを指定する例。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepackage[noalphabet]{pxchfon}
+\setminchofont{ipam.ttf}  % IPA明朝
+\setgothicfont{ipag.ttf}  % IPAゴシック
+\begin{document}
+\section{はじめに}
+この文書は IPA フォントを用いて出力されています。
+\section{おわりに}
+欧文部分は Computer Modern のままです。
+\end{document}
+</pre>
+<div class="bend">
+<span class="lbl">参考：</span> IPA フォントのバージョンによっては
+ファイル名の拡張子が <code>.otf</code> であることがある
+（具体的には ver003.000）。
+これを用いる場合は、<code>\setminchofont</code> 等に指定する
+ファイル名を変更する必要がある。
+W32TeX で Windows にインストールされた IPA フォントを
+使う場合はそれ以外の点では違いはない。
+</div>
+
+<p>MS フォントを指定する場合はプレアンブルを次のようにする。
+</p>
+<pre>
+\usepackage[noalphabet]{pxchfon}
+\setminchofont[0]{msmincho.ttc}  % ＭＳ 明朝
+\setgothicfont[0]{msgothic.ttc}  % ＭＳ ゴシック
+</pre>
+<p>IPA フォントや MS フォントを「もっと簡単に」指定する
+には<a href="#sec-preset">「プリセット指定」の小節</a>を参照。
+</p>
+
+<div class="alert">
+<span class="lbl">注意：</span> pxchfon でフォントを置き換えた
+DVI ファイルを dvipdfmx 以外の DVI ウェア（dviout 等）
+で出力した場合は、置き換えが無効になり、
+そのソフトウェアで設定された本来の明朝・ゴシックのフォントが用いられる。
+（ただしソフトウェアによっては警告やエラーが出る可能性もある。）
+</div>
+
+</div><!--ssec-example-->
+
+<div class="subsection" id="ssec-otf">
+<h3>UTF／OTF パッケージと併用する場合</h3>
+
+<p>和文フォントの置き換えは UTF／OTF パッケージのフォントにも適用される。
+以下に OTF パッケージを用いた例を示す。
+</p>
+<div class="alert">
+<span class="lbl">注意：</span> v0.2a 以前では OTF パッケージ
+（<code>deluxe</code> なし）で <code>\setgothicfont</code> 設定の
+フォントを有効にするには <code>bold</code> か <code>noreplace</code>
+を指定する必要があった。
+0.3 版で多ウェイトに正式に対応したのに伴いこの制限はなくなった。
+</div>
+<pre id="ex-otf-01">
+\documentclass[a4paper]{jsarticle}
+\usepackage[noalphabet]{pxchfon}
+\setminchofont{ipam.ttf}  % IPA明朝
+\setgothicfont{ipag.ttf}  % IPAゴシック
+\usepackage{otf}
+\renewcommand{\theenumi}{\ajLabel\ajMaru{enumi}} %+
+\renewcommand{\labelenumi}{\theenumi}            %+ enumerate を丸数字で
+\begin{document}
+「2001 年宇宙の旅」「時計じかけのオレンジ」等の現代文明の本質を
+鋭い視点で問いかける作品で知られる、米国の映画監督は誰か。
+\begin{enumerate}
+\item 森\UTF{9DD7}外
+\item \UTF{9127}小平
+\item ウィリアム・ヘンリー・ゲイツ\UTF{2162}世
+\item \textgt{この中からどうやって選べというんだ？}
+\end{enumerate}
+\end{document}
+</pre>
+
+<p>無論、フォントが JIS 基本漢字以外の文字（グリフ）を持っていなければ
+何の意味もないのだが、大抵の日本語用 TrueType／OpenType フォントは
+いわゆる「Windows 機種依存文字」（丸数字①，②…等）は持っているので、
+OTF パッケージでこれを使う用途が考えられる。
+なお、上の例で用いた「IPAフォント」は JIS X 0213 の文字集合に
+対応していて例の文書中で指定された文字を全て出力できる。
+</p>
+
+<h4>OTF パッケージの多ウェイト設定の場合</h4>
+
+<p>OTF パッケージで <code>deluxe</code> オプションが
+指定されている場合は、明朝・ゴシックともに 3 ウェイトが
+使用可能となっていて、加えて、丸ゴシックのファミリも使用可能である。
+この場合は、次の命令で各ウェイト毎に置換するフォントを
+指定できる。
+<pre>
+\setlightminchofont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}   ― 明朝・細       (\mcfamily\ltseries)
+\setmediumminchofont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}  ― 明朝・中       (\mcfamily\mdseries)
+\setboldminchofont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}    ― 明朝・太       (\mcfamily\bfseries)
+\setmediumgothicfont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}  ― ゴシック・中   (\gtfamily\mdseries)
+\setboldgothicfont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}    ― ゴシック・太   (\gtfamily\bfseries)
+\setxboldgothicfont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}   ― ゴシック・極太 (\gtfamily\ebseries)
+\setmarugothicfont[&#x2039;番号&#x203A;]{&#x2039;ファイル名&#x203A;}    ― 丸ゴシック     (\mgfamily)
+</pre>
+<p>また、<code>\setminchofont</code> と <code>\setgothicfont</code> は
+各々明朝・ゴシックの 3 ウェイト全てを指定の（同じ）フォントに設定する。
+</p>
+<div class="alert">
+<p><span class="lbl">注意：</span> 欧文フォントの置き換えを有効に
+するためには 3 ウェイト全てが置換されている必要がある。
+従って、例えば 2 ウェイトしか使わないという場合は
+</p>
+<pre>
+\setmediummincho{minchoW3.ttf}  % 中ウェイトを設定
+\setboldmincho{minchoW6.ttf}    % 太ウェイトを設定
+  % 細ウェイトが未設定のため欧文に対しては無効
+</pre>
+<p>ではなく</p>
+<pre>
+\setmincho{minchoW3.ttf}        % まず3ウェイト全部を設定
+\setboldmincho{minchoW6.ttf}    % 太ウェイトの設定を変更
+</pre>
+<p>とする必要がある。</p>
+</div>
+
+
+
+</div><!--ssec-otf-->
+
+</div><!--sec-jfont-->
+
+<div class="section" id="sec-efont">
+<h2>欧文フォントも変更する場合の設定</h2>
+
+<div class="subsection" id="ssec-einstall">
+<h3>インストール</h3>
+
+<p>欧文フォントも変更する場合は、
+<a href="data/pxchfon.zip">Full 版</a>のインストールが必要である。
+残念ながら、Lite 版ほど簡単ではないので、
+具体的な手順は説明書（README ファイル）を見てほしい。
+ただ、ファイルを移動するだけで、何かの設定ファイルを編集する
+必要はないので、普通のフォントパッケージよりは容易である。
+（これまで見たように、設定を書き込む先は LaTeX 文書と
+いうわけである。）
+</p>
+
+</div><!--ssec-einstall-->
+
+<div class="subsection" id="ssec-eusage">
+<h3>使い方</h3>
+<p>pxchfon パッケージを読み込む時に <code>alphabet</code> 
+オプションを指定する。
+あとは和文のみの場合と全く同じである。
+</p>
+<div class="alert">
+<span class="lbl">注意：</span> <code>alphabet</code>/<code>noalphabet</code>
+オプションについては、通常は <code>alphabet</code> の方が既定なので
+省略可能である（以下の例でも省略している）。
+ただし、<a href="#sec-preset">プリセット指定</a>を使用した場合は、
+逆に <code>noalphabet</code> が既定となるので、
+欧文の置換を行うには <code>alphabet</code> オプションが必要になる。
+</div>
+
+</div><!--ssec-eusage-->
+
+<div class="subsection" id="ssec-eexample">
+<h3>例</h3>
+<p>以下の例では、「明朝」の部分を「HG教科書体」に置き換えている。
+このように和文の部分に特徴的な書体を使う場合は、
+欧文部分も同じ書体にしないと奇妙に見える。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepackage{pxchfon} % オプションなし
+\setminchofont[0]{hgrkk.ttc} % HG教科書体
+\begin{document}
+\section{テストです}
+この文書は「HG教科書体」フォントを用いて出力されています。
+このフォントは Microsoft Office に付属するもので、
+Office がインストールされている Windows マシンなら
+このフォントを使うことができます。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:938px">
+<img src="sample/pxchfon-sample01.png" width="938" height="107">
+</div></div>
+<div class="bend">
+<span class="lbl">参考：</span> この例では <code>\setgothicfont</code>
+がないので、ゴシック体（および欧文のサンセリフ）は従来通りの
+フォントが使われる。
+</div>
+
+<p>ただし、上の例の組版結果を見ればわかるように、
+欧文部分が等幅になっているため非常に拙く見える。
+これは、「後からフォントを好きなものに置き換える」
+という方法では、フォントによって同じ文字の幅が変わる
+プロポーショナルフォントには対応できないからである。
+</p>
+
+</div><!--ssec-eexample-->
+
+</div><!--sec-efont-->
+
+<div class="section" id="sec-preset">
+<h2>プリセット指定（一括指定）</h2>
+
+<p>このパッケージの元々の意図は、
+標準のフォントを普段使っているものと全く別の書体に変えることであったが、
+例えば「普段使う設定が複数ありそれを簡単に切り替えたい」
+という場合にも有用である。
+そこで、pTeX において広く行われている設定をパッケージ内に組み込んで、
+パッケージオプションでそれを呼び出すという機能を追加した。
+例えば、「OTF パッケージで、IPA フォントと Microsoft Office のフォントを使う」
+設定にするには、該当の LaTeX 文書に
+</p>
+<pre>
+\usepackage[ipa-dx]{pxjafont}
+</pre>
+<p>を書くだけでよく、これにより内部で適切なフォントが
+<code>\setminchofont</code> 等で設定される。
+</p>
+<p>元々は PXjafont という別のパッケージとの組合せで提供されていた機能であるが、
+0.5 版からこのパッケージに組み入れることにした。
+</p>
+
+<div class="subsection" id="ssec-preset-option">
+<h3>プリセット指定のパッケージオプション</h3>
+
+<p>pxchfon のパッケージオプションとして以下に列挙する
+プリセット名を与えることで、使用する
+（埋め込む；PDF 出力が前提なので）フォントを一括指定できる。
+</p>
+
+<h4>単ウェイト用の設定</h4>
+<ul>
+<li><code>noembed</code> ： フォントを埋め込まない。
+（生成された PDF は閲覧者の環境によっては正常に表示されないかも知れない。）
+</li>
+<li><code>ms</code> ： MS フォント（「ＭＳ 明朝」「ＭＳ ゴシック」）を使用する。
+</li>
+<li><code>ipa</code>／<code>ipa-ttf</code> ： IPA フォント（ファイル拡張子が .ttf；「IPA明朝」「IPAゴシック」）を使用する。
+</li>
+<li><code>ipa-otf</code> ： IPA フォント（ファイル拡張子が .otf）を使用する。
+</li>
+<li><code>kozuka4</code> ： Pro 仕様の小塚フォント（「小塚明朝 Pro R」「小塚ゴシック Pro M」）を使用する。
+</li>
+<li><code>kozuka6</code> ： Pr6 仕様の小塚フォント（「小塚明朝 Pro-VI R」「小塚ゴシック Pro-VI M」）を使用する。
+</li>
+<li><code>kozuka6n</code> ： Pr6N 仕様の小塚フォント（「小塚明朝 Pr6N R」「小塚ゴシック Pr6N M」）を使用する。
+</li>
+<li><code>hiragino</code> ： ヒラギノフォント「ヒラギノ明朝 Pro W3」「ヒラギノ角ゴ Pro W6」を使用する。
+</li>
+</ul>
+<h4>多ウェイト用の設定</h4>
+<p>OTF パッケージの <code>deluxe</code> オプション使用時に有効になる。
+明朝 2 ウェイト、ゴシック 3 ウェイト、丸ゴシック 1 ウェイトを設定する。
+</p>
+<ul>
+<li><code>ms-dx</code> ： MS フォントおよび Microsoft Office 付属の日本語フォントを使用する。
+</li>
+<li><code>ipa-dx</code>／<code>ipa-ttf-dx</code> ： IPA フォント（拡張子 .ttf）および Microsoft Office 付属の日本語フォントを使用する。
+</li>
+<li><code>ipa-otf-dx</code> ： IPA フォント（拡張子 .otf）および Microsoft Office 付属の日本語フォントを使用する。
+</li>
+<li><code>hiragino-dx</code> ： ヒラギノフォント「ヒラギノ明朝 Pro W3・W6」「ヒラギノ角ゴ Pro W3・W6・W8」
+「ヒラギノ丸ゴ Pro W4」を使用する。
+</li>
+</ul>
+<p>ちなみに、W32TeX の既定の設定では、
+pTeX 標準と UTF パッケージについては <code>noembed</code> 相当、
+OTF パッケージについては <code>kozuka4</code> 相当になっている。
+（だから多くの W32TeX ユーザには OTF パッケージの既定設定は
+「使えない」のである。）
+</p>
+
+<div class="alert">
+<span class="lbl">参考：</span> pxjafont パッケージ 0.2 版と
+異なり、<code>ipa(-dx)</code> は拡張子が .ttf の
+IPA フォントを意味する。
+最新の IPA フォントでは拡張子が .ttf であるので変更した。
+</div>
+
+<div class="alert">
+<span class="lbl">参考：</span> <code>ms-dx</code> の設定で
+使用される「HG丸ｺﾞｼｯｸM-PRO」のフォント埋込制限については、
+後の <a href="#sec-fontname">Windows のフォントについて述べた節</a>に
+ある「注意」を参照。
+</div>
+
+<div class="bend"><p><span class="lbl">参考：</span> 
+フォントの設定を始めるにあたってまず大事なことは
+「自分がどのフォントを持っているか」だったりする ;-)
+以下で pTeX で（素人が）使うことが多いと思われるフォントに
+ついて簡単に解説する。
+</p>
+<ul>
+<li>MS フォント： Windows ユーザなら必ず持っている。
+Mac で Microsoft Office をインストールした人も…（使いたいかは別）。
+</li>
+<li>Microsoft Office 付属のフォント： 
+文字通り、Microsoft Office に属する何らかの製品（Microsoft Excel 等）
+がインストールされていれば持っている。
+</li>
+<li>IPA フォント： 
+<a href="http://ossipedia.ipa.go.jp/ipafont/">OSS iPedia</a> のサイトから
+ダウンロード可能なフリー（自由）フォント。
+どの環境でも入手可能であるが、Windows や Mac OS X では最初から
+インストールされている訳ではない。
+</li>
+<li>小塚フォント： 
+Adobe の多くの有償の製品に付属するフォント。
+「Pro」「Pr6」「Pr6N」のどの版であるかは恐らく発売された時期に
+依存するのだと思う。
+</li>
+<li>ヒラギノフォント： 
+Mac OS X 付属のフォント。
+その他の環境の人はフォント単体を購入しない限りは持っていない。
+</li>
+<li>モリサワフォント： 
+あー、聞いたことあるね ;-)
+</ul>
+<p>OTF パッケージを用いる場合はフォントが対応する文字の範囲にも
+注意する必要がある。
+</p>
+<div align="center" style="margin: 12px 0px;">
+<table class="flst">
+<thead>
+<th>名称</th><th>構成フォント</th>
+<th>CP<br>932</th><th>JISX<br>0208</th><th>JISX<br>0213</th><th>AJ<br>1-5/6</th>
+</thead>
+<tbody>
+<tr>
+<td>MSフォント</td><td>「ＭＳ 明朝」等</td>
+<td>○</td><td>○<small>*1</small></td><td>○<small>*3</small></td><td>×</td>
+</tr>
+<tr>
+<td>MS-Office付属</td><td>「HG明朝E」等</td>
+<td>○</td><td>△<small>*2</small></td><td>×</td><td>×</td>
+</tr>
+<tr>
+<td>IPAフォント</td><td>「IPA明朝」等</td>
+<td>○</td><td>○<small></small></td><td>○</td><td>×</td>
+</tr>
+<tr>
+<td>小塚フォント<small>*4</small></td><td>「小塚明朝 Pro-VI R」等</td>
+<td>○</td><td>○</td><td>○</td><td>○</td>
+</tr>
+<tr>
+<td>ヒラギノフォント</td><td>「ヒラギノ明朝 Pro W3」等</td>
+<td>○</td><td>○</td><td>○</td><td>○</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+[*1]  Windows XP 付属のものでは「JIS X 0208 にあって CP932 にない文字(※)」
+について字形に難がある。
+ただし普通に（u）pTeX を使う場合はこの辺りの両符号系の差は吸収されるので
+問題にならない。<br>
+[*2] (※) の文字の字形がない。やはり （u）pTeX では問題にならない。<br>
+[*3] Windows XP 以降の版に付属のもの。
+それより前は JIS X 0208／0212 のみ。<br>
+[*4] Pr6／Pr6N の場合。
+この「6」は Adobe-Japan1-6 対応であることを示す。
+さらに「N」は 2004JIS 対応字形が既定であることを示す。
+Pro 版は Adobe-Japan1-4 までの対応。
+</div>
+
+</div><!--(bend)-->
+
+</div><!--ssec-preset-option-->
+
+<div class="subsection" id="ssec-preset-sample">
+<h3>サンプル</h3>
+
+<p>単ウェイトで和文のみ設定する場合。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepackage[ipa]{pxjafont} % IPA フォントを埋込
+  %\usepackage[ms]{pxjafont} % MS フォントを埋込
+  %\usepackage[kozuka]{pxjafont} % 小塚フォントを埋込
+  %\usepackage[noembed]{pxjafont} % フォントを埋め込まない
+\begin{document}
+
+森喜朗と内田裕也とが墨田区の松坂屋に行くところを想像した。
+
+ちなみに欧文は Computer Modern のままです。
+
+\end{document}
+</pre>
+<p>オプションに <code>alphabet</code> を加えると、
+欧文が和文と同じフォントになる。
+</p>
+
+<p>多ウェイト（OTF の <code>deluxe</code> オプション指定）の場合。
+</p>
+<pre>
+\documentclass[a4paper]{jsarticle}
+\usepackage[deluxe]{otf}
+\usepackage[ipa-dx]{pxjafont} % IPA フォント ＋ Microsoft Office のフォント
+\begin{document}
+   % \UTF と \CID の無駄遣い ;-)
+\mcfamily 森\UTF{559C}朗と\textbf{内田裕\UTF{4E5F}}とが%  % 明朝(中・太)
+\gtfamily \CID{3709}田区の\textbf{\UTF{677E}坂屋}に行く%  % ゴシック(中・太)
+\mgfamily ところを想像した。                              % 丸ゴシック
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:544px">
+<img src="sample/pxjafont-sample01.png" width="544" height="19">
+</div></div>
+
+</div><!--ssec-preset-sample-->
+
+</div><!--sec-preset-->
+
+
+<div class="section" id="sec-fontname">
+<h2>Windows マシンにインストールされているフォントのファイル名</h2>
+<p>等幅の日本語フォントのみを列挙する。
+<code>\setminchofont</code> で指定する形で記述するが、
+もちろん <code>\setgothicfont</code> の方が適切なものもある。
+</p>
+<ul>
+<li>Windows 付属のフォント：
+  <ul>
+  <li><code>\setminchofont[0]{msmincho.ttc}</code>
+      ― ＭＳ 明朝
+  </li>
+  <li><code>\setminchofont[0]{msgothic.ttc}</code>
+      ― ＭＳ ゴシック
+  </li>
+  </ul>
+</li>
+<li>Microsoft Office 付属のフォント：
+  <ul>
+  <li><code>\setminchofont[0]{hgrmb.ttc}</code>
+      ― HG明朝B
+  </li>
+  <li><code>\setminchofont[0]{hgrme.ttc}</code>
+      ― HG明朝E
+  </li>
+  <li><code>\setminchofont[0]{hgrpre.ttc}</code>
+      ― HG創英ﾌﾟﾚｾﾞﾝｽEB
+  </li>
+  <li><code>\setminchofont[0]{hgrgm.ttc}</code>
+      ― HGｺﾞｼｯｸM
+  </li>
+  <li><code>\setminchofont[0]{hgrge.ttc}</code>
+      ― HGｺﾞｼｯｸE
+  </li>
+  <li><code>\setminchofont[0]{hgrsgu.ttc}</code>
+      ― HG創英角ｺﾞｼｯｸUB
+  </li>
+  <li><code>\setminchofont{hgrsmp.ttf}</code>
+      ― HG丸ｺﾞｼｯｸM-PRO (*) (※)
+  </li>
+  <li><code>\setminchofont[0]{hgrkk.ttc}</code>
+      ― HG教科書体
+  </li>
+  <li><code>\setminchofont{hgrskp.ttf}</code>
+      ― HG正楷書体-PRO (*) (※)
+  </li>
+  <li><code>\setminchofont[0]{hgrgy.ttc}</code>
+      ― HG行書体
+  </li>
+  <li><code>\setminchofont[0]{hgrpp1.ttc}</code>
+      ― HG創英角ﾎﾟｯﾌﾟ体
+  </li>
+  </ul>
+  (*) 印のフォントは欧文がプロポーショナルなので
+欧文の置き換えには使えない。
+</li>
+</ul>
+
+<div class="alert">
+<p><span class="lbl">注意：</span> 上掲のフォントの中で
+(※) 印を付したものは PDF 文書への埋込が制限されている。
+「Print &amp; Preview」という制限であり、具体的には
+「該当のフォントを埋め込んだ文書は編集不可でなければならない」
+ことを要求する。
+dvipdfmx で編集不可な PDF 文書を作るには、
+以下のような暗号化オプションを付して dvipdfmx を実行すればよい。
+</p>
+<pre>
+dvipdfmx -K 128 -S -P 2580 &lt;他オプション&gt; &lt;入力&gt;.dvi
+</pre>
+<p>この場合、「Owner password」と「User password」の入力を
+求められるが、「User password」は空にしておく。
+これで、Acrobet で編集操作を行う時には「Owner password」
+が求められるが、Adobe Reader 等で単に閲覧する時には
+パスワードの入力が不要となる。
+</p>
+<p>ちなみに、この「Print &amp; Preview」制限のフォントを埋め込む設定にして
+dvipdfmx を実行した場合は、
+</p>
+<pre>
+** NOTICE: This document contains `Preview & Print' only licensed font **
+</pre>
+<p>というメッセージが表示される。
+この時、<em>埋込は実行されている</em>（従って、
+ライセンス要件を満たさない文書を作成した可能性がある）
+ので十分注意すること。
+</p>
+<p>参考：<a href="http://www.microsoft.com/typography/RedistributionFAQ.mspx">Font Redistribution FAQ</a>（Microsoft サイト）。
+この内容から判断する限り、Microsoft 製品に付随するフォントについては、
+フォント自身に記された埋め込み制限情報を信用すればよいように思える。
+</p>
+</div>
+
+</div><!--sec-fontname-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXchfon パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009-2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-05-15
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

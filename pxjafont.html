@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXjafont パッケージ ～pLaTeX文書のフォントをもっと簡単に変更？～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="フォント,変更,TeX,dvipdfmx,upTeX,dviout,OpenType,LaTeX,pTeX,pLaTeX,upLaTeX">
+<meta name="description"
+  content="「pLaTeX／upLaTeX の文書の標準和文フォントをとても簡単に好きなフォントに変更する」パッケージ PXchfon の機能を用いて「普通のフォントの設定をとても簡単に行う」ためのパッケージ、PXjafont の紹介。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxjafont"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXjafont パッケージ</span>
+</div><!--navibar-->
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/pxjafont.html">http://zrbabbler.sp.land.to/pxjafont.html</a>
+</div>
+<div id="maintext">
+<h1>PXjafont パッケージ</h1>
+
+<div class="abstract">
+PXchfon パッケージと組み合わせて、「pLaTeX／upLaTeX で一般的な和文フォント設定を
+幾つか用意してそこから簡単に選択できるようにする」
+機能を提供する PXjafont パッケージの解説。
+現在は、PXchfon が PXjafont の機能を含むようになったので、
+このパッケージは不要になった。
+（<a href="./pxchfon.html">PXchfon のページ</a>を参照。）
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>2010/05/15：PXjafont の機能が PXchfon に取り込まれたのに伴い、
+PXjafont パッケージは廃止とし、元々このページにあった機能説明を 
+<a href="./pxchfon.html">PXchfon のページ</a>に移動した。
+このページの内容は、PXchfon 0.5 版以上への移行の解説に置き換えた。
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-migrate">
+<h2>PXchfon 0.5 版以上への移行</h2>
+
+<p><a href="pxchfon.html">PXchfon パッケージ</a> 0.5 版への改版において、
+PXjafont パッケージの機能が全て取り込まれたので、
+PXjafont パッケージは廃止された。
+</p>
+
+<div class="subsection" id="ssec-modify-doc">
+<h3>文書作成上の変更点</h3>
+
+<p>PXchfon 0.5 版以上に移行した場合のパッケージ読込記述の変更点
+について述べる。
+まず、pxchfon を直接読み込まずに、pxjafont だけを読み込む書き方、すなわち
+</p>
+<pre>
+\usepackage[&lt;プリセット名&gt;,&lt;pxchfonオプション&gt;]{pxjafont}
+</pre>
+<p>の場合は、単に全く同じオプション列を指定して pxchfon を読み込めばよい。
+プリセット名がある場合は欧文処理の既定が <code>noalphabet</code>
+になるので、この点に関しても変更は不要である。
+</p>
+<pre>
+\usepackage[&lt;プリセット名&gt;,&lt;pxchfonオプション&gt;]{pxchfon}    %(*)
+</pre>
+<p>もし、pxchfon と pxjafont を別々に読み込む書き方、すなわち
+</p>
+<pre>
+\usepackage[&lt;pxchfonオプション&gt;]{pxchfon}
+\usepackage[&lt;プリセット名&gt;]{pxjafont}
+</pre>
+<p>をしている場合は、両者のオプションを合わせて、<code>(*)</code>
+の書式にすればよいが、
+この時、欧文処理について <code>noalphabet</code>（無効）
+の方が既定であるので、
+欧文処理を有効にしたい場合は <code>alphabet</code> を
+オプション列に加える必要がある。
+</p>
+</div><!--ssec-modify-doc-->
+
+<div class="subsection" id="ssec-continue">
+<h3>pxjafont パッケージの使用を継続する</h3>
+
+<p>過去に提供していた PXjafont パッケージ（0.2 版）
+については、PXchfon の版が 0.5 版未満の場合はそのまま
+使い続けることができる。
+PXchfon が 0.5 版以上の場合は、既に述べたように、
+そもそも PXjafont は不要なのであるが、
+何らかの理由で pxchfon 出なく pxjafont パッケージの読込
+で処理したいという場合は、
+今インストールされている pxjafont.sty ファイルを
+PXchfon の <a href="data/pxchfon.zip">Full 版</a>アーカイブ
+の PXjafont ディレクトリにある pxjafont.sty に置き換えるとよい。
+ただし、このパッケージは、単に同じオプション列で pxchfon
+パッケージを読み込むという処理をしているだけなので、
+「pxjafont と pxchfon を別に読み込む」場合には対応できていない。
+</p>
+</div><!--ssec-continue-->
+
+</div><!--sec-migrate-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXjafont パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2009&#2013;2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-05-15
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

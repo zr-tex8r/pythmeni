@@ -1,0 +1,24 @@
+\documentclass[a4paper]{article} % 用紙サイズを A5 にする
+\usepackage{bxbase}
+\recordpapersize
+\usepackage{xltxtra}
+\usepackage{myjapanese}
+\usepackage{color}
+\newfontfamily\cipam[Scale=2]{IPA明朝}
+\newfontfamily\pipam[Scale=2]{IPA P明朝}
+\newcommand\bbar{\textcolor{red}{\rule[-4pt]{.4pt}{28pt}}}
+\newcommand\res[1]{\textcolor{red}{#1}}
+\setmainfont{メイリオ}
+\newcommand\hwb{\hskip-.5em}
+\newcommand\Item[1]{\par\medskip\noindent ■#1\par}
+\pagestyle{empty}
+\begin{document}
+\Item{求められる結果}
+{\cipam である\bbar 。\hwb （\bbar こうで}\qquad \res{1.5em}
+\Item{等幅フォントを用いた場合}
+{\cipam である\bbar 。（\bbar こうで}\qquad \res{2em}
+\Item{プロポーショナルフォントを用いた場合（IPA P明朝の場合）}
+{\pipam である\bbar 。（\bbar こうで}\qquad \res{1.01em}
+\Item{+palt 指定のフォントの場合}
+{\cipam である\bbar 。\hwb\hwb （\bbar こうで}\qquad \res{1em}
+\end{document}

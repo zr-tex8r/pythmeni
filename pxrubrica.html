@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXrubrica パッケージ ～美しい日本のルビ組版～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="epic,eepic,pict2e,dvipdfmx,p2e-dvipdfmx,pdfTeX,pdfLaTeX">
+<meta name="description"
+ content="pict2eをdvipdfmxに対応させるモジュールbxdpxp2eとepic+eepicの機能をpict2eの機能で実現するパッケージbxeepicの紹介。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxrubrica"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXrubrica パッケージ</span>
+</div><!--navibar-->
+
+<div id="maintext">
+<h1>PXrubrica パッケージ<br>
+<span class="subtitle">～美しい日本のルビ組版～</span></h1>
+
+<div class="abstract">
+JIS 規格「JIS X 4051」および W3C 技術ノート
+<a href="http://www.w3.org/TR/jlreq/ja/">「日本語組版処理の要件」</a>
+で述べられているような、
+日本において一般的な様式に従ってルビを付ける機能を提供する。
+</div>
+
+<div id="changelog" class="hdn">
+<div class="lbl">変更履歴</div>
+<ul>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>日本語組版における慣習を文書化した JIS X 4051 や
+<a href="http://www.w3.org/TR/jlreq/ja/">「日本語組版処理の要件」</a>
+（以降「要件」と呼ぶ）
+にある規定に沿った、
+伝統的な様式でのルビの組版を行う機能を提供する。
+</p>
+<p>ルビの出力に関しては、
+組版者の流儀や親文字・ルビ文字の性質に依存して変動する要素を多く抱える。
+このパッケージは、
+それをなるべく簡便なパラメタ入力の形で操れることを重視して設計されている。
+以下に示すものは
+「要件」
+に示されているルビ出力例を再現したものである。
+</p>
+<div>（縦組の例）</div>
+<div class="imagebox" style="width:776px">
+<img src="sample/sample-pxrubrica-jlreq1.png" width="776" height="301">
+</div>
+<div>（横組の例）</div>
+<div class="imagebox" style="width:199px">
+<img src="sample/sample-pxrubrica-jlreq2.png" width="199" height="381">
+</div>
+<p>（これらのソースはブログ記事
+<a href="http://d.hatena.ne.jp/zrbabbler/20110723/1311427941">「ルビはじめました(1)」</a>
+に掲載されている。）
+</p>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+
+<ul>
+<li>TeX 処理系： pLaTeX （派生エンジンを含む）
+</li>
+<li>DVIドライバ： 使用エンジンに対応するもの全て
+</li>
+</ul>
+
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<p>github のページから ZIP アーカイブがダウンロードできる。
+<ul>
+<li><a href="https://github.com/zr-tex8r/PXrubrica">zr-tex8r/PXrubrica</a>
+ページ左上にある「ZIP」のボタンを押す。
+</li>
+</ul>
+
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-install">
+<h3>インストール</h3>
+
+<p>アーカイブに同梱される README ファイルを参照。
+</p>
+<p>（ がであることに注意。）
+</p>
+
+</div><!--ssec-install-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-sample">
+<h2>サンプル</h2>
+
+<p>このパッケージに関するサンプルや使用法については、
+開発中に書いたブログ記事に割と詳しく記されているのでそちらを参照してほしい。
+なお、完全な説明についてはマニュアル文書
+pxrubrica.pdf に述べられている。
+</p>
+<ul>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110723/1311427941">ルビはじめました（PXrubrica パッケージ）(1)</a>
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110724/1311503096">ルビはじめました（PXrubrica パッケージ）(2)</a>
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110726/1311641043">ルビはじめました（PXrubrica パッケージ）(3)</a>
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110727/1311789296">ルビはじめました（PXrubrica パッケージ）(4)</a>
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110806/1312646253">ルビはじめました（PXrubrica パッケージ）(5)</a>
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110807/1312678889">ルビはじめました（PXrubrica パッケージ）(6)</a>
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20110808/1312752947">ルビはじめました(7) ― 段落末尾での挙動</a> （かなり TeX 的な話）
+</li>
+</ul>
+</div><!--sec-sample-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXrubrica パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2012 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2012-04-30
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

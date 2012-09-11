@@ -1,0 +1,1162 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>upLaTeXを使おう [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=uplatex"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">upLaTeX を使おう</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/uplatex.html">http://zrbabbler.sp.land.to/uplatex.html</a>
+</div>
+<div id="maintext">
+<h1>upLaTeX を使おう</h1>
+
+<div class="abstract">
+和文の内部処理を Unicode で行う（従って和文では全ての Unicode
+文字をネイティブに扱える）拡張された pLaTeX である upLaTeX、
+および PXbase パッケージ中の upLaTeX
+を支援する機能について紹介する。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/07/30： <a href="#sec-guide">「付録： upLaTeX 機能一覧」</a>を追加。
+</li>
+<li>2010/07/29： <a href="#ssec-gt-fonts">「GT 書体フォントの利用」</a>を追加。
+</li>
+<li>2009/11/16： OTF パッケージのオプションについての説明を修正。
+pxbabel の説明を大幅に書き直し、<a href="pxbase.html">PXbase バンドル</a>
+のページに移動した。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-preface">
+<h2>まえがき：TeX の Unicode 対応</h2>
+
+<div class="subsection" id="ssec-tex">
+<h3>欧文 TeX において</h3>
+
+<p>Unicode の登場以前から、TeX ではアクセント付のラテン文字を
+「文字とアクセントのグリフを合成する」ことで表現し、
+それにより多くの欧州の言語を出力する能力をもっていた。
+さらに入力文字列をマクロで処理することにより、
+ラテン文字以外の文字に関しても、
+TeX のソース上での文字の表現方法（ASCII 文字での翻字、
+8 ビットのコードページの利用、等）
+と必要なグリフを収めたフォントさえあれば
+出力が可能であり、実際、多くの言語を扱う為の LaTeX
+のパッケージが公開され、中には、
+アラビア語のような複雑なグリフ処理を要するものや、
+日本語のような巨大な文字集合と多バイトコード入力を扱うものもある。
+</p>
+<p>TeX を Unicode に対応させる試みは、Unicode が広く知られるように
+なった 1990 年代半ばにまで遡る。
+Yannis Haralambous と John Plaice により開発されていた
+Omega は Unicode（当時は BMP のみ）
+の利用を想定して内部処理を 16 ビットに拡張した TeX であった。
+Omega は多くの言語のにおける組版の慣行を実現するための
+新しい機構（例えば、日本語を縦書きで出力する、
+アラビア語のグリフ処理を内部で行う、等）
+を備えることが予定されていたが、
+今世紀に入り開発は長らく停止していた。
+</p>
+<p>一方で、従来の LaTeX で UTF-8 入力を扱うパッケージ、
+例えば inputenc の utf8 エンコーディングや、
+より高機能な ucs パッケージ
+（utf8x エンコーディング；Dominique Unruh による）
+も開発されている。
+これらを用いれば、LaTeX の標準の出力符号化処理（fontenc）
+の枠内にある文字を、UTF-8 入力により出力できるが、
+マクロ処理であるが故の制約も多々ある。
+</p>
+<p>放棄されていた Omega の開発は、
+その後 2005 年に新しいプロジェクトである
+LuaTeX（開発は Hans Hagen、Hartmut Henkel、Taco Hoekwater による）
+に取り込まれる形で行われることとなった。
+LuaTeX は、現在の欧米の標準である pdfTeX（PDF 出力が可能な TeX）
+に Omega を併合し、
+さらに Lua スクリプトによる内部処理の調整を可能にした処理系である。
+これとは別に、既存の Unicode テキスト処理技術と TeX
+を融合させるというアプローチで Unicode に対応した
+XeTeX（開発は Jonathan Kew による）
+も開発されている。
+すなわち、TeX の Unicode への対応は現在のところ着実に
+進んでいるといえよう。
+</p>
+
+</div><!--ssec-tex-->
+
+<div class="subsection" id="ssec-ptex">
+<h3>和文 TeX において</h3>
+
+<p>現在日本では、日本語を扱う TeX 処理系として、
+アスキー社が開発した pTeX（p は publishing の略）
+が広く使われている。
+これは、旧来（Unicode 以前）の多バイトの日本語符号系
+（Shift JIS や EUC-JP）を扱うために内部処理を
+16 ビットに拡張したものであり、
+日本語コードの文字（和文文字）が内部でも「文字」
+そのものとして扱われる。
+また、高品位な日本語の組版の為に必要な処理
+（禁則処理、「四分空き」の自動挿入、等）
+が内部処理で行われる。
+従って、マクロによりこれらの処理を行う方法と異なり、
+他のマクロ処理と干渉することがなく、
+欧文 TeX 用のパッケージのほぼ全て
+（8 ビットコード入力を利用したもの以外）
+を変更なく利用できるという特長をもっている。
+</p>
+<p>しかし、日本でも Unicode の普及が進み、
+Unicode を基本の文字コードをするシステムが現れるに至って、
+pTeX が UTF-8（標準的な Unicode の符号化方式）
+を扱えないことが次第に不便に感じられるようになってきた。
+また、世界的な流れとして、Unicode を扱わないソフトウェアが
+「時代遅れ」の烙印を押されて排除される風潮があり、
+それへの危機感も認識されるようになった。
+このことへの解決策を示したのが、
+日本語対応の TeX ディストリビューション ptetex3
+の開発者である土村展之氏である。
+彼は、pTeX の内部漢字コードはそのまま（Shift JIS か EUC-jp）
+にして入出力部分においてコード変換を施すという方法をとっている。
+これにより、pTeX のツールの UTF-8 への対応が比較的簡単に
+行うことができたが、一方で、内部漢字コードの制約の為に、
+この方法は扱える文字集合が従来と同じ JIS X 0208
+に限られるという欠点を持っている。
+</p>
+<p>これとは別に、Unicode の「文字集合」をコード値入力により
+扱おうとする試みも行われた。
+齋藤修三郎氏の OTF パッケージは Unicode
+（あるいは Adobe の CJK グリフ集合）
+に含まれる「漢字に類する文字（全角幅の文字）」
+をコード値入力により出力することを実現している。
+これにより、pTeX において JIS X 0208 にない漢字や異体字を
+出力したいという要求に応えることが可能になった。
+</p>
+
+<p>この 2 つの試みおよびそれを巡る議論は、
+「Unicode 化された pTeX」に対する 1 つの形
+（目的・仕様・実装方法に関して）を導き出したと考えることができる。
+仕様に関しては、「欧文部分はそのままで、和文の内部コードを
+Unicode に変更する」というものである。
+そしてついに田中琢爾（ttk）氏によって、「Unicode 化された pTeX」
+が実装された。
+それが upTeX である。
+</p>
+
+</div><!--ssec-ptex-->
+
+<div class="subsection" id="ssec-goal">
+<h3>この文書の目的</h3>
+
+<p>この文書では、upTeX 上で動く LaTeX である upLaTeX
+の解説を行う。
+また upLaTeX の機能を支援する拙作のマクロパッケージに
+ついて紹介する。
+</p>
+
+</div><!--ssec-goal-->
+
+</div><!--sec-preface-->
+
+<div class="section" id="sec-install">
+<h2>upTeX のインストール</h2>
+
+<p>最初に断っておくが、この文書の説明では W32TeX
+での利用に重点を置いているので、
+そのことを承知して貰いたい。
+</p>
+
+<div class="subsection" id="ssec-install-w32">
+<h3>W32TeX の場合</h3>
+<p><a href="http://w32tex.org/index-ja.html"><!--
+-->W32TeX</a> のインストールで選択するパッケージ（圧縮ファイル）
+に uptex-w32.tar.bz2 を加える。
+これで以下（一部を列挙）の「upTeX 版」
+のコマンドが利用できるようになる。
+</p>
+<div align="center">
+<table class="std" width="70%">
+<col align="center">
+<col align="left">
+<tr><td><code>uplatex</code></td>
+    <td>upLaTeX（upTeX 上の LaTeX）のコマンド</td>
+</tr>
+<tr><td><code>updvipdfmx</code></td>
+    <td>upTeX に対応した dvipdfmx</td>
+</tr>
+<tr><td><code>updvips</code></td>
+    <td>upTeX に対応した dvips</td>
+</tr>
+<tr><td><code>upbibtex</code></td>
+    <td>内部処理が Unicode の JBiBTeX</td>
+</tr>
+<tr><td><code>upmpost</code></td>
+    <td>内部処理が Unicode の日本語 MetaPost</td>
+</tr>
+</table>
+</div>
+<div class="alert"><span class="lbl">注意：</span>
+W32TeX の 2009/07 頃の改訂で、pTeX 用の BibTeX／MetaPost の
+コマンド名が <code>pbibtex</code>／<code>pmpost</code> に
+変更された。
+これに伴い、upTeX 用のものも <code>upjbibtex</code>／<code>upjmpost</code> から
+<code>upbibtex</code>／<code>upmpost</code> に変わっている。
+</div>
+
+<p>奥村晴彦氏製作の
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/jsclasses/"><!--
+-->pLaTeX2e 新ドキュメントクラス</a>は 2009/2/22 以降の版で upLaTeX
+に対応している。
+もしそれより古い版を使っている場合は、
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/jsclasses/jsclasses.zip">最新版のアーカイブ</a>を
+ダウンロードして、それを展開して得られるファイルで
+インストールされている同名のファイルを置き換えればよい。
+（あるいは、検索の優先順位の高いところに置いてもよい。）
+</p>
+
+</div><!--ssec-install-w32-->
+
+<div class="subsection" id="ssec-install-ptetex3">
+<h3>ptetex3 の場合</h3>
+
+<p>開発者の ttk 氏の
+<a href="http://homepage3.nifty.com/ttk/comp/tex/uptex.html"><!--
+-->upTeX のページ</a>から ptetex3 へのパッチ
+uptex-#.##.tar.gz とフォントバイナリ uptex_font-#.##.tar.gz
+（#.## はバージョン番号）
+をダウンロードして中に含まれる説明書の記述に従う。
+ptetex3 のインストールの経験がある人なら
+作業は容易だと思われる。
+</p>
+<p>ptetex3 の場合、一部のコマンド名が元の pTeX
+のものと同名になっていて
+（つまり "up" で始まっていない）、
+それらは upTeX のものに置き換えられる
+（v0.20 の時点では
+<code>dvipdfmx</code>, <code>dvips</code>, <code>xdvi</code>,
+<code>makejvf</code> 等が該当する）。
+従来正常動作していたケースに関しては、動作の変更はないはずである。
+</p>
+
+</div><!--ssec-install-w32-->
+
+<div class="subsection" id="ssec-install-dvipdfmx">
+<h3>フォントの設定 (dvipdfmx)</h3>
+
+<p>dvipdfmx での設定は OTF パッケージでの Unicode
+フォントの設定と同じであり、
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?OTF"><!--
+-->TeX Wiki の OTF の解説</a>が参考になるので、
+ここでは詳細は省略する。
+（W32TeX の規定設定はフォント非埋込で、
+これでよいなら設定は不要。）
+</p>
+<p>dvipdfmx の設定ファイル
+$TEXMF/fonts/map/dvipdfm/base/cid-x.map を見る。
+（<em>注意</em>：最近の版では場所が
+.../<em>dvipdfmx</em>/base/cid-x.map に変更されている。）
+urml..., ugbm..., up... という名前のものが
+upTeX で用いられるフォントで、
+多分一箇所にまとまっているであろう。
+W32TeX のインストール時は次のようになっている（抜粋）。
+</p>
+<pre>
+uprml-h      UniJIS-UTF16-H      !Ryumin-Light
+uprml-v      UniJIS-UTF16-V      !Ryumin-Light
+upgbm-h      UniJIS-UTF16-H      !GothicBBB-Medium
+upgbm-v      UniJIS-UTF16-V      !GothicBBB-Medium
+</pre>
+<p>各行の 3 番目の欄で使用するフォントを指定する。
+上の場合、生成される PDF にはフォントは埋め込まれない。
+（この場合は ! を除いても同じ。）
+ここに ipag.ttf （= IPA ゴシック）等とフォントファイル名を指定すると、
+そのフォントが PDF ファイルに埋め込まれる。
+他の欄の内容は変えてはいけない。
+</p>
+
+</div><!--ssec-install-dvipdfmx-->
+
+<div class="subsection" id="ssec-install-dviout">
+<h3>dviout について</h3>
+
+<p>残念ながら、現状の dviout (ver3.18.1) は upTeX の和文
+TFM には対応していないので、upTeX の DVI
+ファイルを正しく表示することができない。
+（参考：
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/">「TeX Q &amp; A」</a> の
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/51610.html">51610</a>，
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/51135.html">51135</a>。）
+</p>
+<p>しかし、「dvi2dvi で upTeX の仮想フォントを展開する」
+ことでこの制限仕様を回避することができる。
+詳しくは、<a href="data/pxwjmap.zip">PXwjmap パッケージ</a>内の
+説明書（README）を参照してほしい。
+</p>
+
+</div><!--ssec-install-dviout-->
+
+</div><!--sec-install-->
+
+<div class="section" id="sec-elementary">
+<h2>upLaTeX 使用法：基礎編</h2>
+
+<div class="subsection" id="ssec-class">
+<h3>文書作成時の注意</h3>
+<!-- id を保持 -->
+
+<h4>文書の文字コード</h4>
+
+<p>upTeX の入力漢字コード
+（入力文書の文字コード）は UTF-8
+が既定になっている。
+従って、文書ファイルを UTF-8 で作成する必要がある。
+（ただし、uplatex の
+<code>-kanji</code> オプションで
+入力漢字コードを変更することができる。）
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+pTeX の既定の入力漢字コードは環境により異なり、
+Shift_JIS、EUC-JP、UTF-8 のいずれの可能性もある。
+W32TeX の場合は Shift_JIS が既定になっている。
+</div>
+
+<h4>文書クラスの指定</h4>
+
+和文用の文書クラスに関しては、
+upLaTeX に対応したものを用いる必要がある。
+標準的な文書クラスに関しては、upLaTeX に対応した
+設定が用意されている。
+具体的には、先頭の <code>\documentclass</code>
+の指定を次のように変える必要がある。
+</p>
+<ul>
+<li>pLaTeX の標準クラス
+（jarticle／jreport／jbook／tarticle／treport／tbook）の場合： 
+先頭に u を付加した名前のクラスを代わりに用いる。<br>
+（例） <code>\documentclass[fleqn]{jarticle}</code>
+→ <code>\documentclass[fleqn]{ujarticle}</code>
+</li>
+<li>奥村氏の「新ドキュメントクラス」（jsarticle／jsbook）の場合： 
+オプションに <code>uplatex</code> を追加する。<br>
+（例） <code>\documentclass[report,12pt]{jsbook}</code>
+→ <code>\documentclass[report,12pt,uplatex]{jsbook}</code>
+</li>
+</ul>
+<p>欧文の文書中に日本語を混ぜる等の目的で、
+pLaTeX でも欧文の文書クラス（article 等）が用いられることがあるが、
+この場合は upLaTeX でもそのまま通用させることができる。
+</p>
+
+<h4>upLaTeX 文書の例</h4>
+
+<p>あとは、pLaTeX の文書を書くのとほとんど違わない。
+pLaTeX で使っているパッケージは、
+和文と無関係のものなら必ず使えるはずであり、
+和文用のものもほとんどが使えることが期待できる。
+</p>
+
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass{ujarticle}
+%\documentclass[uplatex]{jsarticle}  % jsarticle を使う場合はこっち
+\usepackage[scale=.8]{geometry}      % ページレイアウトを変更してみる
+\usepackage[T1]{fontenc}             % T1 エンコーディングにしてみる
+\usepackage{txfonts}                 % 欧文フォントを変えてみる
+\usepackage{plext}                   % pLaTeX 付属の縦書き支援パッケージ
+\usepackage{okumacro}                % jsclasses に同梱のパッケージ
+\begin{document}
+\title{とにかく up{\LaTeX} を使ってみる}
+\author{匿名希望}
+\西暦\maketitle                      % 漢字のマクロ名も OK
+
+\section{日本語と数式}
+\textbf{ゼータ関数}(zeta function)というのは
+\begin{equation}                     % 数式中の漢字も OK
+\zeta(s) \stackrel{定義}{=} \sum_{n=1}^\infty \frac{1}{n^s}
+= \prod_{p\colon 素数}\frac{1}{1-p^{-s}}
+\end{equation}
+とかいう奴のこと。
+
+\section{縦書き}
+\setlength{\fboxsep}{.5zw}
+縦書きの例は
+\fbox{\parbox&lt;t&gt;{12zw}{%
+  \setlength{\parindent}{1zw}
+  {\TeX}（テック、テフ）はStanford大学のKnuth教授に
+  よって開発された組版システムである。
+  {p\TeX}は\株 アスキーが{\TeX}を日本語対応
+  （縦書きを含む）にしたものである。
+  \par\bigskip
+  このように\bou{縦書き}についても{p\TeX}と
+  全く同様に文書を作成できます。
+  \par\bigskip
+  平成\rensuji{20}年\rensuji{4}月\rensuji{1}日
+  \par\medskip
+  平成\kanji20年\kanji4月\kanji1日
+}}%
+こんなの。
+
+\section{okumacroで遊んでみる}
+\ruby{組}{くみ}\ruby{版}{はん}、\ruby{等}{とう}\ruby{幅}{はば}、
+\keytop{Ctrl}+\keytop{A} \keytop{Del}
+\keytop{Ctrl}+\keytop{S} \return、
+\MARU{1}\MARU{2}\MARU{3}
+\par\bigskip
+\begin{shadebox}
+\挨拶 それでは。敬具
+\end{shadebox}
+
+\end{document}
+</pre>
+
+<p>この LaTeX 文書のファイル名を <code>test1.tex</code> とすると、
+W32TeX の場合、以下のコマンドで PDF 文書に変換できる。
+</p>
+<pre>
+uplatex test1
+updvipdfmx test1
+</pre>
+<div>（表題部より下の部分の出力）</div>
+<div align="center" class="display">
+<div class="imagebox" style="width:980px">
+<img src="sample/uplatex-sample01.png" width="980" height="786">
+</div></div>
+
+</div><!--ssec-class-->
+
+<div class="subsection" id="ssec-char-bmp">
+<h3>Unicode 文字の利用：BMP 内文字</h3>
+
+<p>単に UTF-8 で入力ファイルを書くだけならば、
+ptexenc 組込の pTeX でも可能である
+（起動オプションに <code>-kanji=utf8</code> を指定）
+が、その場合でも ASCII + JIS X 0208 の外の文字を「直接」
+処理することはできない。
+これに対して upTeX は、最初から Unicode を前提としているので、
+全ての Unicode 文字を JIS の文字と全く同様に扱うことができる。
+つまり OTF パッケージ等の補助を必要としない。
+</p>
+
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass{ujarticle}
+%
+%                パッケージ読込なし！
+\begin{document}
+万有引力の法則を発見した科学者は誰か。
+\begin{itemize}
+\item[&#x32d0;] 森&#x9dd7;外
+\item[&#x32d1;] 内田百閒
+\item[&#x32d2;] 鄧小平
+\item[&#x32d3;] 李承燁
+\item[&#x32d4;] ウィリアム・ヘンリー・ゲイツⅢ世
+\item[&#x32d5;] 以上のどれでもない
+\end{itemize}
+\end{document}
+</pre>
+
+<p>
+ただし、<em>Unicode 内部処理が可能なのは和文のみ</em>であり、
+欧文に関しては、upTeX は従来の 8 ビット欧文 TeX
+と同じ能力しか持たないことを改めて注意しておく。
+（欧文の処理については<a href="#ssec-char-alpha">後の節</a>を参照されたい。）
+「欧文文字」を和文扱いにして Unicode 内部処理を
+利用するというトリックは原理的には可能であるが、
+和文処理を目的であるという性質に起因した様々な制限があり、
+またそもそもそのような用途は想定されていないので、
+標準の upLaTeX にそのためのサポートは存在しない。
+以下で、upLaTeX の和文 Unicode 処理に関する注意点を挙げる。
+</p>
+<ul>
+<li>実際に文字が出力（表示・印刷）されるかどうかは、その為に用いられる
+フォントに文字の字形（グリフ）があるかに依存する。
+通常、日本語用のフォントが使用されているはずなので、
+日本語の文脈に現れない文字（例えばグルジア文字）は使用できない。
+特に (up)dvipdfmx の通常の設定では、Adobe-Japan1 
+の字形に対応しない Unicode 文字は使用できない。
+</li>
+<li>さらに、全ての文字に対して全角幅であることを仮定している
+（pTeX の和文フォントと同じ）ので、例えフォントに字形が存在しても、
+それが全角幅でない場合は正しく処理されない。
+JIS X 0213（第3・4水準文字）の一部の記号
+（例えば U+228A [1-2-36]
+<span title="SUBSET OF WITH NOT EQUAL TO/真部分集合2">“&#x228A;”</span>）
+は、日本語フォントで全角幅になっていないことが多いことに注意。
+JIS X 0208 にあるロシア文字・ギリシャ文字は全角幅で「正常に」出力されるが、
+無論それはロシア語・ギリシャ語の組版としては全く役に立たない。
+</li>
+<li>Unicode 規定の文字合成、リガチャ、その他のグリフ置換は
+（例えフォントがその為の情報を持っていたとしても）
+一切適用されない。
+従って、JIS X 0213 に含まれる文字で
+Unicode では合成が必要であるもの
+（例えば 1-4-87 
+<span title="半濁点付き平仮名か">“&#x304B;&#x309C;”</span>（=
+304B 309C））は使用できない。
+</li>
+<li>BMP の外にある文字については、次小節を参照。
+</li>
+<li>中国語・韓国語の出力については、
+<a href="#ssec-char-cjk">後の節</a>を参照。
+</li>
+<li>pTeX と同じく、<code>-kanji</code> オプションで入力コードを指定
+できるが、既定の UTF-8 以外の指定では直接入力可能な文字は JIS X 0208
+に限定され、ShiftJIS2004 等の符号化方式は使えない。
+この場合でも、次に述べるコード入力（<code>\UI</code>）
+は使用できる。
+</li>
+</ul>
+
+<p>Unicode 文字の直接入力が困難な場合は、拙作の
+<a href="pxbase.html">pxbase パッケージ</a>を読み込むと、
+<code>\UI{&#x2039;コード値の16進&#x203a;}</code>
+でそのコード値の文字が出力できる。
+</p>
+
+<pre>
+\documentclass{ujarticle}
+\usepackage{pxbase} % \UI を使用する
+\begin{document}
+「超絶技巧練習曲」「ハンガリー狂詩曲」等の難度の高い
+ピアノ曲が有名な、ハンガリー生まれの作曲家は誰か。
+\begin{itemize}
+\item[\UI{32D0}] 森\UI{9DD7}外
+\item[\UI{32D1}] \UI{9127}小平
+\item[\UI{32D2}] ウィリアム・ヘンリー・ゲイツ\UI{2162}世
+\item[\UI{32D3}] いい加減にしろ
+\end{itemize}
+\end{document}
+</pre>
+
+<h4>半角カタカナの扱い</h4>
+<p>upLaTeX においては、
+半角カタカナは他の和文文字と（字幅を除いて）
+全く同様に扱われる。
+すなわち UTF-8 で入力して処理できる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass{ujarticle}
+\begin{document}
+笑った → ﾜﾗﾀ → ﾜﾛﾀ → ﾜﾛｽ
+\end{document}
+</pre>
+
+</div><!--ssec-char-bmp-->
+
+<div class="subsection" id="ssec-char-nonbmp">
+<h3>Unicode 文字の利用：BMP 外の文字</h3>
+
+<p>upTeX 自身は BMP（基本多言語面）の文字
+（コード値 U+10000 未満の文字）とそれ以外の文字
+（U+10000 以上の文字―前述の理由で実質利用可能なのは
+SIP（第 2 面）の漢字に限られる）
+を区別せずに取り扱う。
+しかし、後述の理由から、upLaTeX の既定のフォント設定では、
+BMP の文字のみが扱えるようになっている。
+（なお、ここでいう「フォント設定」とは upTeX
+の処理のための仮想的なもので、
+dvipdfmx 等の DVI ウェアのフォント設定とは無関係である。
+厳密には「TFM 定義」とでも呼ぶべき。）
+</p>
+<p>BMP 外の文字を使える設定を簡単に手に入れるには、
+拙作の <a href="pxbase.html">pxbabel パッケージ</a>を用いて
+以下のようにすればよい。
+直接入力も <code>\UI</code> によるコード指定も可能である。
+どうして Babel が登場するのか等は取り敢えず
+気にしないことにしよう
+（気になる人は<a href="#ssec-char-cjk">後の解説</a>を参照）。
+<code>babel</code> のオプション <code>english</code>
+も特に意味を持たない。
+</p>
+
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass{ujarticle}
+\usepackage{pxbase} % \UI を使う
+\usepackage[english]{babel}         %+ これを追加
+\usepackage[main=japanese]{pxbabel} %+
+\begin{document}
+土屋さん / \UI{5721}屋さん / \UI{2123D}屋さん \par
+土屋さん / &#x5721;屋さん / &#x2123D;屋さん \par
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:288px">
+<img src="sample/uplatex-sample05.png" width="288" height="55">
+</div></div>
+
+<p>ただし、この設定を用いるときは、
+実際に BMP 外の文字を出力したかに関わらず、
+DVI ファイルを処理するソフトウェア（DVI ウェア）
+は必ず upTeX 対応のものを用いなければならない。
+逆に言えば、この設定でない場合は、
+特に upTeX 対応をしていない DVI ウェアも使える
+（可能性が高い）ということである。
+そもそも upTeX 対応のものが存在しない DVI ウェア
+（dviout がその例）があるので、
+そのことに配慮して、upLaTeX の既定の設定では BMP 
+の文字のみを用いるようになっていると思われる。
+</p>
+
+</div><!--ssec-char-nonbmp-->
+
+<div class="subsection" id="ssec-bookmark">
+<h3>日本語の PDF しおりの作成</h3>
+
+<p>pLaTeX において hyperref パッケージと dvipdfmx
+を用いて和文文字を含むしおりや文書情報を含んだ PDF
+文書を作る場合、
+<a href="pxbase.html#ssec-bookmark"><code>pdf:tounicode</code> special</a>
+を使う必要があった。
+</p>
+<p>upLaTeX の場合、<code>pdf:tounicode</code> special
+は不要である（指定してはいけない）。
+ただし、dvipdfmx は upTeX 対応のもの
+（W32TeX の場合は <code>updvipdfmx</code>）
+でなければならない。
+</p>
+
+<pre>
+\documentclass{ujarticle}
+\usepackage[dvipdfm,
+  bookmarks=true,bookmarksnumbered=true,bookmarkstype=toc,
+  pdftitle={upLaTeX2e怪文書作成入門},pdfauthor={絶対匿名希望},
+  pdfkeywords={upTeX,upLaTeX,怪文書,Unicode,CJK}]{hyperref}
+\begin{document}
+\title{up\LaTeXe\ 怪文書作成入門}
+\author{絶対匿名希望}
+\maketitle
+\section{美しい怪文書組版のために}
+  （スタブ）
+\section{up\LaTeXe\ の紹介}
+  （スタブ）
+\section{以下省略}
+\end{document}
+</pre>
+
+</div><!--ssec-bookmark-->
+
+</div><!--sec-elementary-->
+
+<div class="section" id="sec-advanced">
+<h2>upLaTeX 使用法：応用編</h2>
+
+<div class="subsection" id="ssec-otf-package">
+<h3>OTF パッケージの利用</h3>
+
+<p>upLaTeX では Unicode 文字は標準で使えるが、
+Unicode でも統合（包摂）されている「葛」の
+2 つの字体を書き分けるとか Unicode にない記号を使う等の目的で
+Adobe-Japan1 のグリフを使いたいという場合には
+OTF パッケージが必要になる。
+</p>
+<div class="alert"><span class="lbl">参考：</span> 
+以前は、upLaTeX での使用のためには、パッチを当てた OTF パッケージを
+用いる必要があったが、
+OTF パッケージの 2010/03/23 の改訂で upLaTeX への対応が
+本体に取り込まれた。
+いずれにしても W32TeX や ptetex3 + upTeX の環境でインストール
+される OTF パッケージは upLaTeX 対応のものである。
+</div>
+
+<p>
+<p>upLaTeX で OTF パッケージ（<code>otf</code>）
+を読み込む時には、<code>\usepackage</code> のオプションに
+<code>uplatex</code> を指定する必要がある。
+これを除けば、あとは pLaTeX の場合と全く同じように
+<code>\CID</code> が使えるようになる。
+<code>\UTF</code> はわざわざ使う意味がないが、
+<code>otf</code> のオプション <code>multi</code>
+を指定して <code>\UTFC</code> や <code>\UTFM</code>
+等を使うのは有意義かもしれない。
+（韓国語・中国語の文字を直接書きたい場合
+は<a href="#ssec-char-cjk">後の節</a>を参照。）
+</p>
+
+<div class="alert">
+<span class="lbl">参考：</span> upTeX の 0.25 版より前のパッチが
+適応された OTF パッケージでは、
+<code>noreplace</code> 指定の状態にしか対応していない。
+この場合、<code>bold</code>、<code>expert</code>、<code>deluxe</code>
+は指定できない（<code>multi</code> は可能）。
+</div>
+<pre>
+\documentclass{ujarticle}
+  % v0.25 以降では bold や expert も可、それ以外では noreplace が必要
+\usepackage[uplatex]{otf}
+\renewcommand{\theenumi}{\ajLabel\ajKuroMaruKaku{enumi}}
+\renewcommand{\labelenumi}{\theenumi}% 番号は黒丸四角で
+\begin{document}
+\begin{enumerate}
+\item 奈良県\CID{1481}城市
+\item 東京都\CID{7652}飾区
+\end{enumerate}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:151px">
+<img src="sample/uplatex-sample07.png" width="151" height="69">
+</div></div>
+
+<div class="alert">
+<span class="lbl">注意：</span> 昔の
+<a href="pxbase.html">pxbabel パッケージ</a>では
+（<a href="#ssec-char-nonbmp">BMP 外の日本語文字を使う</a>等の
+目的で）CJK 言語を指定した状態では、<code>\CID</code> 命令が
+正常に動かなかった。最新の 0.4 版以降では大丈夫である。
+また、<code>deluxe</code>、<code>expert</code> 等で OTF パッケージの
+フォント設定を拡張されたものに変えている場合は、
+その設定が CJK 言語が無効である場合にのみ機能する
+（「BMP 外の文字の扱い」と「OTF の拡張設定」が両立できていないため）
+ことに注意。
+</div>
+<p>ちなみに、直接ソースに書いた「葛」
+がどちらの字体になるかはフォントの設定に依存する。
+</p>
+<div class="bend">
+<span class="lbl">注意：</span> dvipdfmx
+の場合の概略を述べておく。
+設定されているフォントが CID-keyed でない場合は、
+そのフォントが（既定の属性値で）
+規定した字体が選択される。
+一方、設定されているフォントが CID-keyed である場合は、
+CMap の設定に依存し、
+H/V または UniJIS-UTF16-H/V の場合は
+2000JIS／83JIS の例示字体、
+UniJIS2004-UTF16-H/V の場合は
+2004JIS の例示字体に対応する字体が選択される。
+（ちなみにこの話は JIS または Unicode を入力符号とする
+和文フォント（JFM）全てに当てはまり、
+OTF パッケージや upTeX とは無関係である。）
+</div>
+
+</div><!--ssec-otf-package-->
+
+<div class="subsection" id="ssec-char-alpha">
+<h3>欧文の UTF-8 入力との併用</h3>
+
+<p>普通の（8 ビットの）欧文 LaTeX で UTF-8 入力を扱う方法として、
+utf8 入力エンコーディング、およびその拡張版である
+<a href="http://ftp.ring.gr.jp/pub/text/CTAN/macros/latex/contrib/unicode.zip">unicode パッケージ</a>の utf8x 入力エンコーディングの使用がある。
+これは UTF-8 入力をバイト列として読み込みマクロ処理を通すことで
+LaTeX が持っている多言語処理（fontenc）
+の枠組に持ち込もうとするものである。
+（下の例で Babel はフォントエンコーディングを適切に切り替える
+役割を果たしている。）
+</p>
+
+<pre>
+% このファイルの文字コードは UTF-8（BOM なし）
+% 欧文 latex を使う
+\documentclass[a4paper]{article}
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8x]{inputenc} % これで欧文 UTF-8 が扱える
+\usepackage[greek,russian,english]{babel}
+\begin{document}
+This document contains English, Rom&#xe2;n&#x103;,
+\foreignlanguage{greek}{Ελληνικ&#x3ac;}, and
+\foreignlanguage{russian}{русский язык}.
+\end{document}
+</pre>
+
+<p>ところが、upLaTeX の既定の設定だと、ASCII 以外の全ての
+Unicode 文字が和文文字として解釈され（つまり入力エンコーディング
+の処理には回らない）、和文文字のフォントで出力しようとする。
+結果は、字形が表示されない、全角幅で表示される等、
+まともなものにならない。
+pTeX では、本来欧文扱いしてほしい文字（ギリシャ文字・
+キリル文字の一部）が JIS X 0208
+に入っている時に同じ現象が起こったが、
+upTeX ではほぼ全ての Unicode 文字について起こることになる。
+</p>
+<p>このため、upTeX では Unicode のブロック毎に、
+それに属する文字がを和文文字として解釈するか、
+それともあたかも欧文 TeX のように UTF-8 バイト列のままにする
+（そして inputenc にマクロ処理させる；
+これを「欧文扱い」と呼ぶ）かを選択することができる。
+この機能を支援する拙作のパッケージが 
+<a href="pxbase.html">pxcjkcat パッケージ（PXbase バンドル）</a>
+である。
+このパッケージの使用法の詳細は解説書（README-pxcjkcat ファイル）
+に任せることにし、
+ここでは欧文中心の文書に適した一括設定を利用することにする。
+次の例のように <code>pxcjkcat</code> を
+<code>prefernoncjk</code> オプション付きで読み込めばよい。
+</p>
+
+<pre>
+% このファイルの文字コードは UTF-8
+% uplatex を使う
+\documentclass[a4paper]{article}
+\usepackage[prefernoncjk]{pxcjkcat} % これを追加
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[greek,russian,english]{babel}
+\begin{document}
+This document contains English, Rom&#xe2;n&#x103;, 日本語,
+\foreignlanguage{greek}{Ελληνικ&#x3ac;}, and
+\foreignlanguage{russian}{русский язык}.
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:716px">
+<img src="sample/uplatex-sample09.png" width="716" height="42">
+</div></div>
+
+<p>この設定では、漢字・かな・ハングル等の明らかな「CJK 文字」
+以外は全て欧文扱いになる。
+<code>pxcjkcat</code> のオプションに <code>prefernoncjk</code>
+の代わりに <code>prefercjkvar</code> を指定すると、
+ギリシャ・キリル文字は欧文扱いだが、“ ”
+等の句読点類は和文扱いになる。
+</p>
+
+<div class="bend">
+<p><span class="lbl">参考：</span> pxcjkcat の <code>prefernoncjk</code>
+設定では、OTF パッケージ（UTF も同様）の読込
+（<code>nomacros</code> でない場合）が失敗する。
+これは、これらのパッケージのマクロ名に使われている ○ や □
+等の記号が欧文扱いになるからである。
+この場合、OTF パッケージを pxcjkcat より前に読み込めばよい。
+どうしても順序を変えたくない場合は、
+OTF の読込の <code>\usepackage</code> 命令を
+<code>\withcjktokenforced</code> の引数に入れるという方法もある。
+さらに、○ 等の記号が入った命令を実際に使う場合は、
+該当の部分を <code>\withcjktokenforced</code> に入れる必要がある。
+</p>
+<pre>
+\documentclass[a4paper]{ujarticle}
+\usepackage[prefernoncjk]{pxcjkcat}
+\withcjktokenforced{\usepackage[uplatex,noreplace]{otf}}
+\begin{document}
+\withcjktokenforced{\○秘} /  % ここでも \withcjktokenforced が必要
+  % これでは面倒なのでマクロにしたい…という場合、そのマクロ
+  % 定義を \withcjktokenforced に入れる必要がある。
+\withcjktokenforced{\newcommand{\MaruHi}{\○秘}}
+\MaruHi                       % 使うときは自由
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:66px">
+<img src="sample/uplatex-sample10.png" width="66" height="24">
+</div></div>
+</div>
+
+
+</div><!--ssec-char-alpha-->
+
+<div class="subsection" id="ssec-gt-fonts">
+<h3>GT 書体フォントの利用</h3>
+
+<p>pLaTeX で「GT 書体フォント」を使用するためのパッケージには、
+<a href="http://w32tex.org/current/gtftex.zip">gtftex パッケージ</a>等が
+あるが、これは upLaTeX では使えない。
+（多くの場合、和文フォントを扱うパッケージはエンコーディングの影響を受ける
+のでそのままでは upLaTeX では使えない。）
+拙作の <a href="pxgtfont.html">PXgtfont パッケージ</a>は
+pLaTeX／upLaTeX の両方に対応しているので、
+これを用いて GT 書体フォントを利用することができる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper,uplatex]{jsarticle}
+\usepackage{pxgtfont}
+\begin{document}
+これは\GI{17106}論でなく髙島屋でもない。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:293px">
+<img src="sample/uplatex-sample13.png" width="293" height="20">
+</div></div>
+
+</div><!--ssec-gt-fonts-->
+
+<div class="subsection" id="ssec-char-cjk">
+<h3>中国語・韓国語の扱い</h3>
+
+<p>upTeX では日本語、韓国語、簡体字中国語、
+繁体字中国語の 4 つの「CJK 言語」（と呼ぶことにする）
+の為のフォント設定（TFM 定義）が用意されている。
+これらを upLaTeX で使うために適切に設定し
+Babel の枠組を利用して切り替える機能を提供する拙作のパッケージが
+<a href="pxbase.html">pxbabel パッケージ（PXbase バンドル）</a>
+である。
+</p>
+<p>このパッケージの詳細は
+<a href="pxbase.html#sec-pxbabel">PXbase バンドルのページ</a>
+に任せるとして、ここでは
+pxbabel を用いた例を 2 つ紹介する。
+最初は基底言語が英語である例である。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass[a4paper]{article}
+\usepackage[prefernoncjk]{pxcjkcat}
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[greek,russian,english]{babel} % まず babel を読み込む
+  % これで japanese, korean, schinese, tchinese の 4 つの言語が定義される
+\usepackage{pxbabel}
+\begin{document}
+This document contains English, Rom&#xe2;n&#x103;,
+\foreignlanguage{japanese}{日本語},
+\foreignlanguage{korean}{&#xd55c;&#xad6d;&#xc5b4;},
+\foreignlanguage{schinese}{&#x7b80;体中文},
+\foreignlanguage{tchinese}{繁體中文},
+\foreignlanguage{greek}{Ελληνικ&#x3ac;},
+\foreignlanguage{russian}{русский язык},
+and tlhIngan Hol.
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:714px">
+<img src="sample/uplatex-sample11.png" width="714" height="51">
+</div></div>
+<p>次は基底言語が日本語である例である。
+</p>
+<pre>
+\documentclass{ujarticle}
+  % この設定については pxbabel のページを参照
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+\begin{document}
+1927 年に人類初の大西洋単独無着陸飛行に成功した
+アメリカの飛行家は誰か。
+\begin{itemize}
+\item[&#x32d0;] 森&#x9dd7;外
+\item[&#x32d1;] \foreignlanguage{schinese}{&#x9093;小平}
+\item[&#x32d2;] \foreignlanguage{korean}{&#xc774;&#xc2b9;&#xc5fd;}
+\item[&#x32d3;] William Henry Gates III
+\item[&#x32d4;] 返す言葉も無い
+\end{itemize}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:677px">
+<img src="sample/uplatex-sample12.png" width="677" height="292">
+</div></div>
+<p>なお、現在の言語が「日本語（<code>japanese</code>）である場合」
+と「CJK 言語以外（<code>english</code> 等）である場合」は
+「和文」フォント（和文 TFM）はともに日本語用のフォントとなるが、
+以下のような違いがある。
+</p>
+<ul>
+<li>日本語である場合： 
+BMP の外の文字も使用可能な特別なフォントが設定される。
+</li>
+<li>CJK 言語以外である場合： 
+文書クラスで指定された既定の和文フォントが設定される。
+ujarticle や jsarticle の場合、これは BMP の文字しか扱えない。
+</li>
+</ul>
+<p><a href="#ssec-char-nonbmp">前の節</a>で述べた
+BMP 外の文字を扱う方法はこのインタフェースを利用したものである。
+そこで述べたとおり、
+pxbabel で指定される日本語のフォントを用いる場合は
+upTeX 対応の DVI ウェアを使用しなければならない。
+さらに、簡体字中国語・繁体字中国語のフォントを用いる場合も
+同じ制約がかかる（韓国語は含まない）。
+</p>
+
+</div><!--ssec-char-cjk-->
+
+</div><!--sec-advanced-->
+
+<div class="section" id="sec-guide">
+<h2>付録： upLaTeX 機能一覧</h2>
+
+<p>pLaTeX と比べた場合の拡張機能、およびそれに深く関わる機能を挙げる。
+</p>
+
+<h4>upTeX の機能</h4>
+
+<ul>
+<li><code>\disablecjktoken</code>［LaTeX 命令］： 
+全ての Unicode 文字を「欧文扱い」にする。
+入力に関して 8 ビット欧文 TeX と同じになる。
+</li>
+<li><code>\enablecjktoken</code>［LaTeX 命令］： 
+「欧文・和文扱い」の別を「本来の状態」
+（和文カテゴリコードに従った状態；pxcjkcat で設定した状態）
+に戻す。
+</li>
+<li><code>\forcecjktoken</code>［LaTeX 命令］： 
+ASCII 文字以外の Unicode 文字を「和文扱い」にする。
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> 
+これ以外に upTeX で追加されたプリミティブは以下の通り：
+<code>\kchar</code>, <code>\kchardef</code>, <code>\ucs</code>
+</div>
+
+<h4>pxbase／bxbase パッケージの機能</h4>
+
+<ul>
+<li><code>\UI{&lt;コード値16進&gt;,...}</code>： 指定
+された Unicode 符号位置の文字を出力する。
+upLaTeX では upTeX 自身の機能を使うので他のパッケージの補助が不要になる。
+</li>
+</ul>
+
+<h4>pxcjkcat パッケージの機能</h4>
+
+<ul>
+<li><code>\cjkcategorymode{&lt;モード&gt;}</code> ［LaTeX 命令］： 
+Unicode 文字の「和文・欧文扱い」の別を切り替える命令。
+<code>&lt;モード&gt;</code> に指定できる値は以下の通り。
+なお、pxcjkcat パッケージの読込時のオプションにモード値を
+指定することも可能。
+<ul>
+<li><code>forcecjk</code> ： 
+upTeX の既定の設定と同じ。
+ASCII ブロックのみが「欧文扱い」で
+それ以外の全てが「和文扱い」となる。
+</li>
+<li><code>prefercjk</code> ： 
+Adobe の CJK 文字集合（Adobe-Japan1 等）の何れかと共通部分をもつ
+Unicode 文字ブロックの文字を「和文扱い」とし、
+残りを「欧文扱い」とする。
+</li>
+<li><code>prefercjkvar</code> ： 
+<code>prefercjk</code> において、
+ギリシャ文字・キリル文字を全て「欧文扱い」に変更したもの。
+</li>
+<li><code>prefernoncjk</code> ： 
+<code>prefercjkvar</code> において、
+さらに一部の句読点や記号を「欧文扱い」に変更したもの。
+</li>
+</ul>
+</li>
+<li><code>\cjkcategory{&lt;ブロック&gt;,...}{&lt;カテゴリ&gt;}</code> ［LaTeX 命令］： 
+各 Unicode ブロックの「和文カテゴリコード」を直接変更する命令。
+<code>&lt;ブロック&gt;</code> にはブロック ID （例えば Cyrillic なら <code>cyrl</code>）
+または非 ASCII 文字 1 つ（その文字の属するブロックを表す）で指定する。
+<code>&lt;カテゴリ&gt;</code> は設定する「和文カテゴリコード」値であり、
+「<code>noncjk</code>（欧文扱い）」
+「<code>kanji</code>（漢字扱い）」
+「<code>kana</code>（仮名扱い）」
+「<code>cjk</code>（和文記号扱い）」
+「<code>hangul</code>（ハングル扱い）」
+のいずれかである。
+後ろの 4 つはともに「和文扱い」であるが、
+upLaTeX での扱いが異なる部分がある。
+</li>
+</ul>
+
+<h4>pxbabel パッケージの機能</h4>
+
+<p>「upTeX で用意された CJK フォント設定を用いる」（<a href="#ssec-char-cjk">参照</a>）
+目的で pxbabel パッケージを使う場合は、パッケージ読込は
+</p>
+<pre>
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+</pre>
+<p>とする。
+これで <code>japanese</code>（日本語）、
+<code>korean</code>（韓国語）、
+<code>schinese</code>（簡体字中国語）、
+<code>tchinese</code>（繁体字中国語）の言語オプションで対応するフォント
+に切り替わる。
+（詳細は<a href="pxbase.html#sec-pxbabel">PXbase パッケージのページ</a>を参照。）
+この目的で最低限必要な Babel の命令を挙げておく。
+</p>
+<ul>
+<li><code>\foreignlanguage{&lt;言語オプション&gt;}{&lt;テキスト&gt;}</code>［LaTeX 命令］： 
+<code>&lt;テキスト&gt;</code> を指定の言語で出力する。
+</li>
+<li><code>\begin{otherlanguage*}{&lt;言語オプション&gt;} &lt;テキスト&gt; \end{otherlanguage*}</code>［LaTeX 環境］： 
+環境内のテキストを指定の言語で出力する。
+</li>
+<li><code>\selectlanguage{&lt;言語オプション&gt;}</code>［LaTeX 命令］： 
+使用言語を切り替える（以降のテキストを指定の言語で出力する）。
+切替は局所的（グルーピングに従う）である。
+</li>
+</ul>
+
+</div><!--sec-guide-->
+
+</div><!--maintext-->
+
+
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">upLaTeX を使おう</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008&ndash;2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-07-30
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

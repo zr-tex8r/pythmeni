@@ -1,0 +1,997 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>BXfltsrc パッケージ（旧 PXfltsrc）[電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxfltsrc"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXfltsrc パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>BXfltsrc パッケージ（旧 PXfltsrc）<br>
+<span class="subtitle">～文書に自動的に前処理を施す～</span></h1>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2011/03/01：0.5 版を公開。
+0.5 版の新機能の解説はもう少しお待ち下さい……。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<p>LaTeX において、（shell escape の機能を用いて）
+組版時に自動的に入力ファイルにある種の変換フィルタが施されるようにする。
+日本語コード変換(SJIS/EUC/JIS/UTF-8/CP832; 補助漢字や拡張漢字を含む、
+自動判別可能)、ギリシャ・キリル文字の「欧文化」、
+任意の外部フィルタ（安田功氏の Utf82TeX 等）
+の呼び出し等が利用できる。
+</p>
+<p>元々 pLaTeX（拡張エンジン含む）用のパッケージバンドルで
+PXfltsrc という名前であったが、
+0.5 版から pLaTeX 用の pxfltsrc と欧文 LaTeX 用の bxfltsrc
+パッケージの両方を含むようになり、
+バンドル名も BXfltsrc に改名された。
+もちろん、過去の pxfltsrc パッケージについての互換性は保証される。
+</p>
+
+<ul>
+<li>bxfltsrc パッケージ： 本体（欧文 LaTeX 用）
+</li>
+<li>pxfltsrc パッケージ： 本体（pLaTeX 用）
+</li>
+<li>pxflgc パッケージ： ギリシャ・キリル文字の処理
+</li>
+<li>pxflhwka パッケージ： 半角カタカナの処理
+</li>
+<li>pxflcchr パッケージ： JIS X 0213 仮名の処理
+</li>
+<li>pxflcln パッケージ： 一時ファイルの削除
+</li>
+</ul>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<ul>
+<li>LaTeX、エンジン不問
+（shell escape 機能対応のもの）
+</li>
+<li>Perl（5.8.1 版以降）
+</li>
+</ul>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/BXfltsrc.zip"><!--
+-->圧縮ファイル BXfltsrc.zip のダウンロード（40KB）</a>
+<span class="mdate">[2011/03/01]</span>
+（v0.5；最新版）
+</li>
+<li><a href="data/pxfltsrc_0.4a.zip"><!--
+-->圧縮ファイル pxfltsrc_0.4a.zip のダウンロード（23KB）</a>
+<span class="mdate">[2011/03/01]</span>
+（v0.4a；1 つ前の版）
+</li>
+</ul>
+<p>インストール方法については、
+パッケージに含まれる解説文書を参照。
+</p>
+<div class="alert"><span class="lbl">注意：</span>
+0.5 版においてインストール先ディレクトリが変更されたので、
+それより前の版から更新する場合は前のものを削除する必要がある。
+</div>
+</div><!--ssec-download-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-notice">
+<h2>注意</h2>
+
+<p>BXfltsrc を使う場合は、latex（platex 等も含む）の起動の際に
+shell escape を有効にする必要がある。
+W32TeX および ptetex3 の latex の場合、
+次のようなコマンド行を用いる。
+</p>
+<pre>
+latex -shell-escape〈入力ファイル名〉
+</pre>
+<p>また、pLaTeX の入力漢字コードを既定のもの（W32TeX では Shift JIS）
+から変更する場合は、
+</p>
+<pre>
+platex -kanji=〈漢字コード〉〈入力ファイル名〉
+(〈漢字コード〉は jis, sjis, euc, utf8 のいずれか)
+</pre>
+<p>のようにする。
+（勿論、両方のオプションを指定することもできる。）
+</p>
+<div class="alert">
+<p><span class="lbl">注意：</span> shell escape 機能とは、
+入力 TeX ファイルの中に
+<code>\write18{コマンド行}</code> の形式で書かれた任意のコマンドを
+実行する機能である。従って、<em>shell escape を有効にしたままで信頼できない
+TeX ファイルを処理してはいけない。</em>
+悪意のあるコマンドが実行される可能性がある。
+</p>
+</div>
+<div class="bend">
+<p><span class="lbl">参考：</span>入力文字コードに
+UTF-8 （<code>-kanji=utf8</code>）が利用できるのは、ptexenc に対応した
+pTeX 処理系（W32TeX や ptetex3 のもの）に限られる。
+また欧文 UTF-8 入力（<code>\usepackage[utf8]{inputenc}</code>）
+を利用したサンプルを処理する為には pTeX の版が 3.1.4
+以上である必要がある。
+</p>
+</div>
+
+</div><!--sec-notice-->
+
+<div class="section" id="sec-sample">
+<h2>pxfltsrc のサンプル</h2>
+
+<p>pxfltsrc パッケージは pLaTeX（拡張エンジンを含む）
+にとって有用な内部フィルタを備えている。
+以前の「PXfltsrc バンドル」の pxfltsrc パッケージの改版である。
+</p>
+
+<p>最初に一つ注意。
+以降の例では、pLaTeX の既定の入力文字コードを Shift JIS としている。
+つまり、普段 pLaTeX のソース（文書）を書くときに用いる文字コードが
+Shift JIS ということである。
+Windows (W32TeX) の場合はそうなっている。
+</p>
+
+<div class="subsection">
+<h3>漢字コード変換</h3>
+
+<p>まず最初に、最も基本的な、役に立たない使い方。
+EUC-JP の文書を Shift JIS 入力が既定の pLaTeX で処理する。
+</p>
+<pre>
+% このファイルの文字コードは EUC-JP
+\documentclass{jsarticle}
+\usepackage[euc]{pxfltsrc}
+\begin{document}
+\filterstart  % ここ以降を変換。
+こんにちは。  % EUC-JP で記述
+\end{document}
+</pre>
+<p><code>\filterstart</code> 以降が文字コード変換の対象となるので、
+和文文字が現れる前に <code>\filterstart</code> を置く必要がある
+（なお、技術的制約により、<code>\filterstart</code>
+は行の先頭に置かなければならない）。
+ただ、上のサンプルでは、先頭のコメントにある和文文字は EUC-JP
+のまま読み込まれることになるが、これは最近の pTeX では問題ない
+（つまり正しく無視される）はずである。
+</p>
+<p>もちろんこの場合は PXfltsrc なんか使わなくても、
+<code>-kanji=euc</code> オプション（上述）を指定すればよい。
+</p>
+
+<p>次に、複数の文字コードが混在する場合を示す。
+<code>\filterinput</code> を実行すると、以降の LaTeX
+ファイル読み込み（<code>\input</code> や <code>\usepackage</code>）
+に対して文字コード変換が適用される。
+<code>byte</code> は特殊な設定で、8 ビット文字を欧文 LaTeX
+と同じように扱うべき時に用いる。
+</p>
+<pre>
+% このファイルの文字コードは pTeX 既定のもの(Shift JIS)
+\documentclass{jsarticle}
+\usepackage[byte]{pxfltsrc} % 入力コードに byte を指定
+%\usepackage{pxfltsrc}    %+ 上の行の代わりにこの 2 行を
+%\filterinencoding{byte}  %+   書いても同じ
+\filterinput       % 以降に読み込まれるファイルに変換適用
+\usepackage{foo}   % foo.sty は欧文の 8 ビット文字を含む
+\nofilterinput     % 読み込みファイルへの変換を停止
+\begin{document}
+
+ほげほげ。 % ここは Shift JIS
+
+\filterinput \filterinencoding{utf8}
+\input{bar.tex}  % bar.tex は UTF-8 で書かれている
+\nofilterinput
+
+ふがふが。
+
+\input{gee.tex} % これは変換せずに読み込まれる
+                %（つまり Shift JIS のはずである）
+\end{document}
+</pre>
+
+<p>次に自動判別を使う例。
+運がよければ全ての <code>\input</code> が上手くいくであろう。
+</p>
+<pre>
+% このファイルの文字コードは Shift JIS
+\documentclass{jsarticle}
+\usepackage[inauto]{pxfltsrc} % 入力コードは自動判別
+%\usepackage{pxfltsrc}    %+ 上の行の代わりにこの 2 行でも同じ
+%\filterinencoding{auto}  %+
+\begin{document}
+ほげほげ。
+
+\filterinput
+\input{src-euc.tex}  % このファイルは EUC-JP
+\input{src-jis.tex}  % このファイルは ISO-2022-JP
+\input{src-sjis.tex} % このファイルは Shift JIS
+\input{src-utf8.tex} % このファイルは UTF-8
+
+\end{document}
+</pre>
+<p>なお、この例では、例え文字コードが UTF-8 であっても、
+JIS X 0208（基本漢字）以外の「全角文字」を使うことはできない。
+これを可能にする方法は次を参照。
+</p>
+
+</div>
+
+<div class="subsection" id="ssec-more-kanji">
+<h3>補助漢字(JIS X 0212)・拡張漢字(JIS X 0213)を使う</h3>
+
+<p>（ここでも pLaTeX の既定の入力文字コードを Shift JIS とする。）
+</p>
+<p>この小節のサンプルを処理するには、次のものが必要である。
+</p>
+<ul>
+<li>齋藤修三郎氏作成の
+  <a href="http://psitau.at.infoseek.co.jp/otf.html">OTF パッケージ</a>：
+  W32TeX の場合は、
+  <a href="http://w32tex.org/index-ja.html"><!--
+  -->配布元</a>にある otf.tar.bz2 をインストールする。
+</li>
+<li>拙作の <a href="bxbase.html">BXbase バンドル</a>。
+この中の bxutf8 入力エンコーディングと bxbase パッケージを用いる。
+</li>
+</ul>
+<p>まずは PXfltsrc を<em>使わない</em>方法。
+入力コードが UTF-8 である pLaTeX (<code>platex -kanji=utf8</code>)
+では、JIS X 0208（基本漢字：第1・第2水準）にない文字は UTF-8
+のバイト列として読み込まれる。
+（結果的に欧文 LaTeX で処理した時と同じ状況になる。）
+ここで、bxutf8 入力エンコーディングと bxbase パッケージを
+読み込んであると、
+UTF-8 のバイト列を OTF パッケージの Unicode 文字出力命令に変換する。
+これを利用して、JIS X 0208 外の文字を含む文書を UTF-8 で書くことで
+pLaTeX での処理が可能になる。
+（詳細は<a href="unichar.html">「Unicode による文字入力」</a>
+を参照してほしい。）
+</p>
+<p>例えば、次のソース（文字集合は ASCII + JIS X 0208 + JIS X 0212；
+文字コードは UTF-8）を
+<code>platex -kanji=utf8</code>
+で組版することができる。
+（勿論、結果の DVI ファイルを見るには、OTF パッケージ対応の
+DVI ウェアと適切な設定が必要である。詳しくは、
+<a href="http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?OTF"><!--
+-->TeX Wiki の OTF の項目</a>を参照。）
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass{jarticle}
+\usepackage[bxutf8]{inputenc}  % bxutf8 +
+\usepackage{bxbase}            % bxbase を使う
+\usepackage{otf}               % OTF を使う
+\begin{document}
+森&#x9dd7;外      % Unicode (BMP) の漢字は何でも入力できる
+\end{document}
+</pre>
+
+<p>PXfltsrc を使うと、UTF-8 以外の
+（基本漢字をはみ出す）文字コードを使うことができる。
+具体的には、pxfltsrc に適切なオプションを与えれば、
+次に挙げる文字コードの文書が処理できる。
+</p>
+<ul>
+<li>UTF-8 → オプションは <code>utf8</code>
+</li>
+<li>EUC-JP（補助漢字 = JIS X 0212 を含む）
+→ オプションは <code>euc</code>
+</li>
+<li>EUC-JIS-2004（拡張漢字 = JIS X 0213 を含む）
+→ オプションは <code>euc</code>
+</li>
+<li>Shift_JIS-2004（拡張漢字 = JIS X 0213 を含む）
+→ オプションは <code>sjis</code>
+</li>
+<li>CP932 （Windows の「シフトJIS」）
+→ オプションは <code>winj</code>
+</li>
+</ul>
+<p>（入力エンコーディング
+は <code>\filterinencoding</code> でも指定可能。）
+</p>
+<pre>
+% このファイルの文字コードは EUC-JP (補助漢字を含む)
+\documentclass{jarticle}
+\usepackage[euc]{pxfltsrc} % オプションに euc
+\usepackage[bxutf8]{inputenc} %+
+\usepackage{bxbase}           %+ この部分はそのまま
+\usepackage{otf}              %+
+\begin{document}
+\filterstart
+\begin{itemize}
+\item 森&#x9dd7;外                         % &#x9dd7;:76-31
+\item 鄧小平                         % 鄧:66-39
+\end{itemize}
+\end{document}
+</pre>
+<div class="bend">
+<p><span class="lbl">参考：</span> PXflrsrc は、
+LaTeX ファイルを指定された文字コードで解読し、
+必要な処理を行った後、ISO-2022-JP（JIS エンコーディング）
+で符号化し、JIS X 0208 にない文字は「TeX エスケープされた
+UTF-8 バイト列」に変換している。
+pTeX は ISO-2022-JP のファイルは、入力コード指定に関わらず
+正しく読み込める。
+</p>
+</div>
+
+<p>この機構を利用して、CP932
+（Windows で「シフトJIS」と呼ばれている文字コード。
+いわゆる「機種依存文字」を含む）
+で書いたソースを処理することができる。
+</p>
+<pre>
+% このファイルの文字コードは CP932
+\documentclass{jarticle}
+\usepackage[winj]{pxfltsrc} % オプションは winj
+\usepackage[bxutf8]{inputenc} %+
+\usepackage{bxbase}           %+ ここは同じ
+\usepackage{otf}              %+
+\begin{document}
+\filterstart
+\begin{itemize}
+  %「機種依存文字」の丸数字やローマ数字や漢字を書く
+\item[①] 内田百閒                       % 閒:FBE8
+\item[②] 鄧小平                         % 鄧:FBB9
+\item[③] ウィリアム・ヘンリー・ゲイツⅢ世
+\end{itemize}
+\end{document}
+</pre>
+
+<h4>拡張漢字（JIS X 0213）のための追加機能</h4>
+
+<p>v0.3 から、JIS X 0213 をより完全に扱うための
+機能が追加された。
+</p>
+<ul>
+<li><code>cxkana</code> オプションを指定して
+pxflcchr パッケージを読み込むと、
+JIS X 0213 の仮名文字のうち Unicode で文字合成が必要なものが
+正しく出力できる。
+</li>
+<li><code>useaj</code> オプションを指定すると、
+Unicode の SIP（第 2 面）の漢字のうち Adobe-Japan1
+にあるものが出力できる。
+（内部で OTF パッケージの <code>\CID</code> 命令に変換している。）
+</li>
+</ul>
+<p>いずれも OTF パッケージを必要とする。
+</p>
+<pre>
+% このファイルの文字コードは Shift_JIS-2004
+\documentclass[a4paper]{jsarticle}
+\usepackage[sjis,cxkana,useaj]{pxfltsrc} % cxkana, useaj を指定
+\usepackage{pxflcchr}                    % さらにこれを読込
+\usepackage[bxutf8]{inputenc}   %+
+\usepackage{bxbase}             %+ ここはいつも通り
+\usepackage{otf}                %+
+\begin{document}
+\filterstart
+\begin{itemize}
+  %「カ&#x309a;」(1-5-87)は Unicode では&lt;カ + U+309A&gt;
+\item 語学「ゴカ&#x309a;ク」 / 言語学「ゲンコ&#x309a;カ&#x309a;ク」
+\item 土屋さん / &#x5721;屋さん / &#x2123d;屋さん  %「&#x2123d;」(1-15-34)は U+2123D
+\end{itemize}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:350px">
+<img src="sample/pxfltsrc-sample01.png" width="350" height="55">
+</div></div>
+<p>なお、この機能を使うのにエンコーディングが JIS X 0213
+用のものである必要はない。
+上の文書がもし UTF-8 で入力されているなら、
+オプションの <code>sjis</code> を <code>utf8</code>
+に変えるだけである。
+（ちなみに、Shift_JIS-2004 に対する自動判別は恐らく上手くいかない。）
+</p>
+
+</div><!--ssec-more-kanji-->
+
+<div class="subsection" id="ssec-useux">
+<h3>useux オプション</h3>
+
+<p>このパッケージでは
+「JIS X 0208（基本漢字）以外の文字は UTF-8 のバイト列に変換
+した上で LaTeX に処理させる」ことを基本の処理として、
+それで上手くいかない点を補うという考えをとっている。
+しかし実際には「基本漢字以外は単に OTF パッケージの \UTF で
+処理すればよい」という場合が多く、
+その場合に多数のパッケージを読み込むのは煩雑に思えるかもしれない。
+</p>
+<p>パッケージ読込時に <code>useux</code> オプションを指定すると、
+UTF-8 のバイト列の代わりに <code>\UTF</code> 命令に変換されるようになる。
+従って、pxfltsrc の他には OTF（UTF）パッケージだけ読み込めば
+よいことになる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+\documentclass{jarticle}
+\usepackage[utf8,useux]{pxfltsrc}
+\usepackage{otf}
+\begin{document}
+\filterstart
+\begin{itemize}
+\item[①] 森&#x9dd7;外
+\item[②] 内田百閒
+\item[③] 鄧小平
+\item[④] ウィリアム・ヘンリー・ゲイツⅢ世
+\end{itemize}
+\end{document}
+</pre>
+<p>ちなみにこの例は BMP の文字しか使っていないので bxbase + bxutf8 で
+処理する場合は pxfltsrc 自体が不要（<code>platex -kanji=utf8</code> で
+組版する）である。
+BMP 外の文字の一部は前小節で述べたように <code>useaj</code> を
+併用すれば出力できる。
+</p>
+<div class="bend">
+<span class="lbl">参考：</span> 実際の処理は、<code>\UTF</code> に
+直接変換しているのではなく、<code>\Ux</code> という命令に変換している。
+これは bxbase（または pxbase、以下同）パッケージで定義されている、
+Unicode 文字入力のための「汎用的な」命令である
+（<a href="./unichar.html">「Unicode による文字の入力」</a>）。
+従って、本来なら bxbase の読込が必要なのだが、
+0.4 版の改訂で bxbase がない場合は <code>\Ux</code> を
+単に <code>\UTF</code> に渡すようにした
+（bxbase 併用時はそちらの定義を使う）。
+また、<code>useaj</code> も実際には一度 <code>\AJ</code> という
+命令に変換している。
+今のところ、<code>\AJ</code> は OTF パッケージの <code>\CID</code>
+に渡す以外の処理方法はない。
+</div>
+
+</div><!--ssec-useux-->
+
+
+<div class="subsection" id="ssec-alphabetize">
+<h3>ギリシャ文字とキリル文字の「欧文化」</h3>
+
+<p><code>utf8</code> 指定の <code>inputenc</code> を用いて
+UTF-8 で記述された文字を読み込む方法は、欧文文字に対しても
+適用できる（というか、そちらが本来の用法である）。
+（ただし、ギリシャ文字（LGR エンコーディング）を扱うには、
+<code>utf8</code> の代わりに高機能な <code>utf8x</code>
+を使う必要がある。）
+しかし、（PXfltsrc なしの）pLaTeX では、JIS X 0208
+に存在するギリシャ文字とキリル文字（ロシア文字）は、
+和文文字として扱われるので、
+和文用のフォントで出力され、また行分割処理等も上手くいかない。
+例えば、以下の例（<code>-kanji=utf8</code> 付きで処理する）では、
+&#x3ac; 以外のギリシャ文字と全てのキリル文字が
+「和文文字扱い」になってしまう。
+</p>
+<p>（この小節のサンプルは OTF パッケージを必要とする。
+また、Babel パッケージやギリシャ・キリル文字のフォントが
+正しく導入されている必要がある。）
+</p>
+<div><em>〈正しく出力されない例〉</em>
+</div>
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass{jarticle}
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8x]{inputenc} % utf8x を指定
+\usepackage[russian,greek,english]{babel}
+\begin{document}
+日本語、English、Fran&#xe7;ais、
+\foreignlanguage{greek}{Ελληνικ&#x3ac;}、
+\foreignlanguage{russian}{Русский язык}
+を含む文書。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:672px">
+<img src="sample/pxfltsrc-sample02.png" width="672" height="50">
+</div></div>
+<p>そこで、<code>pxfltsrc</code> のオプションとして
+<code>ugrek</code> と <code>ucyrl</code> を指定する。
+これで、ギリシャ文字（<code>ugrek</code>）・キリル文字
+（<code>ucyrl</code>）が、あたかも JIS X 0208
+にない文字のように（エスケープされた）UTF-8 のバイト列に変換される
+（以後この処理を「欧文扱い」と呼ぶ）。
+従って、<code>utf8x</code> の <code>inputenc</code>
+を通して、欧文の Unicode 文字として処理される。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8（BOM なし）
+\documentclass{jarticle}
+\usepackage[utf8,ugrek,ucyrl]{pxfltsrc} % ギリシャ・キリル文字を欧文扱い
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8x]{inputenc} % utf8x を指定
+\usepackage[russian,greek,english]{babel}
+\begin{document}
+\filterstart
+日本語、English、Fran&#xe7;ais、
+\foreignlanguage{greek}{Ελληνικ&#x3ac;}、
+\foreignlanguage{russian}{Русский язык}
+を含む文書。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:605px">
+<img src="sample/pxfltsrc-sample03.png" width="605" height="23">
+</div></div>
+<p>この場合、同時に和文のコード変換もされているので、
+<code>-kanji=utf8</code> はもはや不要なはずである。
+ところが、UTF-8 の文書の先頭に BOM がある場合、
+これはコード変換の対象にならない
+（必然的に <code>\filterstart</code> 以前にある）ので、
+<code>-kanji=utf8</code> なしで処理するためには BOM なしの UTF-8
+にする必要がある。
+</p>
+<p>同様に、オプション <code>upnct</code> に指定すると、
+句読点類（Unicode ブロック &ldquo;General Punctuation&rdquo;
+に属する文字；U+2000&#x301c;U+206F）が「欧文扱い」になる。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8（BOM なし）
+\documentclass{jarticle}
+\usepackage[utf8,upnct]{pxfltsrc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\filterstart
+“&#xbf;But aren’t Kafka’s Schlo&#xdf; and &#xc6;sop’s &#x152;uvres often na&#xef;ve vis-&#xe0;-vis the d&#xe6;monic
+ph&#x153;nix’s official r&#xf4;le in fluffy souffl&#xe9;s?” \par
+「しかしカフカの『城』もイソップの作品もふわふわのスフレの中の悪魔的不死鳥の
+公的役割に比すれば素朴であることも屡々ではないか？」
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:678px">
+<img src="sample/pxfltsrc-sample04.png" width="678" height="111">
+</div></div>
+
+<p>なお、入力文字コードは UTF-8 である必要はない。
+ロシア語の文字だけなら、JIS X 0208 に基づく文字コードでも構わない。
+なお、次例では「ロシア語を簡単に出力する例」を意図して
+キリル文字のフォントに W32TeX に最初から含まれる
+Washington Cyrillic (wncyr) を用いている。
+（この簡易設定では分綴は不正になるのでキリル文字部分は
+<code>\mbox</code> に入れている。）
+</p>
+<pre>
+% このファイルの文字コードは pTeX 既定値 (Shift JIS)
+\documentclass{jarticle}
+\usepackage[ucyrl]{pxfltsrc}
+\filterstart
+\usepackage[OT2,OT1]{fontenc}
+\usepackage[utf8]{inputenc}
+\newcommand*{\Rus}[1]{%
+  \mbox{\fontencoding{OT2}\fontfamily{wncyr}\selectfont#1}}
+\begin{document}
+
+日本語の外来語の中にロシア語を起源とするものがある。
+ペレストロイカ（\Rus{перестройка}）やウォッカ（\Rus{водка}）、
+ボルシチ（\Rus{борщ}）といったロシア（ソ連）に直接関連するものは除いても、
+イクラ（\Rus{икра}；魚卵）やノルマ（\Rus{норма}）は元はロシア語で、
+また「インテリ」は英語の intelligence ではなくロシア語の\ 
+\Rus{интеллигенция}）の省略形である。
+
+\end{document}
+</pre>
+
+</div><!--ssec-alphabetize-->
+
+<div class="subsection" id="ssec-hwkana">
+<h3>半角カタカナの扱い</h3>
+
+<p>半角カタカナを含む LaTeX 文書を処理するには次のようにする。
+</p>
+<ul>
+<li>OTF パッケージを読み込む。
+</li>
+<li>pxfltsrc パッケージを <code>chwka</code> オプション付きで読み込む。
+</li>
+<li>PXfltsrc 付属の pxflhwka パッケージを読み込む。
+</li>
+</ul>
+<p>入力文字コードは ISO-2022-JP（JIS エンコーディング）以外は
+オプションで適切に指定する限り何でも良い。
+</p>
+
+<pre>
+% このファイルの文字コードは pTeX 既定値 (Shift JIS)
+\documentclass{jarticle}
+\usepackage[chwka]{pxfltsrc} % 入力文字コードは既定値(Shift JIS)
+\usepackage{pxflhwka}
+\usepackage{otf}
+\filterstart
+\begin{document}
+
+日本で最初にコンピュータウイルスが作られたのは1988年のことであった。
+それはX68000用の「SURGEON」というソフトウェアの違法コピー対策として
+作られたもので、感染すると画面に
+\begin{quote}
+ＳＵＲＧＥＯＮ買ってね! ｳﾋｮ
+\end{quote}
+というメッセージを出すものであった。
+
+\end{document}
+</pre>
+<div class="alert">
+<p><span class="lbl">注意：</span> 半角カタカナは
+Unicode に含まれるので、一見すると他の Unicode 文字の処理と
+同じく UTF-8 に変換させて otf で処理するとよさそうだが、
+実際には正しい出力にならない。
+これは OTF パッケージの仕様に起因する。
+</div>
+
+</div><!--ssec-hwkana-->
+
+<div class="subsection" id="ssec-filteredverb">
+<h3><span class="lgc">\</span>filteredverbatiminput 命令</h3>
+
+<p><code>\filterinput</code> が有効な時には、<code>\input</code>
+や <code>\usepackage</code> で読み込むファイルがフィルタ適用の対象
+になるが、他のパッケージが読み込むファイルも対象になることがある。
+対象になるか否かは当該パッケージのファイル読込の処理方法に依存する。
+</p>
+<p>verbatim パッケージの <code>\verbatiminput</code> 命令は、
+（verbatim パッケージの）<code>verbatim</code> 環境の中と同じ状態で
+ファイルを読み込む（すなわちファイルの内容が「そのまま」出力される）
+命令である。
+文字コード変換を使っている場合等で、<code>\verbatiminput</code>
+で読むファイルにも適用したいことがあるが、残念ながら、
+<code>\verbatiminput</code> の対象ファイルには
+pxfltsrc のフィルタは適用されない。
+そこで、フィルタが適用される <code>\verbatiminput</code> を
+別に <code>\filteredverbatiminput</code> という名前で用意した。
+</p>
+<pre>
+% このファイルの文字コードは pTeX 既定値 (Shift JIS)
+\documentclass{jarticle}
+\usepackage{verbatim}
+\usepackage[utf8]{pxfltsrc}
+\begin{document}
+英数字を半角に変換するフィルタ。
+入出力は UTF-8 で行い、このファイル自身も UTF-8 で書く。
+\begin{quote}\small
+\filteredverbatiminput{an2hw.perl}
+\end{quote}
+\end{document}
+</pre>
+<p>ファイル an2hw.perl の内容（文字コードは UTF-8）。
+<pre>
+#!/usr/bin/perl
+use utf8; use open ':std', ':utf8';
+while (<>) { tr/Ａ-Ｚａ-ｚ０-９/A-Za-z0-9/; print; }
+# EOF
+</pre>
+
+<p>ただし、<code>\filteredverbatiminput</code> で読み込むファイルが
+JIS X 0208（基本漢字）以外の文字を含んでいる場合は少々
+面倒なことになる。
+この場合、UTF-8 バイト列を処理する仕組み（bxutf8 + OTF パッケージ）が
+必要である上に、さらに「verbatim の中の UTF-8 バイト列を扱う」
+ために pxbase パッケージの <code>\safecaret</code> を呼び出す
+必要がある。
+従って、プレアンブルは次のようになる。
+</p>
+<pre>
+% このファイルの文字コードは pTeX 既定値 (Shift JIS)
+\documentclass{jarticle}
+\usepackage{verbatim}
+\usepackage{otf}
+\usepackage{pxbase} % \safecaret には pxbase が必要
+\usepackage[bxutf8]{inputenc}
+\usepackage[utf8]{pxfltsrc}
+\safecaret
+\begin{document}
+「鴎外」を「\Ux{9DD7}外」に変換するフィルタ。
+入出力は UTF-8 で行い、このファイル自身も UTF-8 で書く。
+\begin{quote}\small
+\filteredverbatiminput{ogai.perl}
+\end{quote}
+\end{document}
+</pre>
+<p>ファイル ogai.perl の内容（文字コードは UTF-8）。
+<pre>
+#!/usr/bin/perl
+use utf8; use open ':std', ':utf8';
+while (<>) { s/鴎外/&#x9dd7;外/g; print; }
+# EOF
+</pre>
+<p>出力結果は以下のようになる。
+</p>
+<div align="center" class="display">
+<div class="imagebox" style="width:675px">
+<img src="sample/pxfltsrc-sample05.png" width="675" height="156">
+</div></div>
+
+</div>
+
+<div class="subsection" id="ssec-external">
+<h3>外部フィルタの適用</h3>
+
+<p>オプションとして、
+<code>+</code> の後にコマンド行を書いたものを指定すると、
+そのプログラムがフィルタ
+（標準入力から読み込み何らかの変換を施した結果を標準出力に書き出す）
+として入力 TeX ソースに適用される。
+外部フィルタの変換のみを適用し PXfltsrc の行う通常の変換
+（コード変換等）は行わない場合は、入力文字コードとして <code>thru</code>
+を指定する。
+もし両方を併用する場合（<code>thru</code> でない場合）
+は、PXfltsrc の行う処理の後に外部フィルタが適用される。
+</p>
+<p>例として、安田功氏製作の
+<a href="http://yasuda.homeip.net/tex/utf82tex.html">Utf82TeX</a>
+を使用することを考える。
+このプログラムは入力も出力も UTF-8 で行う。
+従って、入力 LaTeX ファイルを UTF-8 で書き、
+pLaTeX に <code>-kanji=utf8</code> を付ける。
+PXfltsrc の入力文字コードは <code>thru</code> にする。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass{jarticle}
+\usepackage[thru,+utf82tex]{pxfltsrc}
+\usepackage[OT2,T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,greek,english]{babel}
+\usepackage[multi]{otf}
+\begin{document}
+\filterstart
+日本語、&#xd55c;&#xad6d;&#xc5b4;、
+%&lt;utf82tex_c&gt;
+&#x7b80;体中文%   「\UTFC{...}」に変換されるので % が要る
+%&lt;/utf82tex&gt;
+、
+%&lt;utf82tex_t&gt;
+繁體中文%
+%&lt;/utf82tex&gt;
+、English、Fran&#xe7;ais、
+\foreignlanguage{greek}{Ελληνικ&#x3ac;}、
+\foreignlanguage{russian}{Русский язык}
+を含む文書。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:678px">
+<img src="sample/pxfltsrc-sample06.png" width="678" height="50">
+</div></div>
+
+<p>Utf82TeX と PXfltsrc 自身の処理を併用する場合、
+PXfltsrc 自身の変換の出力（Utf82TeX への入力となる）は UTF-8
+でなければならないので、オプションに <code>oututf8</code>
+を追加する必要がある。
+次例は入力を EUC-JP にしたものである。
+</p>
+<pre>% このファイルの文字コードは EUC-JP
+% platex に -kanji=utf8 が必要（euc でない！）
+\documentclass{jarticle}
+\usepackage[euc,oututf8,+utf82tex]{pxfltsrc} % EUC-JP→UTF-8 に変換
+\usepackage[multi]{otf}
+\begin{document}
+\filterstart
+中国語（簡体字）では『骨』という字を『
+%&lt;utf82tex_c&gt;
+骨%
+%&lt;/utf82tex&gt;
+』と書く。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:483px">
+<img src="sample/pxfltsrc-sample07.png" width="483" height="19">
+</div></div>
+<div class="bend">
+<span class="lbl">参考：</span> この場合、pLaTeX が最終的に「読む」の
+は Utf82TeX の出力であるから、pLaTeX の入力漢字コードを UTF-8 にする
+（オプション <code>-kanji=utf8</code>）必要がある。
+</div>
+<div class="alert">
+<p><span class="lbl">注意：</span> 
+<code>\usepackage</code> のオプション引数の中では、
+空白文字は無視され、またコンマは区切り文字になるので、
+これらの文字を含むコマンド行をそのまま書いても上手くいかない。
+このようなコマンド行を使いたい場合は、
+該当のオプションを <code>{ }</code> で囲めばよい。
+（この時、囲った全体の前後に余分の空白がないようにする
+必要があるようである。）
+</p>
+<pre>
+\usepackage[thru,{+utf82tex -r}]{pxfltsrc}
+</pre>
+</div>
+<div class="bend" id="bend-ukanji">
+<p><span class="lbl">参考：</span> 0.4 版で試験的に
+「漢字を全部 UTF-8 バイト列に変換する」オプション <code>ukanji</code>
+を導入した。
+これと <a href="unichar.html#ssec-cjk">pxbabel パッケージ（PXbase バンドル）</a>と
+OTF パッケージを併用することで上の例と同じことができる。
+</p>
+<pre>
+% このファイルの文字コードは EUC-JP
+\documentclass{jarticle}
+\usepackage[euc,ukanji]{pxfltsrc} % ukanji オプション
+\usepackage[multi]{otf}           % \UTF, \UTFC を処理する
+\usepackage{bxbase}               % \Ux を \UTF に渡す
+\usepackage[bxutf8]{inputenc}     % UTF-8 バイト列を \Ux に変換
+\usepackage[english]{babel}       % pxbabel には babel が必要
+\usepackage[main=japanese]{pxbabel} % \UTF を \UTFC に切替可能にする
+\begin{document}
+\filterstart
+中国語（簡体字）では『骨』という字を
+『\foreignlanguage{schinese}{骨}』と書く。
+\end{document}
+</pre>
+<p>次は中国語（簡体字）のテキストファイルを <code>\filteredverbatiminput</code>
+で読み込む例である。
+</p>
+<pre>
+\documentclass{jarticle}
+  % パッケージがいっぱいです
+\usepackage[utf8,ukanji]{pxfltsrc}
+\usepackage{verbatim}
+\usepackage[multi]{otf}
+\usepackage{pxbase}
+\usepackage[bxutf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+\begin{document}
+\selectlanguage{schinese}
+\filteredverbatiminput{test.sh}
+\end{document}
+</pre>
+<p>test.sh の内容（文字コードは UTF-8）
+</p>
+<pre style="font-family:'SimHei',monospace">
+#!/bin/sh
+echo '&#x8fd9;&#x786e;&#x5b9e;只是宏包地&#x72f1;&#x554a;!'
+exit 1
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:288px">
+<img src="sample/pxfltsrc-sample08.png" width="288" height="77">
+</div></div>
+</div>
+
+</div><!--ssec-external-->
+
+<div class="uplatex">
+<h3>upLaTeX での PXfltsrc の利用</h3>
+
+<p>PXfltsrc が有用である事例としてこれまでに挙げたほとんどのものは、
+upLaTeX では自身の機能で処理が可能である。
+（詳しくは<a href="uplatex.html">「upLaTeX を使おう」</a>を参照。）
+しかし、upLaTeX 使用時でも次のような場合は PXfltsrc
+が有用であると思われる。
+</p>
+<ul>
+<li>外部フィルタを使用する場合。
+</li>
+<li>UTF-8、ISO-2022-JP、Shift JIS、EUC-JP
+以外の文字コードを使う場合。
+</li>
+<li>複数の文字コードを併用する場合。
+</li>
+<li>文字コードの自動判別を行う場合。
+</li>
+</ul>
+<p>文字コード変換の例として、CP932（「Windows 機種依存文字」を含む）
+で書いた文書を処理する例を挙げておく。
+upLaTeX は Unicode 文字を自前で扱えるので、
+pxfltsrc 以外のパッケージを何も使っていないことに注意。
+</p>
+<pre>
+% このファイルの文字コードは CP932
+\documentclass{ujarticle}
+\usepackage[winj]{pxfltsrc}
+\begin{document}
+\filterstart
+\begin{itemize}
+\item[①] 内田百閒
+\item[②] 鄧小平
+\item[③] ウィリアム・ヘンリー・ゲイツⅢ世
+\end{itemize}
+\end{document}
+</pre>
+<div class="bend">
+<p><span class="lbl">参考：</span> 
+upLaTeX 使用時は
+PXfltsrc の内部フィルタの出力は UTF-8 （<code>oututf8</code>）
+が既定である。pLaTeX と同じ ISO-2022-JP にするには
+<code>outjis</code> オプションを指定する。
+</p>
+</div>
+
+</div><!--ssec-uplatex-->
+
+</div><!--sec-sample-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXfltsrc パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2007&ndash;2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-03-01
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

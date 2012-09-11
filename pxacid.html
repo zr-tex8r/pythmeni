@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>PXacid パッケージ ～AJ1 フォントの従属欧文の TFM 生成～ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="description"
+  content="PXacid は Adobe-Japan1 の CID 対応の OpenType フォントの欧文部分の字形を LaTeX で用いるために必要な一連のファイルを XeTeX を利用して自動生成する Perl スクリプトである。OT1・T1・LY1・TS1 エンコーディングに対応、またイタリック字形も使用可能である。">
+<meta name="keywords"
+  content="TeX,LaTeX,CID,従属欧文,AJ1,AJ16,AJ1-6,フォント,欧文,Adobe-Japan1-6,TFM,モリサワ,ヒラギノ,自動生成">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxacid"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXacid パッケージ</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>PXacid パッケージ<br>
+<span class="subtitle">～AJ1 フォントの従属欧文の TFM 生成～</span></h1>
+
+<div class="abstract">
+Adobe-Japan1 の CID 対応の OpenType フォントの欧文部分の字形を
+LaTeX で用いるために必要な一連のファイル
+（メトリックファイル、フォント定義ファイル、マップファイル、等）
+を XeTeX を利用して自動生成するための Perl スクリプトである
+（使用に関しては XeTeX である必要はない）。
+OT1・T1・LY1・TS1 エンコーディングに対応、
+また AJ1 に含まれるイタリック字形をイタリックシェープのフォント
+として使うことも可能。
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2011/02/19：0.2.3 版を公開。
+ovp2ovf の 2.0 版でエラーになるというバグを修正。
+</li>
+<li>2010/06/09：0.2.2 版（初の公開版）。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<p>pxacid スクリプトの実行には以下のものが必要。
+</p>
+<ul>
+<li>XeTeX 0.997 版以降
+</li>
+<li>pltotf ： TeX の配布物に含まれる
+</li>
+<li>opl2ofm／ovp2ovf （1.1 版／2.0 版ともに可）：
+Omega の配布物に含まれる（W32TeX では aleph-w32.tar.xz）
+</li>
+<li>Perl （5.8.1 版以降ならOK）
+</li>
+</ul>
+<div class="alert"><span class="lbl">注意：</span>
+0.2.2 版では ovp2ovf の 2.0 版が使えないという不具合があった。
+</div>
+<p>スクリプトの実行で得られるフォント（TFM）
+は以下の DVI ウェアで使用できる。
+</p>
+<ul>
+<li>dvipdfmx<br>
+（「Omega フォントと CID アクセスに対応した DVI ウェア」
+であれば適切なマップファイルを書けば対応できると思われるが、
+試していない。）
+</li>
+</ul>
+
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<ul>
+<li><a href="data/PXacid.zip"><!--
+-->圧縮ファイル PXacid.zip (v0.2.3)のダウンロード（16KB）</a>
+</li>
+</ul>
+</div><!--ssec-download-->
+
+<div class="subsection" id="ssec-install">
+<h3>インストール</h3>
+
+<p>このパッケージに実質的に含まれるのは Perl スクリプト pxacid.pl
+のみである。
+Perl と XeTeX がインストールされていれば動作するはずである。
+</p>
+<p>以下の解説では、このスクリプトが pxacid のコマンド名で実行される
+ことを想定する。
+W32TeX でそれを実現するためには
+$TEXMF/bin/runscr.exe を pxacid.exe の名前でコピーし、
+実行パスの通ったフォルダに置いた後、
+pxacid.pl を同じフォルダに置く。
+</p>
+
+</div><!--ssec-install-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-basic">
+<h2>基本的な使い方</h2>
+
+<p>コマンドライン書式は以下の通り。
+</p>
+<pre>
+pxacid [&lt;オプション&gt;...] &lt;ファミリ&gt;[/&lt;シリーズ&gt;] &lt;フォントファイル名&gt;
+</pre>
+<p><code>&lt;ファミリ&gt;</code> と <code>&lt;シリーズ&gt;</code>
+は当該フォントに対応させる NFSS のファミリとシリーズの名前を指定する。
+シリーズの既定値は <code>m</code>（標準）である。
+</p>
+<p>対象のフォントはフォント名（「ほげら明朝 Pr6N R」とか）
+ではなくファイル名（HogeraMin-Pr6N-R.otf とか）
+で指定する。
+フォントファイルは Kpathsearch で検索可能なディレクトリに置く。
+（ファイル名で検索しているので
+XeTeX の通常のフォント探索で検出できる必要はない。）
+</p>
+<p>オプションは次の通り。</p>
+<ul>
+<li><code>-a / --append</code>： 
+追記モード。
+当該のファミリのフォント定義ファイル（<code>*.fd</code>）
+とマップファイル（<code>*.map</code>）が既に
+（カレントディレクトリに）ある場合は
+上書きせずにその中に新しい項目を追記する。
+</li>
+<li><code>-b / --use-berry</code>： 
+TeX フォント名（TFM ファイルのベース名）
+に「Berry 命名規則」（<code>xxxri7t</code>
+のような形式）を採用する。
+既定は「ZR 命名規則（謎）」（<code>xxx-ri-ot1</code>
+のような形式）である。
+</li>
+<li><code>-t / --tfm-family=&lt;名前&gt;</code>： 
+TeX フォント名の「ファミリ名」の部分（前項の <code>xxx</code>
+の部分；Berry 規則の場合「ベンダ名+ファミリ名」に相当する）
+の名前を指定する。
+この名前の既定値は引数の <code>&lt;ファミリ&gt;</code> に指定
+した名前（つまり NFSS でのファミリ名）である。
+</li>
+<li><code>--min-kern=&lt;値&gt;</code>： 
+フォントに含まれるペアカーニング情報で
+大きさがこの値（単位はデザインサイズ）未満のものを無視する。
+既定値は 0.01。
+</li>
+<li><code>--slant=&lt;値&gt;</code>： 
+斜体（slanted；シェープ <code>sl</code>）の傾斜値
+（TFM の SLANT 値）を指定する。
+斜体はこの値に基づいて機械的に変形させた字形になる。
+既定値は 0.167。
+なお、イタリック（シェープ <code>it</code>）の傾斜値は自動的に推定されるが、
+もしそれが失敗した場合はイタリックにもここで指定した値が使われる。
+（こちらは字形には影響しない。）
+</li>
+</ul>
+
+<div class="subsection" id="ssec-usage">
+<h3>使用法</h3>
+
+<p>架空の例として、3 ウェイトからなる「ほげら明朝」
+のファミリがあり、これを LaTeX でファミリ <code>hogem</code>
+で使用できるようにすることを考える。
+すなわち、以下の 3 つのフォントファイルがあり、
+これを各々シリーズに対応付ける。
+</p>
+<ul>
+<li>HogeraMin-Pr6N-W3.otf → シリーズ <code>m</code>
+</li>
+<li>HogeraMin-Pr6N-W6.otf → シリーズ <code>bx</code>
+</li>
+<li>HogeraMin-Pr6N-W8.otf → シリーズ <code>eb</code>
+</li>
+</ul>
+
+<h4>pxacid の実行</h4>
+
+<p>この場合、次の一連のコマンドを実行する。
+大量のファイルが生成されるので、専用の作業ディレクトリを
+作ってそこで実行するのがよいであろう。
+（フォントファイル（*.otf）は TeX が見つけられる場所に置いておく。
+W32TeX なら Windows にインストールしてもよい。）
+</p>
+<pre>
+&gt; <span class="pre-in">pxacid hogem HogeraMin-Pr6N-W3.otf</span>
+&gt; <span class="pre-in">pxacid -a hogem/bx HogeraMin-Pr6N-W6.otf</span>
+&gt; <span class="pre-in">pxacid -a hogem/eb HogeraMin-Pr6N-W8.otf</span>
+</pre>
+<p>これにより、4 つのエンコーディング、
+OT1・T1・LY1・TS1 のために必要な全てのファイルが生成される。
+なお、この例のように、同じファミリの複数のシリーズ（ウェイト）
+を処理する場合は、2 度目以降は、
+以前に生成されたファイルを置いたままにして追記モード
+（<code>-a</code> オプション）で pxacid を実行する必要がある。
+</p>
+<p>正常に必要なファイルが生成されたかを確かめるために、
+そのままカレントにある <code>pxacid-test-hogem-*.tex</code>
+（<code>*</code> の部分はシリーズ）を LaTeX
+で組版してみる。
+次のような文字列が所望の書体で正しく出力されていれば成功である。
+<small>（ちなみにこの図のフォントは TeX Gyre Schola。）</small>
+</p>
+<div align="center" class="display">
+<div class="imagebox" style="width:716px">
+<img src="image/pxacid-image01.png" width="716" height="94"
+     alt="…">
+</div></div>
+
+<h4>生成ファイルのインストール</h4>
+
+<p>正常動作を確認したら、
+これらのファイルを TeX ツリーにインストールする。
+まず、各ファイルを次に示す場所に移動する。
+ここで “hogetype” は「ほげら明朝」の「ベンダ名」
+を表すが、実際には任意の名前で構わない。
+</p>
+<div align="center" class="display"><table class="std">
+<tr>
+<td><code>hogem-*-*.tfm</code></td>
+<td>（TFMファイル）</td>
+<td>→ $TEXMF/fonts/tfm/hogetype/hogem/</td>
+</tr>
+<tr>
+<td><code>hogem-*-*.ofm</code></td>
+<td>（OFMファイル）</td>
+<td>→ $TEXMF/fonts/ofm/hogetype/hogem/</td>
+</tr>
+<tr>
+<td><code>hogem-*-*.vf</code></td>
+<td>（VFファイル）</td>
+<td>→ $TEXMF/fonts/vf/hogetype/hogem/</td>
+</tr>
+<tr>
+<td><code>pdfm-hogem.map</code></td>
+<td>（dvipdfmx マップ）</td>
+<td>→ $TEXMF/fonts/map/dvipdfmx/hogem/</td>
+</tr>
+<tr>
+<td><code>*hogem.fd</code></td>
+<td>（フォント定義ファイル）</td>
+<td>→ $TEXMF/tex/latex/hogem/</td>
+</tr>
+<tr>
+<td><code>*hogem.fd</code></td>
+<td>（フォント定義ファイル）</td>
+<td>→ $TEXMF/tex/latex/hogem/</td>
+</tr>
+<tr>
+<td><code>pxacid-hogem.sty</code></td>
+<td>（パッケージファイル）</td>
+<td>→ $TEXMF/tex/latex/hogem/</td>
+</tr>
+</table></div>
+<p>次に、マップファイルの dvipdfmx への登録を行う。
+すなわち、設定ファイル $TEXMF/dvipdfmx/config/dvipdfmx.cfg
+に「<code>f pdfm-hogem.map</code>」を追記する。
+最後に、ls-R 使用の場合は mktexlsr を実行する。
+</p>
+
+<h4>LaTeX のフォントの使用</h4>
+
+<p>以上のインストール作業が済むと、NFSS のファミリ名
+hogem で「ほげら明朝」が使用できるようになる。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\begin{document}
+{\fontfamily{hogem}\selectfont Wow, Hogera Mincho!}\par
+{\usefont{T1}{hogem}{eb}{it} Wow, Hogera Mincho in extra bold!!}\par
+\end{document}
+</pre>
+<p>なお、生成ファイルに含まれる pxacid-hogem.sty は簡易的な
+LaTeX パッケージであり、hogem ファミリに切り替える命令
+<code>\hogemfamily</code>／<code>\texthogem</code>
+が定義されている。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{pxacid-hogem}
+\begin{document}
+\hogemfamily\bfseries
+Hogera Special FontPack ---
+Campaign price \textyen 198,000 (38\% discount!)
+\end{document}
+</pre>
+
+
+</div><!--ssec-usage-->
+
+</div><!--sec-basic-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">PXacid パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010&#x2013;2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-02-20
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

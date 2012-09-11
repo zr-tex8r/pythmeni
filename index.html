@@ -1,0 +1,384 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>En toi Pythmeni tes TeXnopoleos [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords"
+  content="TeX,LaTeX,多言語,Babel,国際化,XeTeX,XeLaTeX,upTeX,upLaTeX,フォント.日本語,Unicode,JIS X 0213,dvipng">
+<meta name="description"
+  content="このサイトでは、TeX／LaTeX 関連のトピック（パッケージの配布等）を取り扱います。特に、LaTeX2e (pLaTeX／upLaTeX／XeLaTeX）上での日本語/多言語処理の支援を主要テーマにしようと考えています。">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=index"></script>
+<script type="text/javascript"><!--
+
+//--></script>
+</head>
+<body>
+
+<div id="canvas" class="top"><!--************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno1.jpg" width="400" height="160"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+<td id="site-title-a">
+<table><tr>
+<td><div class="lgc">Access:</div></td>
+<td><div id="counter-index"></div></td>
+</tr></table>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<span class="here">トップ</span>
+</div><!--navibar-->
+
+<div id="maintext">
+
+<div class="abstract">
+このサイトでは、TeX／LaTeX 関連のトピック（パッケージの配布等）
+を取り扱います。
+特に、LaTeX2e (pLaTeX／upLaTeX／XeLaTeX）
+上での日本語/多言語処理の支援を主要テーマにしようと考えています。
+</div>
+<p class="center" style="color:#FF6; font-size:small; margin: 6px 0;">
+新しい TeX エンジンについて知りたい →
+<a href="./texconf10.html">「日本人の知らない TeX」</a><br>
+いろいろやろうぜ →
+<a href="uplatex.html">upTeX</a> /
+<a href="xelatex.html">XeTeX</a> /
+<a href="lualatexlua.html">LuaTeX</a><br>
+奥底的ブログ →
+<a href="http://d.hatena.ne.jp/zrbabbler/">マクロツイーター</a>
+</p>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2012/05/01： <a href="zxjatype.html">ZXjatype パッケージ</a> 0.5 版。
+<a href="bxjscls.html">BXjscls パッケージ</a> 0.3a 版。
+</li>
+<li>2012/04/30： <a href="pxrubrica.html">PXrubrica パッケージ</a> 1.0 版。
+</li>
+<li>2011/10/23： <a href="texconf.html">「集い場の活動記録」</a>
+のページを設置。
+</li>
+<li>2011/05/28： <a href="lualatexuni.html">「LuaLaTeX で Unicode してみる」</a>
+を公開。
+</li>
+<li>2011/05/08： <a href="xelatex.html">「XeLaTeX で日本語する件について」</a>
+等のページの記述を fontspec 2.x 版を前提とするものに修正。
+</li>
+<li>2011/03/20： BXpdfcrypt パッケージをひっそりと公開 →
+<a href="package.html#sec-simple">簡易包装コーナー</a>
+</li>
+<li>2011/03/01： <a href="pxfltsrc.html">BXfltsrc（旧 PXfltsrc）パッケージ</a> 0.5 版。
+</li>
+<li>2011/02/19： <a href="pxacid.html">PXacid パッケージ</a> 0.2.3 版。
+</li>
+<li>2011/01/26： <a href="http://d.hatena.ne.jp/zrbabbler/20110126/1296063230">BXopcjk パッケージ</a>をひっそりと公開。 →
+<a href="package.html#sec-simple">簡易包装コーナー</a>
+</li>
+<li>2011/01/09： <a href="http://d.hatena.ne.jp/zrbabbler/20110109/1294532666">ZXaddrite パッケージ</a>をひっそりと公開。 →
+<a href="package.html#sec-simple">簡易包装コーナー</a>
+</li>
+<li>2010/10/27： <a href="http://oku.edu.mie-u.ac.jp/texconf10/">「TeX ユーザの集い 2010」</a>
+の招待講演<a href="texconf10.html">「日本人の知らない TeX」</a>
+のスライドファイルとそのソースファイル一式を公開しました。
+</li>
+<li>2010/10/24： アクセスカウンタについて移転前のサイトの値を合算しました。
+</li>
+<li>2010/08/22： <a href="pxbase.html">BXbase／PXbase パッケージ</a> 0.5 版。
+</li>
+<li>2010/08/19： <a href="bxpict2e.html">BXpict2e パッケージ</a> を追加。
+</li>
+<li>2010/08/16： <a href="bxjscls.html">BXjscls パッケージ</a> 0.3 版。
+</li>
+<li>2010/08/14： <a href="zxjatype.html">ZXjatype パッケージ</a> 0.4 版。
+</li>
+<li>2010/07/30： <a href="uplatex.html">「upLaTeX を使おう」</a>を
+更新。
+</li>
+<li>2010/07/24： <a href="lualatexlua2.html">「怯まず Lua で LaTeX してみた（仮）」</a>を
+更新。
+</li>
+<li>2010/07/11： Firefox 等での画像の表示がようやくまともになった。
+</li>
+<li>2010/07/11： <a href="lualatexlua2.html">「怯まず Lua で LaTeX してみた（仮）」</a>を
+始めてみた。
+</li>
+<li>2010/06/19： <a href="xelatex.html">「XeLaTeX で日本語する件について」</a>と<!--
+--><a href="uplatex.html">「upLaTeX を使おう」</a>を更新。
+PXwjmap パッケージ 0.4a 版。
+</li>
+<li>2010/06/09： <a href="pxacid.html">PXacid パッケージ</a>。
+</li>
+<li>2010/06/07： <a href="pxcopyfont.html">PXcopyfont パッケージ</a>。
+</li>
+<li>2010/06/06： <a href="pxmonja.html">PXmonja パッケージ</a>。
+</li>
+<li>2010/06/06： <a href="pxutil.html">PXutil パッケージ</a>の解説を更新。
+</li>
+<li>2010/05/30： <a href="lualatexlua.html">思わず Lua で LaTeX してみた（仮）</a>更新。
+</li>
+<li>2010/05/15： <a href="pxchfon,html">PXchfon パッケージ</a> 0.5 版リリース。
+従来の PXjafont パッケージの機能を組み入れたので、PXjafont は廃止となった。
+</li>
+</ul>
+</div>
+
+<div class="section" id="sec-main">
+<h2>メイン</h2>
+
+<div class="subsection" id="ssec-package">
+<h3>奥底のパッケージ</h3>
+<p>もう少し詳しい概要を含めた一覧が<a href="./package.html">「奥底のパッケージ」</a>のページにあります。
+このサイトにあるソフトウェアは、
+特に他のものが明示されていない場合は、
+<em>MIT ライセンス</em>（X11 ライセンス）の下で配布されているものとします。
+</p>
+
+<h4>PX シリーズ （pTeX／upTeX 用）</h4>
+
+<ul>
+<li><a href="pxrubrica.html">PXrubrica パッケージ</a>：
+日本語組版の伝統的な様式に従ったルビ出力を行う。
+</li>
+<li><a href="pxchfon.html">PXchfon パッケージ</a>：
+標準の和文フォントを文書内で簡単に設定する。
+</li>
+<li><a href="pxbase.html">PXbase パッケージ</a>：
+和文文書作成を支援する基礎ライブラリ。
+</li>
+<li><a href="pxgtfont.html">PXgtfont パッケージ</a>：
+「GT書体フォント」の利用。
+</li>
+<li><a href="pxmonja.html">PXmonja パッケージ</a>：
+いわゆる和文等幅出力の実現。
+</li>
+<li><a href="pxmika.html">PXmika パッケージ</a>：
+「みかちゃん」。
+</li>
+<li><a href="pxtosb.html">PXtosb パッケージ</a>：
+(u)pTeX DVI を dvi2dvi で変換して dvipng に通す。
+</li>
+<li><a href="package.html#elt-pxwjmap">PXwjmap パッケージ</a>：
+W32TeX の dvipdfmx の妥当な設定例の集まり。
+</li>
+<li><a href="pxcopyfont.html">PXcopyfont パッケージ</a>：
+仮想フォント（TFM &amp; VF）のコピー。（要 Perl or LuaTeX）
+</li>
+<li><a href="pxutil.html">PXutil パッケージ</a>：
+vftovp/vptovf の和文版のツール。（要 Perl）
+</li>
+<li><a href="pxacid.html">PXacid パッケージ</a>
+AJ1 対応の OpenType の従属欧文を使う。
+</li>
+</ul>
+
+<h4>ZX シリーズ （XeTeX 用）</h4>
+
+<ul>
+<li><a href="zxjatype.html">ZXjatype パッケージ</a>：
+XeLaTeX で pTeX 並の品質の日本語文書組版を行いたい。
+</li>
+<li><a href="zxjafont.html">ZXjafont パッケージ</a>：
+普通の和文フォント設定を fontspec の上で行う。
+</li>
+<li><a href="zxotf.html">ZXotf パッケージ</a>：
+OTF パッケージの <code>\CID</code> を XeLaTeX で実現する。
+</li>
+<li><a href="zxgtfont.html">ZXgtfont パッケージ</a>
+「GT書体フォント」の利用。
+</li>
+</ul>
+
+<h4>BX シリーズ（全エンジン）</h4>
+
+<ul>
+<li><a href="pxfltsrc.html">BXfltsrc パッケージ</a>（旧 PXflrsrc）：
+ソース文書に自動的にフィルタを適用する。（要 Perl）
+</li>
+<li><a href="bxjscls.html">BXjscls パッケージ</a>：
+JSクラス（jsarticle 等）を pLaTeX 以外で使いたい。
+</li>
+<li><a href="bxpict2e.html">BXpict2e パッケージ</a>：
+eepic の機能を pict2e の上で実現する。
+</li>
+<li><a href="bxptool.html">BXptool パッケージ</a>：
+ascmac とか jsverb とかも pLaTeX 以外で使いたい。
+</li>
+<li><a href="bxsuika.html">BXsuika パッケージ</a>：
+topdftex を利用して、pdfLaTeX で日本語を出力する。
+</li>
+<li><a href="pxbase.html">BXbase パッケージ</a>：
+基礎ライブラリ。
+</li>
+</ul>
+
+<h4>その他</h4>
+
+<ul>
+<li><a href="package.html#elt-jxempt">JXempt パッケージ</a>：
+JSクラス（jsarticle 等）の文書を NTT jTeX で組版したい。
+</li>
+<li><a href="concrete.html">RC Fonts パッケージ</a>：
+「鉄筋コンクリートフォント」、すなわち Type1 の Concrete。
+</li>
+<li><a href="package.html#sec-simple">簡易包装コーナー</a>：
+ZXjafbfont, BXopcjk, ZXaddrite, BXpdfcrypt, mplus1p, pxeveryshi, ...
+</li>
+</ul> 
+</div><!--ssec-package-->
+
+<div class="subsection" id="ssec-document">
+<h3>奥底の文書</h3>
+
+<ul>
+<li><a href="texconf.html">集い場の活動記録</a>
+  <span class="mdate">[2011/10/23]</span><br>
+「TeX ユーザの集い」における私の発表の際に用いた資料の置き場。
+</li>
+<li><a href="lualatexuni.html">LuaLaTeX で Unicode してみる</a>
+  <span class="mdate">[2011/05/28]</span><br>
+LuaLaTeX\ で Unicode してついでに日本語もする、そんな感じの話。
+</li>
+<li><a href="lualatexlua.html">思わず Lua で LaTeX してみた（仮）</a>
+  <span class="mdate">[2011/05/28]</span><br>
+Lua で LaTeX するけど日本語はしない、そういう話。
+<br>
+<a href="lualatexlua1.html">Lua 内で TeX コードの実行を完了させる</a>
+  <span class="mdate">[2010/07/11]</span><br>
+Lua で LaTeX するけど call/cc はしない、そんな話。
+<br>
+<a href="lualatexlua2.html">怯まず Lua で LaTeX してみた（仮）</a>
+  <span class="mdate">[2010/07/24]</span><br>
+Lua で LaTeX しているけどもはや何だか分からない、その類の話。
+</li>
+<li><a href="xelatex.html">XeLaTeX で日本語する件について</a>
+  <span class="mdate">[2010/08/14]</span><br>
+Unicode ネイティブな TeX の拡張の一つである XeTeX での
+日本語文書作成についての現状をまとめる。<br>
+<a href="xelatex1.html">XeLaTeX：欧文フォントについての補足</a>
+  <span class="mdate">[2010/08/14]</span><br>
+</li>
+<li><a href="uplatex.html">upLaTeX を使おう</a>
+  <span class="mdate">[2010/07/30]</span><br>
+和文内部処理を Unicode で行う（従って全ての Unicode
+和文文字をネイティブに扱える）拡張された pLaTeX である upLaTeX、
+および PXbase パッケージ中の upLaTeX
+を支援する機能について紹介する。
+</li>
+<li><a href="concrete.html">コンクリートなフォントとか</a>
+  <span class="mdate">[2010/05/16]</span><br>
+TeX/LaTeXの既定の欧文フォントであるComputer Modernフォントの派生フォントである、
+Computer ConcreteフォントとComputer Modern Brightフォントの紹介。
+特に後者はサンセリフ体をメインとする文書の作成に適している。
+XeLaTeX での使用方法についても解説する。
+</li>
+<li><a href="unichar.html">Unicode による文字入力</a>
+  <span class="mdate">[2009/11/16]</span><br>
+bxutf8 入力エンコーディング、bxucs パッケージ、
+pxbase パッケージ、および齋藤修三郎氏製作の otf
+パッケージの組み合わせでコード値入力および UTF-8
+直接入力で Unicode 文字を入力する方法を解説。
+</li>
+<li><a href="bxthai.html">タイ語をどうにかする実験</a>
+  <span class="mdate">[2008/06/25]</span><br>
+</li>
+<li><a href="note.html">蛇足事項、その他</a>
+  <span class="mdate">[2010/08/11]</span><br>
+</li>
+</ul>
+</div><!--ssec-document-->
+
+<div class="subsection" id="ssec-other">
+<h3>その他諸々</h3>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/">今更ブログを始めてみるという実験</a>
+  <span class="mdate">[since 2010/11/03]</span><br>
+上手くいくかは不明。
+<ul>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20120206/1328551619">例の 10 万ページのアレ </a><small class="mdate">[2012/02/06]</small><br>
+10 万ページ超のハノイの塔。
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20120109/1326115861">例の proof 環境のアレ </a><small class="mdate">[2012/01/09]</small><br>
+「証明型環境」について amsthm と同じ感じで自分でスタイルを定義したい。
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20111231/1325342713">展開可能なナベアツ（\NabeAzzX）の回答例 </a><small class="mdate">[2011/12/31]</small><br>
+展開可能でしかも e-TeX 拡張を使わない。
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20111224/1324744132">TeX で「ほむほむ」したり草を生やす件について </a><small class="mdate">[2011/12/24]</small><br>
+TeX 言語で Grass 言語のインタプリタを実装した。ほむほむ。
+</li>
+<li><a href="http://d.hatena.ne.jp/zrbabbler/20111111/1321022257">1 から始める TeX ～1TeXの紹介～ </a><small class="mdate">[2011/11/11]</small><br>
+TeX 文書なんて「1」だけあれば事足りる。
+</li>
+</ul>
+</li>
+<li><a href="archive.html">保存書庫</a>
+  <span class="mdate">[2009/07/05]</span><br>
+サイト内で配布されているパッケージの旧版の置き場所。
+</li>
+<li><a href="license.html">サイト内の文章のライセンス</a>
+  <span class="mdate">[2008/06/14]</span><br>
+</li>
+</ul>
+
+</div><!--ssec-other-->
+
+</div><!--sec-main-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<span class="here">トップ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="copyright">
+Copyright &copy; 2007&#x2013;2012 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2012-05-19
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

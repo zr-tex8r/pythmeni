@@ -1,0 +1,827 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>BXbase／PXbase パッケージ [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<style type="text/css"><!--
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=pxbase"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXbase／PXbase パッケージ</span>
+</div><!--navibar-->
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/pxbase.html">http://zrbabbler.sp.land.to/pxbase.html</a>
+</div>
+<div id="maintext">
+<h1>BXbase／PXbase パッケージ</h1>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2010/08/22： BXbase／PXbase の 0.5 版を公開。
+</li>
+<li>2010/01/21： <a href="#ssec-babel-caption">「Babel 使用時にキャプションを日本語のままにする」</a>中の
+ロシア語の扱いの誤りを訂正。
+（<code>\Rus</code> や <code>\Eng</code> は宣言型の命令であった。）
+french 言語オプションが scalefnt を要求することの注意を追加。
+</li>
+<li>2009/11/16： BXbase バンドルのページと統合して全面的に書き直し。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-overview">
+<h2>概要</h2>
+
+<div class="subsection" id="ssec-role">
+<h3>これらのパッケージバンドルの役割</h3>
+
+<p>BXbase／PXbase パッケージバンドルの役割は以下のようである。
+</p>
+<ul>
+<li>拙作の他のパッケージによって使われる部品的な機能を提供している
+（ライブラリの役割）。
+このため、他のパッケージ（およびその一部の機能）で BXbase／PXbase
+のインストールが求められることがある。
+</li>
+<li>非常に「基本的」と考えられる機能を提供するパッケージを
+BXbase／PXbase バンドルに入れることがある
+（例えば pxbabel パッケージ等）。
+</li>
+<li>さらに一部の「基本的」な機能は bxbase／pxbase パッケージで
+提供されることがある
+（<code>\recordpapersize</code> 等）。
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> 
+なお BXbase（大文字）と bxbase（小文字）
+の使い分けについては<a href="./note.html#sec-alphacase">「蛇足事項」のページ</a>を参照。
+</div>
+
+</div><!--ssec-role-->
+
+<div class="subsection" id="ssec-bxpxbase">
+<h3>BXbase と PXbase の関係</h3>
+
+<p>BXbase バンドルは欧文 LaTeX（XeLaTeX を含む）用、
+PXbase バンドルは pLaTeX（upLaTeX を含む）
+用のパッケージを収めている。
+勿論、欧文 LaTeX 用のパッケージは pLaTeX でも使えるので、
+BXbase のパッケージを pLaTeX で使うことは可能であり、
+またその必要が生じることもあるだろう。
+</p>
+<p>bxbase パッケージと pxbase パッケージで共通の機能をもっていることがある
+（例えば <code>\Ux</code> 命令等）。
+この場合、どちらのパッケージを用いても結果は変わらない。
+また、一方にしか含まれない機能もあるので、場合によっては両方を読み込む
+必要があるだろう。
+</p>
+<div class="bend"><span class="lbl">参考：</span>
+bxbase と pxbase の両方を読み込んだ場合、共通する機能については、
+読込の順番に関わらず新しい版の方が有効になる。
+後方互換性は保証されるので、pxbase と bxbase の各々について、
+その時に必要な最新のものをインストールしておけば問題はない。
+</div>
+
+</div><!--ssec-bxpxbase-->
+
+<div class="subsection" id="ssec-packages">
+<h3>パッケージ一覧</h3>
+
+<h4>PXbase バンドル</h4>
+<ul>
+<li>ifuptex パッケージ: upTeX 判定
+</li>
+<li>pxbase パッケージ: 基礎ライブラリ
+</li>
+<li>pxcjkcat パッケージ: 和文文字カテゴリ操作
+</li>
+<li>pxbabel パッケージ: CJK 間のフォント切替 
+</li>
+<li>upkcat パッケージ: 文字指定の kcatcode 操作
+</li>
+</ul>
+
+<h4>BXbase バンドル</h4>
+<ul>
+<li>bxutf8 入力エンコーディング: UTF-8 入力
+</li>
+<li>bxbase パッケージ: 基礎ライブラリ
+</li>
+<li>bxucs パッケージ: 欧文 Unicode 文字出力
+</li>
+<li>zxbase パッケージ: XeLaTeX 用基礎ライブラリ（予定）
+</li>
+</ul>
+
+</div><!--ssec-packages-->
+
+<div class="subsection" id="ssec-environ">
+<h3>対応環境</h3>
+<p>パッケージ付属の説明書を参照。
+</p>
+</div><!--ssec-environ-->
+
+<div class="subsection" id="ssec-download">
+<h3>ダウンロード</h3>
+<h4>最新バージョン</h4>
+<ul>
+<li><a href="data/bxbase.zip"><!--
+-->圧縮ファイル bxbase.zip (v0.5)のダウンロード（24KB）</a>
+</li>
+<li><a href="data/pxbase.zip"><!--
+-->圧縮ファイル pxbase.zip (v0.5)のダウンロード（44KB）</a>
+</li>
+</ul>
+<p>インストール方法については、
+パッケージ付属の説明書を参照。
+</p>
+<h4>前のバージョン</h4>
+<ul>
+<li><a href="data/bxbase_0.4a.zip"><!--
+-->圧縮ファイル bxbase.zip (v0.4a)のダウンロード（22KB）</a>
+</li>
+<li><a href="data/pxbase_0.4a.zip"><!--
+-->圧縮ファイル pxbase.zip (v0.4a)のダウンロード（47KB）</a>
+</li>
+</ul>
+</div><!--ssec-download-->
+
+</div><!--sec-overview-->
+
+<div class="section" id="sec-bxbase">
+<h2>bxbase／pxbase パッケージの機能紹介</h2>
+
+<div class="subsection" id="ssec-codeinput">
+<h3>Unicode／CID 符号値による文字入力 <span class="subtitle">［bxbase／pxbase］</span></h3>
+
+<p>Unicode および Adobe-Japan1 の CID の符号値によって文字を
+入力する命令。
+</p>
+<ul>
+<li><code>\Ux{&lt;コード値16進&gt;,...}</code>： Unicode、欧文扱い
+</li>
+<li><code>\UI{&lt;コード値16進&gt;,...}</code>： Unicode、和文扱い
+</li>
+<li><code>\AJ{&lt;コード値10進&gt;,...}</code>： Adobe-Japan1 CID
+</li>
+</ul>
+<p>ただし、このパッケージ自身は入力の手段を与えているだけで、
+実際の処理は「そこで利用可能な機能」を介して行われる。
+例えば、<code>\UI</code> は「OTF パッケージ読込の pLaTeX」
+では <code>\UTF</code> を使うが upLaTeX や XeLaTeX では
+TeX エンジンのもつ Unicode 符号値入力の機能を使う。
+</p>
+<p>詳細については、
+<a href="./unichar.html">「Unicode による文字入力」のページ</a>を参照。
+</p>
+
+</div><!--ssec-codeinput-->
+
+<div class="subsection" id="ssec-jiscodeinput">
+<h3>JIS コード符号値による文字入力 <span class="subtitle">［bxbase／pxbase］</span></h3>
+
+<p>JIS X 0208／JIS X 0213 （またはその変種）の符号値によって文字を入力する命令。
+</p>
+<ul>
+<li><code>\JI{&lt;コード値16進&gt;,...}</code>： JIS コード（JIS X 0208 GL 表現）
+</li>
+<li><code>\KI{&lt;コード値10進&gt;,...}</code>： 区点コード<br>
+RRCC または PRRCC（P = 面；RR = 区；CC = 点；全て 10 進）の形式で指定する。
+後者の形式は JIS X 0213 のためのもの。
+</li>
+</ul>
+<p><code>\Ux</code> 命令等と同様に、
+実際の処理は「そこで利用可能な機能」を介して行われる。
+今のところ、この命令が実際に使えるのは (u)pTeX 上に限られる。
+また、JIS X 0213 の文字を出力するためには、
+JIS X 0213 のエンコーディングをもつ和文フォント
+（和文 TFM）を用いる必要があり、
+なおかつ、第 2 面（第 4 水準）の漢字を出力するには、
+内部漢字コードが sjis の pTeX を用いる必要がある。
+</p>
+
+</div><!--ssec-jiscodeinput-->
+
+<div class="subsection" id="ssec-safecaret">
+<h3>Safe caret 機能 <span class="subtitle">［bxbase／pxbase］</span></h3>
+
+<p>pLaTeX で JIS X 0208 外の Unicode 文字を直接入力する機能を
+verbatim の中でも正常動作させるための機能。
+詳細については、
+<a href="./unichar.html#ssec-safecaret">「Unicode による文字入力」の「Safe caret 機能」小節</a>を参照。
+</p>
+
+
+
+</div><!--ssec-safecaret-->
+
+<div class="subsection" id="ssec-bookmark">
+<h3>日本語の PDF しおりの作成 <span class="subtitle">［pxbase］</span></h3>
+
+<p class="notice">（upLaTeX の場合は
+<a href="uplatex.html#ssec-bookmark">「upLaTeX を使おう」</a>
+のページを参照。）
+</p>
+
+<p>pLaTeX において hyperref パッケージと dvipdfmx
+を用いて和文文字を含むしおりや文書情報を含んだ PDF
+文書を作る場合、
+<code>pdf:tounicode</code> special を使う
+（つまりプレアンブルに
+</p>
+<pre>
+% (内部文字コードが sjis の場合)
+\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+% (内部文字コードが euc の場合)
+\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}
+</pre>
+<p>を書く）必要があった。
+<em>（注意：最近の hyperref ではこれは失敗する可能性がある。）</em>
+</p>
+<p>この作業を自動で行うのが <code>\usejapanesepdfstring</code>
+命令である。
+使っている ptex の内部文字コードに応じて適切な
+special 命令を DVI に挿入する。
+</p>
+<pre>
+\documentclass{jarticle}
+\usepackage[dvipdfm,
+  bookmarks=true,bookmarksnumbered=true,bookmarkstype=toc,
+  pdftitle={pLaTeX2e怪文書作成入門},pdfauthor={絶対匿名希望},
+  pdfkeywords={pTeX,pLaTeX,怪文書,日本語}]{hyperref}
+\usepackage{pxbase}
+\usejapanesepdfstring
+\begin{document}
+\title{p\LaTeXe\ 怪文書作成入門}
+\author{絶対匿名希望}
+\maketitle
+\section{美しい怪文書組版のために}
+  （スタブ）
+\section{以下省略}
+\end{document}
+</pre>
+<p>勿論、<code>pdf:tounicode</code> special 命令を解釈できるのは
+dvipdfmx のみなので、
+<em>この方法は dvipdfmx 専用であり、</em>
+他の DVI ウェアを用いて PDF を作る場合には使えないことに注意。
+（一般に、special 命令をそれに対応していない
+DVI ウェアで用いても期待通りの結果にはならず、
+場合によってはエラーになる。）
+</p>
+
+<div class="alert"><span class="lbl">注意：</span>
+最近の hyperref で行われた修正に伴い、
+冒頭に示した <code>\special</code>
+を直接書く方法は上手くいかなくなっている。
+<code>\usejapanesepdfstring</code>
+はこの修正に対応しているので大丈夫である。
+</div>
+
+</div><!--ssec-bookmark-->
+
+<div class="subsection" id="ssec-papersize">
+<h3>紙面のサイズを記録する（papersize special） <span class="subtitle">［bxbase／pxbase］</span></h3>
+
+<p>TeX の出力である DVI ファイルには紙面（版面）
+の大きさは記録されないので、
+DVI ファイルを処理するソフトウェア（DVI ウェア）は、
+一般に、紙面の正しい大きさ（LaTeX で指定した大きさ）
+を改めて使用者から入力して貰う
+（例えば dvipdfmx の <code>-p</code> オプション）必要がある。
+これでは不便なので、紙面の大きさを記録する special 命令
+（拡張命令）が一部の DVI ウェアでサポートされた。
+それが papersize special 命令であり、
+LaTeX においてはプレアンブルに次を記述すると実行される。
+</p>
+<pre>
+\AtBeginDvi{\special{papersize=\the\paperwidth,\the\paperheight}}
+</pre>
+<p>この作業を行う命令（要するに上述の命令に展開されるマクロ）
+が <code>\recordpapersize</code> である。
+これを実行すると、papersize special 命令をサポートする DVI ウェア、
+例えば dviout、dvips、dvipdfm(x) 等で、
+改めて紙面サイズを指定する必要がなくなる。
+</p>
+<pre>
+\documentclass[a5paper]{jarticle} % 紙面サイズは A5
+\usepackage{pxbase} % または bxbase
+\recordpapersize
+\begin{document}
+お久しぶり、\TeX ！
+\end{document}
+</pre>
+<p>papersize special 命令対応の DVI ウェアはかなり多いが、
+無論そうでないのもあるので、
+やはり他の special 命令と同様の注意が必要である。
+</p>
+
+</div><!--ssec-papersize-->
+
+<div class="subsection" id="ssec-captionlang">
+<h3>Babel 使用時にキャプションを日本語のままにする <span class="subtitle">［bxbase／pxbase］</span></h3>
+
+<p>pLaTeX 上で Babel を使って日本語がメインの多言語文書を
+作成するときに困る点の一つが、キャプションの文字列
+（「参考文献」や「図」等）の言語の問題である。
+例えば下の例では、表のキャプションの番号が “Table1”
+となってしまっている。
+</p>
+<div><em>（正しく出力されない例）</em></div>
+<pre>
+\documentclass{jsarticle}
+\usepackage[OT2,T1]{fontenc}
+\usepackage[russian,english]{babel}
+\newcommand\RUS{\foreignlanguage{russian}}
+\begin{document}
+\begin{table}[tbp]\centering
+\caption{省略される前の単語をみる}\label{tbl:kolkhoz}
+\begin{tabular}{cccc}\hline
+日本語(?) & ロシア語 & 省略前の形 & 英字表記 \\\hline
+コルホーズ &\RUS{kolhoz}&\RUS{kollektivnoe hozya\U{i}stvo}
+&kollektivnoje khozjajstvo\\
+ソフホーズ &\RUS{sovhoz}&\RUS{sovet{}skoe hozya\U{i}stvo}
+&sovjetskoje khozjajstvo\\\hline
+\end{tabular}
+\end{table}
+表~\ref{tbl:kolkhoz} をみてみよう。
+コルホーズの省略前の形の前の単語は kollektivnoje、そう、
+英語で collective、つまり「集団的」である。
+一方、ソフホーズは sovjetskoje でここには sovjet (\RUS{sovet})
+「ソビエト、国家」が見えてくる。
+「コルホーズは colletive、ソフホーズは Sovjet」
+と覚えておけばもう間違えないであろう。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:935px">
+<img src="sample/pxbase-sample01.png" width="935" height="276">
+</div></div>
+
+<p>通常、キャプション文字列の言語は、Babel
+で一番最後に読み込まれたもの
+（それが本文開始時に有効な「メインの言語」になる；
+この場合は <code>english</code>）になる。
+Babel の標準の言語オプションに「日本語」はないので、
+キャプション文字列を日本語のままにしておくことができないのである。
+</p>
+
+<h4>キャプション文字列の変更の解除</h4>
+<p>これに対する解決策の一つに、「日本語の言語オプションを用意する」
+ことが考えられる。
+例えば、
+<a href="http://www2.tba.t-com.ne.jp/ing/babel.html#japanese">
+japanese パッケージ</a>（稲垣徹氏作）を利用して <code>babel</code>
+の読み込みを次のように変えればよい。
+</p>
+<pre>
+\usepackage[russian,english,japanese]{babel}
+</pre>
+<p>しかし、この方法で起こっていることは、「キャプション文字列を
+<code>japanese</code> オプションで用意したものに書き換える」
+ということであるので、文書クラスが用意していた文字列がこれと異なる場合、
+結局は「元の通り」にはなっていない。
+それに、日本語の文書クラスではキャプション文字列の扱いが
+Babel がサポートしている言語（多くは西欧語）と異なることが多い
+（また扱いも文書クラス毎に異なる）ので、
+この方法では上手くいかない可能性も残っている。
+</p>
+<p>Babel の機能が日本語に関しては邪魔になる原因は次のようである。
+日本語がメインの文書を作る場合は、
+ほぼ必ず日本語用の文書クラスが用いられる
+（日本語文書のレイアウトが西欧語と大きく異なるから）。
+当然、そこではキャプション文字列は既に日本語になっている。
+このことを考えると、一番望ましいのは
+「文書クラスの設定を何も変えない」ことということになる。
+</p>
+<p>そこで pxbase パッケージ（または bxbase パッケージ）
+ではその為の機能を用意している。
+次のように、プレアンブルで <code>\bxcaptionlanguage{default}</code>
+を指定すればよい。
+これで表のキャプション中の番号は「表 1」となる。
+</p>
+<pre>
+\documentclass{jsarticle}
+\usepackage[OT2,T1]{fontenc}
+\usepackage[russian,english]{babel}
+\usepackage{pxbase}                   %+  (または bxbase)
+\bxcaptionlanguage{default}           %+ これを追加
+\newcommand\RUS{\foreignlanguage{russian}}
+\begin{document}
+\begin{table}[tbp]\centering
+\caption{省略される前の単語をみる}\label{tbl:kolkhoz}
+\begin{tabular}{cccc}\hline
+日本語(?) & ロシア語 & 省略前の形 & 英字表記 \\\hline
+コルホーズ &\RUS{kolhoz}&\RUS{kollektivnoe hozya\U{i}stvo}
+&kollektivnoje khozjajstvo\\
+ソフホーズ &\RUS{sovhoz}&\RUS{sovet{}skoe hozya\U{i}stvo}
+&sovjetskoje khozjajstvo\\\hline
+\end{tabular}
+\end{table}
+\end{document}
+</pre>
+<p><code>\bxcaptionlanguage</code> の引数は以下のものが可能である。
+</p>
+<ul>
+<li><code>default</code>：
+キャプション文字列を文書クラス設定のものから変更しない。
+</li>
+<li><code>main</code> : 
+メインの言語（最後に呼ばれたオプション）のものに変更する。
+</li>
+<li>有効な言語オプションの名 : 
+その言語に変更する。
+</li>
+</ul>
+<p><code>main</code> は本来の Babel の動作と同じようにみえるが、
+実は <code>\bxcaptionlanguage</code>
+にはもう一つの作用があるので同じにはならない。
+以下ではその作用について説明する。
+</p>
+
+<h4>キャプション文字列の本文開始時の固定</h4>
+<p>Babel において <code>\selectlanguage</code>
+で言語を切り替えると次の例のように、
+キャプション文字列の言語も追随して変わる。
+<em>（注意：これは故意に変な例を作っている。）</em>
+</p>
+<pre>
+\documentclass{article}
+\usepackage[OT2,T1]{fontenc}
+\usepackage[russian,french,english,ngerman]{babel}
+\begin{document}
+\selectlanguage{french}
+\begin{figure}[!h]\centering
+\fbox{\LARGE Voici une figur!}
+\caption{in Franz\&quot;osisch}
+\end{figure}
+\selectlanguage{russian}
+\begin{figure}[!h]\centering
+\fbox{\LARGE Vot risunok!}
+\caption{\foreignlanguage{ngerman}{in Russisch}}
+\end{figure}
+\selectlanguage{english}
+\begin{figure}[!h]\centering
+\fbox{\LARGE Here is a figure!}
+\caption{in Englisch}
+\end{figure}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:260px">
+<img src="sample/pxbase-sample02.png" width="260" height="364">
+</div></div>
+
+<p>一見して便利なように見えるが、よく考えてみると、
+一つの言語の中でこのようにキャプション文字列の言語が変わることは、
+実際の文書ではまず起こり得ない。
+多言語の文書といっても、そこには「メインの言語」があって、
+全てのキャプション文字列はその言語のものになっているはずである。
+例えば、英語がメインで所々にロシア語とギリシャ語が出てくる文書では、
+図の番号は Fig.1, Fig.2, ……
+であって途中でロシア語に変わったりしないのが自然であろう。
+</p>
+<p>そこで、<code>\bxcaptionlanguage</code> が使われた場合は、
+本文の先頭（<code>\begin{document}</code> の場所）
+で一旦キャプション言語を決めた後は自動的には変更されないようにしている。
+例えば、直前の例で <code>\bxcaptionlanguage{main}</code>
+を指定すると、図番号は全て <code>ngerman</code> のものになる。
+</p>
+
+<h4>まとめ</h4>
+<ul>
+<li>日本語用の文書クラスで、キャプション文字列を日本語から変更しない：
+<pre>
+\documentclass{jarticle}  % 日本語用のクラス
+\usepackage[french,english]{babel}
+\usepackage{pxbase} % または bxbase
+\bxcaptionlanguage{default}
+</pre>
+</li>
+<li>キャプション文字列を「メインの言語」のものに固定する。
+<pre>
+\documentclass{article}
+\usepackage[norsk,swedish,ngerman]{babel} % メインは ngerman
+\usepackage{bxbase}
+\bxcaptionlanguage{main}
+</pre>
+</li>
+</ul>
+
+</div><!--ssec-captionlang-->
+
+</div><!--sec-bxbase-->
+
+<div class="section" id="sec-bxucs">
+<h2>bxucs パッケージ、bxutf8 入力エンコーディング</h2>
+
+<p>欧文の場合、utf8 入力エンコーディング等を用いて BMP 内の Unicode 文字を
+「入力」することができるが、その文字を「出力」する方法が
+各種言語パッケージ等によって提供されていなければ、
+結局その文字を使うことはできない。
+bxucs は BMP 内の任意の Unicode 文字を「出力」する機能を提供する
+（色々と制限があるが）。
+bxutf8 は utf8 に bxucs や OTF パッケージのサポートを加えたもの。
+</p>
+<p>詳細については、
+<a href="unichar.html">「Unicode による文字入力」の「欧文の場合」節</a>
+を参照してほしい。
+</p>
+
+</div><!--sec-bxucs-->
+
+<div class="section" id="sec-pxcjkcat">
+<h2>pxcjkcat パッケージ</h2>
+
+<p>upLaTeX において、特定の文字群の「欧文扱い」「和文扱い」を変更するためのパッケージ。
+例えば「ギリシャ文字は欧文として出力したい」という場合に有効である。
+</p>
+<p>基本的な使用法については
+<a href="./uplatex.html#ssec-char-alpha">「upLaTeX を使おう」</a>
+で説明している。
+</p>
+
+</div><!--sec-pxcjkcat-->
+
+<div class="section" id="sec-pxbabel">
+<h2>pxbabel パッケージ</h2>
+
+<p>pLaTeX／upLaTeX での CJK 言語（日本語・中国語・韓国語）
+の間の「和文」フォント切替を Babel のマークアップで
+行えるようにするもの。
+現在、「pLaTeX + <code>multi</code> オプション付の OTF パッケージ」
+と「upLaTeX」に対応している。
+</p>
+
+<div class="subsection" id="ssec-pxbabel-load">
+<h3>パッケージの読込</h3>
+
+<p>基本的に、pxbabel は Babel の言語オプションとして、
+</p>
+<ul>
+<li><code>japanese</code>： 日本語
+</li>
+<li><code>korean</code>： 韓国語
+</li>
+<li><code>schinese</code>： 簡体字中国語
+</li>
+<li><code>tchinese</code>： 繁体字中国語
+</li>
+</ul>
+<p>の 4 つを追加する。
+ここで追加されるオプションは、和文フォントの切替のみを行い、
+キャプションの変更は行わないという単純なものである。
+もし、上で挙げた名前のオプションが既に存在する
+（<code>babel</code> のオプションとして指定されている）
+場合は、その設定の中にフォント切替が追加される。
+例えば、
+</p>
+<pre>
+\usepackage[esperanto,latin,english,japanese]{babel}
+\usepackage{pxbabel}
+</pre>
+<p>とすると、既存の <code>japanese</code>
+には日本語へのフォント切替が追加され、
+また <code>korean</code>、<code>schinese</code>、<code>tchinese</code>
+の 3 つが新たに生成される。
+この場合の基底の言語は、Babel の規則に従って、
+<code>japanese</code>（最後に指定されたオプション）である。
+</p>
+<p>もし、言語オプションの名前を変更したい場合
+（典型的には、CJK 言語用の既存の言語オプションで上掲の名前と異なるものを用いている場合）
+は、pxbabel のオプションに「<code>&lt;元の名前&gt;=&lt;新しい名前&gt;</code>」を指定する。
+</p>
+<pre>
+  % simpchinese という簡体字中国語用オプションを用いている
+\usepackage[simpchinese,japanese,english]{babel}
+  % これで既存の simpchinese にフォント切替が入る
+  % ついでに繁体字中国語も tradchinese の名前に変えた
+\usepackage[schinese=simpchinese,tchinese=tradchinese]{pxbabel}
+</pre>
+<p>オプションに <code>main=&lt;言語オプション名&gt;</code>
+を指定することで基底言語を変更できる。
+これを用いて、pxbabel で生成される言語オプションを基底言語に
+設定することが可能になる。
+</p>
+<pre>
+  %「フォントの切替」だけを使いたい場合の設定
+\usepackage[english]{babel}  % english はダミー
+\usepackage[main=japanese]{pxbabel}
+  % 4 つの言語オプションが生成され、japanese が基底になる
+</pre>
+<div class="alert"><span class="lbl">注意：</span> 上の例で
+Babel の本来の機能は使わないので、<code>babel</code>
+のオプションには本来何も要らないはずである。
+しかし、オプションを指定せずに <code>babel</code> を読み込もうと
+するとエラーになるので、ダミーとして <code>english</code>
+を入れている。
+（アクティブ文字を一切定義しない <code>english</code>
+が安全である。）
+</div>
+<div class="alert"><span class="lbl">注意：</span> 上の例で
+通常 Babel ではキャプションや日付の文字列を言語によって
+切り替わるようになっている。
+日本語を含む使用の場合、この機能は不便をもたらすことが多いので、
+pxbabel の既定設定ではこの機能を無効化している。
+（特に、自動生成された言語オプションはキャプション設定を
+何も含まないことに注意。）
+すなわち、キャプションは文書クラスが設定したものが
+そのまま使われる。
+オプションに <code>switchcaption</code> を指定すると本来の
+Babel の動作に戻る。
+（他の設定も可能である。詳しくは pxbabel
+の説明書を参照。）
+</div>
+
+</div><!--ssec-pxbabel-load-->
+
+<div class="subsection" id="ssec-pxbabel-platex">
+<h3>pLaTeX の場合</h3>
+
+<p>pLaTeX + OTF パッケージ（<code>multi</code> 付）の場合、
+<code>\UTF</code> 命令を現在有効な言語によって
+<code>\UTFK</code> 等に渡すようにする。
+bxutf8 入力エンコーディングと併用した場合、
+JIS X 0208 外かつ Unicode BMP 内にある CJK 文字は
+<code>\UTF</code> に変換されるので、
+ハングル等を直接入力できるようになる
+（この機構の詳細については
+<a href="./unichar.html#elt-pxbabel">「Unicode による文字入力」</a>を参照）。
+</p>
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass[a4paper]{jsarticle}
+\usepackage[bxutf8]{inputenc}  %+ UTF-8 直接入力
+\usepackage{pxbase}            %+ を扱うための設定
+\usepackage[multi]{otf}
+\usepackage[spanish,english]{babel}
+\usepackage[main=korean]{pxbabel} % メインを韓国語にした
+\pagestyle{empty}
+\begin{document}
+\foreignlanguage{spanish}{Espa&ntilde;ol}&#xC744; &#xD3EC;&#xD568;&#xD558;&#xB294; &#xBB38;&#xC11C;.
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:230px">
+<img src="sample/pxbabel-sample01.png" width="230" height="20">
+</div></div>
+<p>ただし、この機能には重要な制限があり、
+JIS X 0208 内の文字は <code>\UTF</code> に処理が回らずに
+pTeX が直接出力してしまうので、これらに対してはフォント切り替えが効かない。
+</p>
+<div><em>（正しく出力されない例）</em></div>
+
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass[a4paper]{jsarticle}
+\usepackage[bxutf8]{inputenc}  %+ UTF-8 直接入力
+\usepackage{pxbase}            %+ を扱うための設定
+\usepackage[multi]{otf}
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+\begin{document}
+「骨」の簡体字は「\foreignlanguage{schinese}{骨}」。
+% 下の記述ならばOK。U+9AA8 = 骨
+%「\UTF{9AA8}」の簡体字は「\foreignlanguage{schinese}{\UTF{9AA8}}」。
+
+% 「体中文」はフォントが切り替わらない
+日本語、\foreignlanguage{korean}{&#xD55C;&#xAD6D;&#xC5B4;}、
+\foreignlanguage{schinese}{&#x7B80;体中文}を含む文書。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:496px">
+<img src="sample/pxbabel-sample02.png" width="496" height="106">
+</div></div>
+
+<p>JIS X 0208 の漢字にもフォント切替を有効にする方法として、
+<a href="./pxfltsrc.html#bend-ukanji">pxfltsrc パッケージの <code>ukanji</code> オプション</a>を使うものがある。
+<pre>
+% このファイルの文字コードは UTF-8
+% platex に -kanji=utf8 が必要
+\documentclass[a4paper]{jsarticle}
+\usepackage[ukanji,useux,utf8]{pxfltsrc}
+\usepackage[multi]{otf}
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+\begin{document}
+\filterstart
+「骨」の簡体字は「\foreignlanguage{schinese}{骨}」。
+
+% 「文」の初画に注目
+日本語、\foreignlanguage{korean}{&#xD55C;&#xAD6D;&#xC5B4;}、
+\foreignlanguage{schinese}{&#x7B80;体中文}を含む文書。
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:496px">
+<img src="sample/pxbabel-sample03.png" width="496" height="88">
+</div></div>
+
+</div><!--ssec-pxbabel-platex-->
+
+<div class="subsection" id="ssec-pxbabel-uplatex">
+<h3>upLaTeX の場合</h3>
+
+<p>upLaTeX の場合は和文エンコーディングを変更することでフォントを切り替えている。
+機構が単純なので JIS X 0208 の漢字で問題が起こることもない。
+</p>
+<pre>
+\documentclass[a4paper,uplatex]{jsarticle}
+\usepackage[english]{babel}
+\usepackage[main=japanese]{pxbabel}
+  % 下のマクロは「\verb|\expandafter|」の代用 ;-)
+\newcommand*{\csExpandafter}{\texttt{\symbol{`\\}expandafter}}
+\begin{document}
+\begin{itemize}
+\item My package is full of {\csExpandafter}'s.
+\item 私のパッケージは {\csExpandafter} でいっぱいです。
+\item \foreignlanguage{korean}{&#xB0B4; &#xD328;&#xD0A4;&#xC9C0;&#xB294; {\csExpandafter}\,&#xB85C; &#xAC00;&#xB4DD;&#xD569;&#xB2C8;&#xB2E4;.}
+\item \foreignlanguage{schinese}{我的宏包充&#x6EE1;了 {\csExpandafter}。}
+\end{itemize}
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:457px">
+<img src="sample/pxbabel-sample04.png" width="457" height="119">
+</div></div>
+
+</div><!--ssec-pxbabel-platex-->
+
+</div><!--sec-pxbabel-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">BXbase／PXbase パッケージ</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2008 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-08-22
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>

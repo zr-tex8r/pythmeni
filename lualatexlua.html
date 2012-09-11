@@ -1,0 +1,1460 @@
+﻿<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>思わず Lua で LaTeX してみた ～LuaTeX で日本語しない件について～</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="LuaTeX,LuaLaTeX,Lua,プログラミング,マクロ,pdfTeX,TeX">
+<meta name="description" content="LuaTeX 上で動く LaTeX である LuaLaTeX を使ってみる。特に、LaTeX の多少複雑な処理を Lua でプログラミングすることで実現することに焦点を当てる。">
+<style type="text/css"><!--
+ul.compact li, ol.compact li {
+  margin: 0;
+}
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=lualatexlua"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">思わず Lua で LaTeX してみた</span>
+</div><!--navibar-->
+
+
+<div id="maintext">
+<h1>思わず Lua で LaTeX してみた<br>
+<span class="subtitle">～LuaTeX で日本語しない件について～</span></h1>
+
+<div class="abstract">
+LuaTeX 上で動く LaTeX である LuaLaTeX を使ってみる。
+特に、
+LaTeX の多少複雑な処理を Lua で
+（TeX ではなく！）
+プログラミングすることで実現することに焦点を当てる。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+LuaLaTeX の組版上の拡張機能、
+特に
+「UTF-8 で入力して OpenType／TrueType の
+Unicode フォントで出力する」
+ことについては
+<a href="lualatexuni.html">「LuaLaTeX で Unicode してみる」</a>
+のページで解説しているのでそちらを参照してほしい。
+（「日本語する件」
+の情報もあります。）
+</div>
+
+<div id="changelog">
+<div class="lbl">変更履歴</div>
+<ul>
+<li>2011/05/28: 一部の内容を
+<a href="lualatexuni.html">「LuaLaTeX で Unicode してみる」</a>
+のページに移動（&amp; 書き直し）した。
+</li>
+<li>2010/07/24: ixbase0 パッケージを更新（v0.1b）。
+</li>
+<li>2010/07/23: <a href="#sec-guide">付録</a>を追加。
+</li>
+<li>2010/07/11: ixbase0 パッケージを更新（v0.1a）。
+現状の W32TeX に適応させる。
+</li>
+</ul>
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-intro">
+<h2>LuaTeX の紹介</h2>
+
+<div class="subsection" id="sec-nogaki">
+<h3>いつも通り能書きから</h3>
+
+<p>LuaTeX は TeX の拡張の一つで、
+主に Taco Hoekwater、Hartmut Henkel、Hans Hagen
+によって開発されている。
+簡単に言うと、
+LuaTeX は以下に挙げるものを統合して成立した TeX エンジンである。
+</p>
+<ul>
+<li>pdfTeX ―
+（DVI でなく）
+PDF を直接出力する TeX。
+海外で TeX を使う場合、
+実際にはこの pdfTeX が使われることがほとんどである。
+</li>
+<li>Omega ―
+Unicode を直接扱える TeX として 1990 年代に開発されていた。
+縦書きなどの複数な書字方向のサポートや
+入力の加工の機能などの様々な先進的な機能を有しているが、
+開発は長らく中断されていた。
+</li>
+<li>MetaPost ―
+PostScript 形式の画像を出力する描画用プログラミング言語で
+METAFONT の派生として生まれた。
+</li>
+<li>Lua インタプリタ ―
+Lua は軽量のスクリプト言語であり、
+他のソフトウェアに
+（プログラム可能なマクロ機能を持たせるために）
+組み込むという用途を対象に開発されており、
+また実際にそういう用途で広く用いられている。
+</li>
+<li>OpenType フォントの広範なサポート ―
+この辺りは FontForge のコードを流用しているようである。
+</li>
+</ul>
+<p>この中で、
+TeX エンジンの拡張として異質なのは
+「Lua インタープリタの組入」
+であろう。
+TeX はそれ自体がプログラミング言語であるので、
+結局のところ、
+プログラミング言語
+（TeX）
+のインタプリタに別のプログラミング言語
+（Lua）
+を載せていることになっているのである
+（いや、
+MetaPost も立派なプログラミング言語なので、
+結局 3 つある…）。
+このような構成には次のような目的がある。
+</p>
+<ol>
+<li>TeX の文法が苦手な人でも、
+現在において
+「ありふれた」
+文法体系を持った言語で TeX の機能を操ることができる。
+（LuaTeX の開発の最初の動機はこの点であるらしい……。）
+</li>
+<li>これまで TeX の言語でも触ることのできなかった
+TeX の内部構造へのアクセスを可能にする
+（例えば一度組み上がったボックスの中身を加工する等）
+ことで、
+TeX の組版機能の根幹を
+（それ以上のエンジンの改変なしに）
+拡張する枠組を提供する。
+</li>
+</ol>
+<p>この 2 の
+「枠組を提供する」
+という方針は、
+今注目されているもう一つの拡張エンジンである XeTeX
+と対比すると解り易い。
+XeTeX は、
+OpenType の複雑なレンダリングや言語に応じた行分割
+（日本語の禁則処理など）
+等の拡張機能について、
+完成品を提供している。
+従って、
+（TeX のレベルでは）
+それらの拡張機能はすぐに誰でも使用可能な状態になっていて、
+あとは、
+LaTeX 等の上位システムでのサポートを整える作業が残るだけである。
+逆に、
+提供された機能を超える拡張
+（日本語の行組版の空き調整や、
+欧文和文のフォント自動切換など）
+については、
+従来通り、
+TeX の文法を用いて
+「マクロ」
+（命令列の操作）
+のレベルで実装しなければならない。
+</p>
+<p>LuaTeX では TeX の組版機能を Lua で操作できるように
+したとともに、
+一連の処理の中の様々な場面で Lua
+の処理を自動的に割り込ませる仕組みを与えている。
+これにより、
+元々から備わっている pdfTeX と Omega に加えて、
+必要に応じて他の拡張
+（例えば pTeX 相当の日本語の行組版の処理）
+を、
+Lua を用いて、
+また処理の流れの中の望みの箇所で、
+実装することが可能になっている。
+</p>
+
+</div><!--ssec-nogaki-->
+
+<div class="subsection" id="ssec-present">
+<h3>LuaTeX の現状</h3>
+
+<p>2012 年 6 月現在、
+LuaTeX のバージョンは 0.71 である。
+開発の<a href="http://www.luatex.org/roadmap.html">ロードマップ</a><!--
+--->によると現時点では 0.90 辺りに達していて今年
+（2012 年）
+の終わりには最初の正式リリース
+（バージョン 1.00）
+となるはずだが、
+どうやら開発者が多忙で最近は遅れているらしい。
+なお、
+現在海外で最も多く使われている TeX エンジンは pdfTeX であるが、
+LuaTeX は pdfTeX の後継となることが既に決定している。
+</p>
+<p>LuaTeX 上で動く LaTeX、
+つまり
+「LuaLaTeX」
+についてであるが、
+LuaTeX 自体が ConTeXt
+（LaTeX とは別の著名な TeX 上のフレームワーク）
+での実践と並行して開発されているという経緯があり、
+LaTeX での LuaTeX のサポートはあまり進んでいなかった。
+しかし、
+少なくとも TeX Live 2009 の途中から、
+「LuaLaTeX」
+のコマンド <code>lualatex</code> が用意されるようになっている。
+併せて、
+LuaTeX の拡張機能を LaTeX
+上で使えるようにするためのパッケージ
+（luatexbase、luacode 等）
+も少しずつ準備されている
+（<a href="lualatexuni.html#ssec-preamble">参照</a>）。
+</p>
+
+</div><!--ssec-present-->
+
+<div class="subsection" id="ssec-theme">
+<h3>この文書の目的</h3>
+
+<p>先に述べた通り、
+LuaTeX の凄みはその果てしない拡張性にあるといえるが、
+実際に拡張を行うためには、
+TeX の内部構造に関する知識が不可欠になり、
+一般の LaTeX ユーザにとっては縁遠いものになってしまう。
+そこで、
+ここでは敢えて先述の
+「もう一方の目的」、すなわち
+「文書作成上で遭遇する複雑な処理を
+『普通の』
+スクリプト言語で解決できる」
+という所に焦点を当ててみる。
+つまりは、
+</p>
+<blockquote>
+標準の LaTeX のレベルでは実現困難な、
+擬実用的な処理を
+「訳の判らない TeX マクロ」
+ではなく Lua 言語でのプログラムで解決しよう
+</blockquote>
+<p>という話である。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+いやそもそも
+「TeX マクロが訳の判らない」
+というのが大きな誤解であって、
+本当は……（以下略）。
+</div>
+<p>従って、
+この文書では
+（LaTeX のユーザ命令の範囲を超える）
+TeX 言語に関する知識は一切前提としないが、
+Lua でのプログラミング能力は仮定する。
+（現在一般的な何らかのスクリプト言語ができる人なら
+Lua は容易に習得可能だと思われる。）
+なお、
+「TeX のマクロ」
+は扱わないが、
+「LaTeX のマクロ機能」
+（<code>\newcommand</code> や <code>\newenvironment</code>）
+の知識は必要である
+（これは LaTeX の参考書に載っている事項である）。
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+なお
+「擬実用的」
+とは要するに
+「非実用的」
+ということである。
+</div>
+
+</div><!--ssec-theme-->
+
+</div><!--sec-intro-->
+
+<div class="section" id="sec-basic">
+<h2>とにかく LuaLaTeX を使ってみる</h2>
+
+<p class="notice">（この節の内容は
+<a href="lualatexuni.html">「LuaLaTeX で Unicode してみる」</a>
+のページの
+<a href="lualatexuni.html#sec-legacy">『従来の欧文 LaTeX の代わりに使う』
+節</a>に移動しました。）
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+この文書の初版を公開した時点
+（2010/05/27）
+には LuaLaTeX 対応の fontspec
+（2.0 版）
+はまだ公開されていなかった
+（公開されたのは翌日の 2010/05/28）。
+その後も暫くは私が様子見をしている状態だったので、
+「Lua で LaTeX してみた」
+のシリーズで挙げられているソース文書では全て
+「入力は ASCII、
+出力は 8 ビットフォント」
+に従っている。
+</div>
+
+</div><!--sec-basic-->
+
+<div class="section" id="sec-lua-latex">
+<h2>Lua で LaTeX してみる</h2>
+
+<div class="subsection" id="ssec-hex-count">
+<h3>事例その 1： カウンタ値の 16 進表記</h3>
+
+<p>LaTeX カウンタの値を <code>\arabic</code> で出力させる
+（例えば <code>\arabic{section}</code>）
+と、
+結果は 10 進表記になるが、
+時にはこれを 16 進表記にしたい場合がある
+（異論は当分保留しておこう）。
+これを Lua で実現してみる。
+必要なのは次の 2 つの要素で、
+これらは LaTeX と Lua の連携において最も基本的なものである。
+</p>
+<ul id="elt-ref-1">
+<li><code>\directlua{&lt;テキスト&gt;}</code>［LaTeX 命令］： 
+<code>&lt;テキスト&gt;</code> を Lua コードとして
+Lua インタプリタで実行する。
+</li>
+<li><code>tex.print(&lt;文字列&gt; s, ...)</code>［Lua 関数］：
+引数の文字列を LaTeX の入力として渡す。
+各々の文字列が 1 つの入力行とみなされる。
+文字列中に含まれる LaTeX の特殊文字は有効
+（特殊性を保つ）である。
+（注意：第 1 引数の型が数値であると別の意味になる。）
+</li>
+</ul>
+<p>LuaLaTeX 文書は次のようになる。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\begin{document}
+\renewcommand{\theenumi}{\directlua{
+local hexform = "0x"..string.char(0x25).."02X"
+tex.print(hexform:format(\arabic{enumi}))
+}}
+\renewcommand{\labelenumi}{{\ttfamily\theenumi:}}
+\begin{enumerate}
+\item First item.
+\item Next item.
+\item And more. \item And more. \item And more. \item And more.
+\item And more. \item And more. \item And more. \item And more.
+\item And more. \item And more. \item And more. \item And more.
+\item And more. \item And more. \item And more. \item And more.
+\item Last but one,
+\item That's all!
+\end{enumerate}
+\end{document}
+</pre>
+<div class="center display">
+<img src="sample/lualatex-example11.png" width="204" height="420"
+     alt="項目番号が「0x01:」「0x02:」…「0x0F:」「0x10：」…のようになる。">
+</div>
+<p>この文書では、
+Lua コードと連携した LaTeX マクロの書き方を解説する。
+まず最初に、そのようなマクロを作成する際には、
+「LaTeX（TeX）
+と Lua はどちらも言語であり両者はかなり異なる文法をもっているので、
+文字列の受け渡しをする時に細心の注意を払う必要がある」
+ということを注意しておく。
+<code>\directlua</code> の動作をもう少し詳しく述べると以下のようになる。
+</p>
+<ul>
+<li><code>\directlua</code> の引数の文字列は LaTeX
+の字句解析規則に従って解釈される。
+例えば、
+行頭の空白は無視され、
+改行は
+（原則的に）
+空白と同じ扱いになり、
+<code>%</code> から行末まではコメントとして無視される、
+等である。
+上の例で <code>%02X</code> という
+（Lua の）
+文字列を作るために <code>string.char(0x25)</code> としているのは、
+<code>%</code> が直接書けないからである。
+<div class="alert"><span class="lbl">注意：</span> 
+改行が空白の扱いになるので、
+<code>\directlua</code> のコードは常に 1 つの行と見做される。
+ゆえに、
+Lua の 1 行コメント
+（<code>--</code>）
+を入れるとそれ以降が全部無視される。
+単一行のコメントを入れるには LaTeX のコメント
+（<code>%</code>）
+を利用すればよい。
+</div>
+<div class="alert"><span class="lbl">注意：</span> 
+通常、
+LaTeX で〈%〉を出力するには <code>\%</code> と書けばよい。
+この <code>\%</code> が意味するのは
+「〈%〉を出力する命令の実行」
+であって、
+「非特殊な <code>%</code> への展開」
+<em>ではない</em>ので、
+<code>\directlua</code> 中で <code>\%</code>
+と書いても <code>%</code> の意味にはならない。
+（実際に <code>\%</code> と書いた場合、
+普通の LaTeX の設定では、
+そのまま <code>\%</code> と解釈されるはずだが、
+パッケージ読込状況により異なる可能性がある。）
+</div>
+</li>
+<li><code>\directlua</code> の引数中にある LaTeX の命令やマクロは、
+単なる文字列に展開されるものであれば、
+その展開が実行される。
+例えば、
+<code>\arabic{enumi}</code> はカウンタ <code>enumi</code>
+の現在の値の 10 進表記に展開される
+（そしてそれは Lua の有効な数値表現である）。
+そうでない命令
+（<code>\hspace</code> や <code>\textbf</code> 等の
+「展開可能でない」
+もの；
+大部分の LaTeX 命令はこちらに属する）
+は原則的に書くことができない。
+（なお、
+LaTeX の命令を含む文字列を Lua の文字列として扱う方法
+については後で説明する。）
+加えて、
+もし <code>\directlua</code> が LaTeX のユーザ命令定義の本体中にあり、
+その引数中に引数 <code>#1</code>、<code>#2</code>、……
+が現れた場合は、
+それは
+（実際のユーザ命令の使用における）
+実引数に置換される。
+<div class="bend"><span class="lbl">参考：</span> ［TeX レベルの話］ 
+要するに <code>\write</code> でファイルに書き出した文字列と同じになる。
+TeX のマクロは通常の方法で展開される。
+</div>
+</li>
+<li><code>\directlua</code> による Lua コードの呼び出しが終わったら、
+制御は LaTeX 側に戻り、
+その時、
+当該の <code>\directlua</code> 呼出内で実行された全ての
+<code>tex.print</code> の引数の文字列が順番に改行区切りでその場に挿入されている
+（最後に改行文字はない）
+状態になる。
+<div class="bend"><span class="lbl">参考：</span> ［TeX レベルの話］ 
+すなわち、
+あたかも <code>\directlua{...}</code> の
+「展開」
+結果が上述のテキストであるような動作になる。 
+（実際の動作は <code>\scantokens</code> でのテキスト挿入に近い。）
+展開であるので、
+上の例で <code>\item</code> に <code>\label</code>
+を付して参照を行っても正しく動作する。
+テキストのカテゴリコードは <code>\directlua</code> 呼出時のものになる。
+なお、 
+<code>tex.write()</code> 
+（<a href="#sec-guide">付録</a>参照）
+では所謂「<code>\the</code>-文字列」
+のカテゴリコードが適用される。
+</div>
+</li>
+</ul>
+
+<div class="bend hdn"><span class="lbl">参考：</span> 
+Lua コードを実行する LaTeX 命令は <code>\directlua</code>
+の他に <code>\latelua</code> がある。
+この命令で指定されたコードは、
+次にページ出力が行われた時に実行される。
+</div>
+
+</div><!--ssec-hex-count-->
+
+<div class="subsection" id="ssec-ixbase0">
+<h3>ixbase0 パッケージ</h3>
+
+<p>先に述べた通り、<code>\directlua</code> の引数の中でも
+LaTeX の特殊文字（<code>%</code> など）は有効であるので、
+このままでは Lua のコードが書きづらい。
+勿論、別のファイルに書いて <code>dofile()</code> すればよい
+（また、LuaLaTeX では別のファイルを用いることが推奨される
+見込みである）のだが、
+ここでは、LaTeX 文書内に Lua コードを書くことが容易になるように
+簡単な（手抜きの）補助パッケージを用意してみた。
+（このパッケージが提供する機能の一覧については、
+<a href="#sec-guide">付録</a>を参照）
+</p>
+
+<ul>
+<li><a href="data/ixbase0.sty">ixbase0 パッケージ（v0.1b；ダウンロード 12KB）</a>
+<span class="mdate">[2010/07/24]</span>
+</li>
+</ul>
+<p>このパッケージを読み込む
+（<code>\usepackage{ixbase0}</code>）
+と、以下の命令が使えるようになる。
+</p>
+<ul id="elt-ref-2">
+<li><code>\begin{execluacodeblock}&lt;テキスト&gt;\end{execluacodeblock}</code>［LaTeX 環境］： 
+中のテキストを「verbatim な状態」
+（LaTeX の字句解析規則や特殊文字を無効化した状態）で読み取りそれを
+<code>\directlua</code> で実行する。
+Lua からの出力（<code>tex.print</code>）は verbatim
+ではなく LaTeX の通常の状態で解釈される。
+<em>注意：</em>verbatim 環境等と同じく、命令やマクロの引数内では使えない。
+</li>
+<li><code>\?\<u>*</u></code> （<code><u>*</u></code> は英数字でない ASCII 文字）［LaTeX 命令］：
+「非特殊」な文字 <code><u>*</u></code> に展開される。
+例えば <code>\?\%</code> と書くことで Lua コードに <code>%</code> を含められる。
+</li>
+<li><code>\??\<u>*</u></code> （<code><u>*</u></code> は英数字でない ASCII 文字）［LaTeX 命令］：
+「非特殊」な文字列 <code>\<u>*</u></code> に展開される。
+例えば <code>"\??\\"</code> は <code>"\\"</code> になる。
+</li>
+</ul>
+
+<p>ixbase0 パッケージを使うと、<a href="#ssec-hex-count">先の例</a>の
+<code>\theenumi</code> の定義は次のようにできる。
+</p>
+<pre>
+\renewcommand{\theenumi}{\directlua{
+tex.print(("0x\?\%02X"):format(\arabic{enumi}))
+}}
+</pre>
+
+</div><!--ssec-ixbase0-->
+
+<div class="subsection" id="ssec-aa">
+<h3>事例 2： graphicx パッケージで傾き（斜体）変形</h3>
+
+<div class="right" style="width:300px;text-align:right">
+<img src="sample/lualatex-eq02.png" width="280" height="120"
+     alt="垂直座標がy増す毎に水平変位がx変化する場合、「傾き具合」rはx/yと定義される。">
+</div>
+<p>ここでいう（水平方向の）傾き変形とは、右の図のように、
+各点を水平方向に移動させる（ただし水平方向の距離は不変）
+線形変換のことである。
+ここで実数 <i>r</i> は「どれだけ傾けるか」を示すパラメタである。
+フォントを「機械的に斜体」(synthetic slant)にする場合に
+この変換が用いられる。
+graphicx パッケージでは、回転変形と拡大縮小の機能が
+提供されているが、傾き変形はない。
+しかし、傾き変形は回転変形と拡大縮小の合成として表現できるので、
+graphicx の機能だけで <i>r</i> をパラメタとする
+傾き変形の機能が実現できるはずである。
+ここでは LuaLaTeX でそれを実装してみる。
+</p>
+<p>パラメタ <i>r</i> の傾き変形は、
+</p>
+<ul class="compact">
+<li><code>\rotatebox{</code><i class="lgc">θ</i><code>}</code>
+</li>
+<li><code>\scalebox{</code><i class="lgc">a</i><code>}</code><!--
+--><code>[</code><i class="lgc">b</i><code>]</code>
+</li>
+<li><code>\rotatebox{</code><i class="lgc">θ'</i><code>}</code>
+</li>
+</ul>
+<p>を順に適用したものと同値になる。
+ここで各変数値は <i>r</i> の値から次の式により求められる。
+</p>
+<center>
+<img src="sample/lualatex-eq01.png" width="513" height="39"
+     alt="a=(√(r&sup2;+4)&minus;r)/2, b=(√(r&sup2;+4)+r)/2, θ°=(1/2)arctan(2/r), θ′°=θ°&minus;90°">
+</center>
+<p>ただしここで一つ問題がある。
+<code>\rotatebox</code> には
+「回転後のボックスの大きさを調整」する機能があり、
+これは回転を合成する際には邪魔になってしまう。
+そこで、回転を施す前に外見の大きさをゼロに設定する処理を加え、
+傾き変形の結果について、その大きさを変形前の大きさと同じに設定する。
+</p>
+<p>各パラメタ（<i class="lgc">a, b, θ, θ'</i>）
+の値が与えられているという前提で考えると、
+この部分の処理は次のような LaTeX マクロで表せる。
+（ほとんど LaTeX と graphicx のコマンド呼び出しからなる
+のでこの部分は LaTeX で書いた方が簡明である。
+</p>
+<pre>
+\newsavebox{\grslantBox}%  savebox を用意する
+% (savebox 使用は「中身」を 2 回組版するのを避けるため)
+\newcommand\grslantSub[5]{% 引数は{θ}{a}{b}{θ'}{中身}
+  \savebox{\grslantBox}{#5}% 中身の組版結果を \grslantBox に格納
+  % graphicx 命令を組み合わせて変形する
+  \rotatebox{#4}{\scalebox{#2}[#3]{\rotatebox{#1}{%
+   % \makebox, \smash でボックス寸法をゼロに潰している
+   \makebox[0pt][l]{\smash{\usebox{\grslantBox}}}}}}%
+   % (幅ゼロなので出力位置は不変)
+  % 最後に \phantom を利用して元の「中身」と同じ寸法を持たせる
+  \phantom{\usebox{\grslantBox}}}
+</pre>
+<p>その上で、全体の実装方針を次のようにする。
+</p>
+<ul>
+<li>ユーザ命令を <code>\grslant{&lt;r&gt;}{&lt;テキスト&gt;}</code> とする。
+</li>
+<li><i>r</i> から <i class="lgc">a, b, θ, θ'</i> への変換を
+Lua で行う。
+</li>
+<li>Lua から <code>\grslantSub</code> の呼び出しコードを返す。
+</li>
+</ul>
+<p>完全な LuaLaTeX ソースは以下のようになる。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{ixbase0}
+\usepackage{graphicx}
+\newcommand\grslant[1]{%
+  \directlua0{
+    local r = #1; local q = math.sqrt(r * r + 4)
+    local a, b = (q - r) / 2, (q + r) / 2
+    local t0 = math.deg(math.atan(2 / r) / 2); local t1 = t0 - 90
+    local s = "\??\\grslantSub{\?\%s}{\?\%s}{\?\%s}{\?\%s}"
+    tex.print(s:format(t0, a, b, t1))
+  }}
+\newsavebox{\grslantBox}
+\newcommand\grslantSub[5]{%
+  \savebox{\grslantBox}{#5}%
+  \rotatebox{#4}{\scalebox{#2}[#3]{\rotatebox{#1}{%
+   \makebox[0pt][l]{\smash{\usebox{\grslantBox}}}}}}%
+  \phantom{\usebox{\grslantBox}}}
+\begin{document}
+
+\begin{center}
+  \fbox{A$\otimes$} % anything can be set slanted!
+  \grslant{.1}{\fbox{A$\otimes$}} \grslant{.2}{\fbox{A$\otimes$}}
+  \grslant{.3}{\fbox{A$\otimes$}} \grslant{.4}{\fbox{A$\otimes$}}
+\end{center}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:266px">
+<img src="sample/lualatex-example12.png" width="266" height="31"
+     alt="文字Aと記号\otimesを、0％、10％、20％、30％、40％の傾き変形を施して出力する。">
+</div></div>
+<div class="bend"><span class="lbl">参考：</span> 
+上掲のプログラムでは「<code>\gslant</code> + 1 引数」を
+「<code>\gslantSub</code> + 4 引数」に置き換えていて、
+テキストの部分は Lua に渡していない。
+次小節で見るように、文字列のユーザ引数を Lua で取り扱う
+のは少々厄介であるので、ここではそれを避けている。
+</div>
+
+</div><!--ssec-a-->
+
+<div class="subsection" id="ssec-hard-table">
+<h3>事例 3： 自動化処理を含む表組み</h3>
+
+<p>以下のような要件を満たす簡単な「年表作成」用の
+LaTeX コマンドを作成する。
+</p>
+<ul>
+<li>書式は以下の通り。
+<pre>
+\begin{TimeLine}
+\TLEntry{&lt;年&gt;}{&lt;月&gt;}{&lt;キー&gt;}{&lt;事柄&gt;}
+%……以降同じ形式の \TLEntry が続く
+\end{TimeLine}
+</pre>
+</li>
+<li>出力は「年」「月」「事柄」の 3 列からなる。
+</li>
+<li>項目（行）は「年」と「キー」の辞書順昇順に並び替える。
+</li>
+<li>「年」毎に横罫線で区切る。また「年」の表示は該当の「年」
+の最初の行にのみ行う。
+</li>
+<li>「年」は 4 桁の数字であり、「キー」はプレーン文字列である。
+「月」「事柄」は LaTeX 命令を含みうる。
+</li>
+</ul>
+<p>これを実装したものを以下に使用例とともに示す。
+少し長い Lua コードを含むので、execluacodeblock 環境を使っている。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+%% Lua codes
+\begin{execluacodeblock}
+-- TL_init_table: called at \begin{TimeLine}
+function TL_init_table()
+  -- The table TL_table holds all data given by \TLEntry;
+  -- it is used as an array of maps.
+  TL_table = {}
+end
+-- TL_add_entry: called at \TLEntry
+function TL_add_entry(year, mon, key, text)
+  -- makes the 'real' key from year and key given
+  local fullkey = ("%05d%s"):format(year, key)
+  -- adds the entry to TL_table
+  local ent = { year = year; mon = mon; key = fullkey; text = text }
+  table.insert(TL_table, ent)
+end
+-- TL_output_table: called at \end{TimeLine}
+function TL_output_table()
+  -- sorts the array
+  local function TL_compare(a, b) return a.key < b.key end
+  table.sort(TL_table, TL_compare)
+  -- prints data as a tabular
+  -- (header lines)
+  ixbase.print([=[
+\begin{tabular}{cc|p{.72\linewidth}}
+\hline
+\itshape Year & \itshape Mon. & \multicolumn{1}{c}{\itshape Fact} \\
+]=])
+  -- (data rows)
+  local prev_year = 0
+  for _, ent in ipairs(TL_table) do
+    local year = ""
+    if prev_year ~= ent.year then
+      tex.print("\\hline"); year = ent.year; prev_year = year
+    end
+    local fo = "\\TLStrut\\sffamily\\bfseries %s & %s & %s\\\\"
+    local line = fo:format(year, ent.mon, ent.text)
+    tex.print(line)
+  end
+  -- (trail)
+  ixbase.print([=[
+\hline
+\end{tabular}]=])
+end
+\end{execluacodeblock}%
+%% LaTeX stuffs
+\newenvironment{TimeLine}%
+  {\directlua{TL_init_table()}}%
+  {\directlua{TL_output_table()}}
+\newcommand\TLStrut{\rule{0pt}{1em}}
+\newcommand\asluastring[1]{"\luaescapestring{\detokenize{#1}}"}
+\newcommand\TLEntry[4]{\directlua{
+  TL_add_entry(#1, \asluastring{#2}, \asluastring{#3}, \asluastring{#4})
+}}
+\begin{document}
+
+\newcommand*{\AmS}{\textit{AmS}} % here we do with simple logo
+\begin{center}\begin{TimeLine}
+\TLEntry{1977}{---}{001}
+ {Knuth begins his research on typography.}
+\TLEntry{1978}{---}{001}
+ {Knuth delivers an AMS Gibbs Lecture entitled
+  ``Mathematical Typography''
+  [Bull.\ AMS, vol.~1 (March 1979), no.~2, pp.~337--372]
+  to the AMS membership at its annual meeting.}
+\TLEntry{1979}{---}{001}
+ {Digital Equipment Corporation and the American Mathematical Society
+  jointly publish Knuth's book
+  \emph{{\TeX} and METAFONT: New Directions in Typesetting},
+  which contains the text of Knuth's Gibbs Lecture.}
+\TLEntry{1982}{Sep.}{091}
+ {Knuth releases dvitype, a model DVI driver.}
+\TLEntry{1980}{Oct.}{101}
+ {The first draft of Spivak's ``Joy of TeX'' is announced in
+  TUGboat, vol.~1, no.~1.}
+\TLEntry{1983}{Dec.}{121}
+ {Lamport writes a {\LaTeX} manual, the earliest known {\LaTeX}
+   manual in existence.}
+\TLEntry{1984}{---}{001}
+ {Addison-Wesley publishes Knuth's \emph{The {\TeX}book},
+  destined to become the definitive {\TeX} reference.}
+\TLEntry{1984}{Sep.}{091}
+ {Lamport releases version 2.06a of the {\LaTeX} macros.}
+\TLEntry{1985}{Aug.}{081}
+ {Lamport releases {\LaTeX} 2.09, his last version of
+  the {\LaTeX} macros.}
+\TLEntry{1985}{---}{091}
+ {Addison-Wesley publishes the first edition of Lamport's
+  reference manual
+  \emph{{\LaTeX}: A Document Preparation System}.}
+\TLEntry{1982}{Jan.}{011}
+ {Spivak announces {\AmS}-{\TeX} at the joint math meetings.}
+\TLEntry{1982}{Jan.}{012}
+ {Version 0 of Spivak's ``Joy of {\TeX}'' is released.}
+\end{TimeLine}\end{center}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:684px">
+<img src="sample/lualatex-example13.png" width="684" height="671"
+     alt="出力では、例えば、1982 のある行は、その後に「Jan.」「Spivak announces ...」と続く。その下の行は年表示がなく「Jan.」「Version 0 of ...」、その下は「Sep.」「Knuth releases ...」。その他、上述した仕様を満たす出力が得られている。">
+</div></div>
+<p>Lua（或いは他のスクリプト言語）のプログラミングに慣れている人ならば、
+Lua の処理自体は容易に理解できると思う。
+問題は LaTeX との受け渡しの部分である。
+以下で要点を述べる。例えば、
+</p>
+<pre>
+\TLEntry{2013}{Apr.}{401}{\emph{Lua{\TeX}: The Program} is published.}
+</pre>
+<p>が実行された場合、以下のような Lua コードが実行されるようにしたい。
+</p>
+<pre>
+TL_add_entry(2013, "Apr.", "401", "\\emph {Lua{\\TeX }: The Program} is published.")
+</pre>
+<p>この文字列の形式変換を行うために次のような命令を用いる。
+</p>
+<ul id="elt-ref-3">
+<li><code>\detokenize{&lt;テキスト&gt;}</code>［LaTeX 命令］： 
+LaTeX の特殊文字や命令を含むテキストを、
+「この文字列をもう一度 LaTeX の入力として与えるともとのテキストに戻る」
+という性質をもつ文字列に変換する。
+（つまり、テキスト <i>X</i> について、
+<code>\detokenize{</code><i>X</i><code>}</code> の結果の
+文字列を Lua で <code>tex.print</code>
+させて LaTeX がそれを読むと <i>X</i> に戻る。）
+<div class="bend"><span class="lbl">参考：</span>［TeX レベルの話］
+すなわち、<code>\detokenize{&lt;テキスト&gt;}</code> を展開すると、
+<code>&lt;テキスト&gt;</code> を \write で出力する形式の文字列
+（「<code>\the</code>-文字列」のカテゴリコードをもつ）になる。
+この際に命令実行やマクロ展開は一切行われない。
+なお、<code>\detokenize</code> は e-TeX のプリミティブである。
+</div>
+</li>
+<li><p><code>\luaescapestring{文字列}</code>［LaTeX 命令］： 
+文字列に対して、Lua の通常文字列リテラルで必要なエスケープ
+処理を行う。
+（つまり、文字列 <i>S</i> に対し、
+<code>&quot;\luaescapestring{</code><i>S</i><code>}&quot;</code>
+の Lua での評価結果は <i>S</i> になる。）
+</p>
+</li>
+</ul>
+<p>ここから次のようなことがいえる。
+次のようなマクロを用意する。
+</p>
+<pre>
+\newcommand\asluastring[1]{"\luaescapestring{\detokenize{#1}}"}
+</pre>
+<p>すると、LaTeX テキスト <i>X</i> に対し、<code>\directlua</code>
+を用いて Lua で
+<code>tex.print(\asluastring{</code><i>X</i><code>})</code>
+を実行すると、<i>X</i> を書いたのと同じことになる。
+これを利用して、一旦 Lua に渡した LaTeX コードをそのまま
+戻すことが可能になる。
+</p>
+<p>これとは別の話として、上の例では Lua コード中に LaTeX
+ソースを（改行を含む）長形式文字列の形（<code>[=[ ... ]=]</code>）
+で含めているが、
+これを <code>tex.print()</code> で出力すると、
+改行文字が「LaTeX の改行文字の働き」をしてくれない。
+そこで、ixbase0 パッケージで次の補助機能を用意していて、
+例ではその関数を用いて出力させている。
+</p>
+<ul id="elt-ref-4">
+<li><code>ixbase.print(&lt;文字列&gt; s,...)</code> ［Lua 関数］： 
+引数の各文字列を改行文字毎に分割して <code>tex.print()</code>
+に渡す（文字列の末尾の改行は無視する）。
+結果的に、文字列の中の各行が LaTeX の 1 つの入力行と扱われる。
+<div class="bend"><span class="lbl">参考：</span> ［TeX レベルの話］
+execluacodeblock 環境では、TeX ソース中の改行文字を
+「カテゴリコード 12 の CR」として Lua に渡しているが、
+Lua はこれを常に LF と解釈するようである。
+そして、LuaTeX の <code>tex.print</code> の 1 つの引数の文字列は
+（LF のカテゴリコードに関わらず）常に 1 つの行として扱われる。
+</div>
+</li>
+</ul>
+
+</div><!--ssec-hard-table-->
+
+<div class="subsection" id="ssec-truncate">
+<h3>事例 4： 文字列を指定の字幅で切り捨てる</h3>
+
+<p>すなわち次のようなマクロを作成する。
+</p>
+<blockquote>
+<code>\truncatetowidth{&lt;長さ&gt;}{&lt;文字列&gt;}</code>：
+指定された文字列を先頭から順に幅が <code>&lt;長さ&gt;</code>
+を超えない範囲で』出力する。
+簡単のために <code>&lt;文字列&gt;</code>
+には LaTeX の特殊文字や命令は含まないものとする。
+</blockquote>
+<p>実装方針は次の通り。
+</p>
+<ul>
+<li>切り出した文字列に対して幅を調べることができるので、
+二分探索により、幅に収まる最大の文字列長を求める。
+</li>
+<li>切り出した文字列の幅を求めるのは、LaTeX の
+<code>\settowidth</code> 命令を使う
+（幅を得るには組版処理を行わなければならないため）。
+残りの処理のほぼ全てを Lua で行う。
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> 
+Lua の中で組版処理を行うのも可能ではあるが、
+「TeX の内部処理を自前でやる」ことになるので、
+それなりの知識が必要で、かつ非常に面倒である。
+</div>
+<p>いくつか準備をする。
+まず、二分探索のアルゴリズムを確認しておく。
+</p>
+<pre>
+  -- str = 入力文字列; wd = 上限の幅
+  -- str の先頭 n 文字を組版した時の幅が wd 以下で
+  -- あるような最大の n を求める
+  local l, u = 0, str:len()
+  while l < u do
+    local m = math.ceil((l + u) / 2)  -- ※ floor ではダメ
+    local w = 【str:sub(1, m) の幅】
+    if w <= wd then l = m       -- ※ m + 1 ではない
+    else            u = m - 1
+    end
+  end
+  -- ここで l (= u) が求める値である
+</pre>
+<p>幅の取得のために、LaTeX の長さ変数の値を Lua
+で読み取る必要がある。
+ixbase0 パッケージで用意された命令を利用する。
+</p>
+<ul id="elt-ref-5">
+<li><code>ixbase.length.&lt;名前&gt;.width</code> ［Lua 変数・読書可］： 
+LaTeX の長さ変数 <code>\&lt;名前&gt;</code> の現在の値の自然長。
+値は sp 単位の整数で指定する（1pt = 65536sp）。
+この <code>ixbase.length.&lt;名前&gt;</code>
+（これ自体はユーザデータ型）の他のフィールドを
+用いると伸縮長（plus/minus）の部分も読み書きできるのだが、
+ここでは省略。
+</li>
+<li><code>ixbase.counter.&lt;名前&gt;</code> ［Lua 変数・読書可］： 
+LaTeX のカウンタ <code>&lt;名前&gt;</code> の現在の値。
+今の例では使わないがついでに紹介しておく。
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> ［TeX レベルの話］
+TeX のレジスタについては、<code>tex.count</code>、
+<code>tex.dimen</code>、<code>tex.skip</code> 等を使う。
+それぞれ、「レジスタ番号」または「（<code>\countdef</code> 等での）名前」
+のインデクスでアクセス可能である。
+<code>ixbase.counter.hoge</code> は
+<code>tex.count["c@hoge"]</code> と同値となる。
+</div>
+<p>実は、この題目については、比較的簡単かつ素直に
+実装できると当初予想していたのであるが、実際には
+かなり技巧的なコーディングを要するようである。
+</p>
+<pre>
+\documentclass[a4paper]{article}
+\usepackage{ixbase0}
+
+%% Lua code
+\begin{execluacodeblock}
+function truncate_to_width(str)
+  local wdt = ixbase.length.ttwTarget.width
+  -- binary search written in tail recursion
+  function ttw_iterate(l, u)
+    if l == u then -- here l is the answer
+      tex.print(str:sub(1, l)); return
+    end
+    local m = math.ceil((l + u) / 2)
+    -- Make a closure containing what to do after LaTeX
+    -- work finishes (it is referred in ttw_get_width()).
+    function ttw_continue()
+      local wdm = ixbase.length.ttwMeasured.width
+      if wdm <= wdt then ttw_iterate(m, u)
+      else               ttw_iterate(l, m - 1)
+      end
+    end
+    ttw_get_width(str:sub(1, m))
+    -- ... and exit Lua context for a while!
+  end
+  ttw_iterate(0, str:len())
+end
+
+function ttw_get_width(str)
+  -- here promise that you'll go back into loop
+  ixbase.print([[
+\settowidth{\ttwMeasured}{]]..str..[[}%
+\directlua{ttw_continue()}]])
+end
+\end{execluacodeblock}
+
+%% LaTeX stuff : it is easy!
+\newlength{\ttwTarget}
+\newlength{\ttwMeasured}
+\newcommand*{\truncatetowidth}[2]{% {width}{string}
+  \setlength{\ttwTarget}{#1}%
+  \directlua{
+    truncate_to_width("\luaescapestring{\detokenize{#2}}")
+  }%
+}
+
+\begin{document}
+\begin{itemize}
+\item \truncatetowidth{10pt}{Hello world!}
+\item \truncatetowidth{20pt}{Hello world!}
+\item \truncatetowidth{30pt}{Hello world!}
+\item \truncatetowidth{40pt}{Hello world!}
+\item \truncatetowidth{50pt}{Hello world!}
+\item \truncatetowidth{60pt}{Hello world!}
+\item \truncatetowidth{70pt}{Hello world!}
+\end{itemize}
+
+\end{document}
+</pre>
+<div align="center" class="display">
+<div class="imagebox" style="width:128px">
+<img src="sample/lualatex-example14.png" width="128" height="263"
+     alt="上から「H」「Hell」「Hello」「Hello wo」「Hello worl」「Hello world!」「Hello world!」という項目が並ぶ。">
+</div></div>
+<p><code>truncate_to_width()</code> の中は先に示した
+二分探索の実装であるが、何やら不可解なコードに
+変わってしまっている。
+</p>
+<ul>
+<li>この関数の中では、LaTeX の <code>\settowidth</code>
+を呼び出すとともにそこで設定された値を読み取る必要がある。
+従って、単に LaTeX コードが <code>tex.print</code>
+で書かれるだけでは不十分でそれが実行される必要があり、
+そのためには一旦 Lua の実行コンテキスト
+（<code>\directlua</code>）を抜ける必要があり、
+その上で、<code>\ttwMeasured</code> の値を読むところ
+から Lua の処理に戻らなければならない。
+</li>
+<li>これを何とか実現するために、
+LaTeX の実行の完了を待つ箇所について、
+それ以降のコードを一旦関数にし、それを実行する
+<code>\directlua</code> を書き出して、Lua の実行を
+終了するという処理をとっている。
+<table style="margin: 4px auto;width:80%">
+<tr>
+<td width="45%"><pre style="margin:0">
+\directlua{
+  A(); B(); local r = C()
+  tex.print("\\TeXprocess")
+  <span style="color:#9FC">【TeX コードを実行させる】</span>
+  D(r); E(); F()
+}
+</pre></td>
+<td style="font-size:3em;text-align:center">→</td>
+<td width="45%"><pre style="margin:0">
+\directlua{
+  A(); B(); local r = C()
+  tex.print("\\TeXprocess")
+  <span style="color:#FF9">function do_next() --「後の処理」を関数にする
+    D(r); E(); F()
+  end</span>
+  <span style="color:#9FC">tex.print("\\directlua{do_next()}")</span>
+}% Lua 実行を抜ける。\TeXprocess が
+% 実行され、その後 do_next() に戻る。
+</pre></td>
+</tr>
+</table>
+</li>
+<li>ところが、今の探索過程ではその「待つ箇所」
+が while ループの中にあるので、「それ以降の処理」
+というのが上手く関数で書けなくなってしまっている。
+</li>
+<li>そのため、上掲の実装においては、<code>truncate_to_width</code>
+の中の反復処理を末尾再帰（tail recursion）の形に書き換えてから、
+<code>ttw_get_width</code> 以降の処理を関数にしている。
+</li>
+</ul>
+<div class="bend"><span class="lbl">参考：</span> 
+一応実装はできたが、もはや「普通のスクリプト言語の書き方」
+ではなくなっているのも事実である
+（関数型言語がもっとポピュラーな存在であればいいのだが…）。
+どういうコードの書き方をしていても任意の場所で TeX へ抜け出せる
+ようにはできないか。
+何だか無性に call/cc が欲しくなってくるところだが、
+もう少し調べてみると、Lua のコルーチンの機構を使うと
+解決できることが判った。
+→ <a href="./lualatexlua1.html">Lua 内で TeX コードの実行を完了させる</a>
+</div>
+
+</div><!--ssec-truncate-->
+
+<div class="subsection" id="ssec-heavy">
+<h3>事例 5： コンパイルに 3 日かかる LaTeX 文書を作る</h3>
+
+<pre>
+\documentclass[a4paper]{article}
+\usepackage[width=545pt,vscale=.9]{geometry}
+\usepackage{lmodern}
+\usepackage{ixbase0}
+\pagestyle{empty}\raggedbottom
+\begin{execluacodeblock}
+MP_PREC = 1000000    -- number of digits
+
+MP_BDGT = 7
+MP_SIZE = math.floor(MP_PREC * 1.001 / MP_BDGT) + 2
+MP_RDX = 10^MP_BDGT; MP_SF = "%0"..MP_BDGT.."d"
+function mp_make(v)
+  local x = { [0] = v }
+  for i = 1, MP_SIZE do x[i] = 0 end
+  return x
+end
+function mp_clone(x)
+  local t = { [0] = x[0] }
+  for i = 1, MP_SIZE do t[i] = x[i] end
+  return t
+end
+function mp_add(x, y)
+  local c = 0
+  for i = MP_SIZE, 0, -1 do
+    local r = x[i] + y[i] + c
+    if r < MP_RDX then x[i] = r; c = 0
+    else               x[i] = r - MP_RDX; c = 1
+    end
+  end
+end
+function mp_sub(x, y)
+  local c = 0
+  for i = MP_SIZE, 0, -1 do
+    local r = x[i] - y[i] - c
+    if r >= 0 then x[i] = r; c = 0
+    else           x[i] = r + MP_RDX; c = 1
+    end
+  end
+end
+function mp_div(x, v)
+  local c = 0; local floor = math.floor
+  for i = 0, MP_SIZE do
+    local r = c * MP_RDX + x[i]
+    x[i] = floor(r / v); c = r % v
+  end
+end
+function mp_divx(x, v)
+  local c = 0; local floor = math.floor
+  local t = {}; local u; local z = true
+  for i = 0, MP_SIZE do
+    local r = c * MP_RDX + x[i]
+    u = floor(r / v); t[i] = u; c = r % v
+    if u > 0 then z = false end
+  end
+  if z then return nil else return t end
+end
+function mp_string(x)
+  local t = {}
+  for i = 1, MP_SIZE do t[i] = MP_SF:format(x[i]) end
+  local s = table.concat(t):sub(1, MP_PREC)
+  return (x[0].."."..s:gsub("0+$", ""))
+end
+
+function a_atan_rcp_b(a, b)
+  local x = mp_make(a); mp_div(x, b)
+  local s = mp_clone(x); local n, tadd = 1, true
+  while true do
+    n = n + 2; tadd = not tadd
+    if n >= MP_RDX then return nil end
+    mp_div(x, b * b)
+    local t = mp_divx(x, n)
+    if not t then return s, n end
+    if tadd then mp_add(s, t) else mp_sub(s, t) end
+  end
+  return s
+end
+
+function calc_pi()
+  -- Good old Machin formula:
+  --  pi/4 = 4atan(1/5) - atan(1/239)
+  print("start")
+  local t1 = os.time()
+  local r1, n1 = a_atan_rcp_b(16, 5)
+  print("atan(1/5) needed terms up to n = "..n1)
+  local r2, n2 = a_atan_rcp_b(4, 239)
+  print("atan(1/239) needed terms up to n = "..n2)
+  mp_sub(r1, r2); local pi = mp_string(r1)
+  local td = os.difftime(os.time(), t1)
+  print("Calculation took "..td.." seconds.")
+  local s1, s2 = pi:sub(1, 7), pi:sub(-40)
+  print("pi = "..s1.."..."..s2)
+  return pi
+end
+
+function output_pi ()
+  local pi = calc_pi():sub(3) -- discard "3."
+  -- pad spaces to an appropriate length
+  local len = pi:len()
+  if len % 100 ~= 0 then
+    pi = pi..(" "):rep(100 - len % 100); len = pi:len()
+  end
+  -- divide into 10-digit chunks
+  local cnk = {}
+  for j = 10, len, 10 do
+    table.insert(cnk, pi:sub(j - 9, j))
+  end
+  -- take 10 chunks to form a line
+  for j = 10, #cnk, 10 do
+    local s = table.concat(cnk, "\\blksep", j - 9, j)
+    tex.print("\\oneline{"..s.."}")
+  end
+end
+\end{execluacodeblock}
+\begin{document}
+
+\begin{flushleft}
+\fontsize{32}{32}\selectfont
+$\pi$ = 3.
+\end{flushleft}
+\newcommand*\blksep{\hspace{5pt plus.5pt minus.5pt}}
+\newcommand*\oneline[1]{\noindent#1\par}
+\par\directlua{output_pi()}
+
+\end{document}
+</pre>
+<div class="center display">
+<img src="sample/lualatex-example15.png" width="620" height="620"
+     alt="π=3. 1415926535 8979323846 2643383279 5028841971 6939937510 5820974944 5923078164 0628620899 8628034825 3421170679 8214808651 3282306647 0938446095 5058223172 5359408128 4811174502 8410270193 8521105559 6446229489 5493038196 4428810975 6659334461 2847564823 3786783165 2712019091 4564856692 3460348610 4543266482 1339360726 0249141273 7245870066 0631558817 4881520920 9628292540 9171536436 7892590360 0113305305 4882046652 1384146951 9415116094 …………（159ページまで続く）">
+</div>
+<p>計算時間は約 60 時間<small>（Pentium D 2.80GHz／1.00GB RAM）</small>。
+<div class="bend"><span class="lbl">参考：</span> 
+なお、現在のところ、LuaTeX では LuaJIT 等の Lua 高速化技術を採用する予定はないようである。
+</div>
+<div class="bend"><span class="lbl">参考：</span> 
+LuaJIT を試してみた。もはや TeX とは無関係な話 ;-)
+<div align="center" class="display">
+<div>計算の所要時間（単位：秒）</div>
+<table class="std">
+<col>
+<col align="right">
+<col align="right">
+<tr><th>処理系</th>
+<th>5万桁</th><th>10万桁</th></tr>
+<tr><td>LuaTeX beta-0.50.0 (W32TeX)</td>
+<td>529</td><td>2137</td></tr>
+<tr><td>Lua5.1.4 (LuaBinaries)</td>
+<td>335</td><td>1342</td></tr>
+<tr><td>LuaJIT 2.0.0-beta4（自前ビルド）</td>
+<td>44</td><td>182</td></tr>
+</table>
+</div>
+</div>
+
+</div><!--ssec-heavy-->
+
+</div><!--sec-lua-latex-->
+
+<div class="board">
+<a href="./lualatexlua2.html">→そしてさらなる深淵へ……</a>
+</div>
+
+<div class="section" id="sec-guide">
+<h2>付録：Lua と LaTeX の連携の命令の一覧</h2>
+
+<div class="subsection" id="ssec-guide-luatex">
+<h3>LuaTeX の機能</h3>
+
+<p>ここに挙げる「LaTeX 命令」は、実際には LuaTeX のプリミティブである。
+最近の LuaLaTeX では、一部のプリミティブ
+（★印；LuaTeX で追加されたもので <code>\directlua</code> 以外のもの）
+は本来の名前でなく、前に <code>luatex</code> を付加した名前
+（例えば <code>\latelua</code> → <code>\luatexlatelua</code>）
+で定義されている。
+LuaLaTeX の方針としては、luatextra パッケージ（後述）
+で用意される命令（ラッパー）を使うのが適当としている
+のだと思われる。
+今のところ、このページでは luatextra を使わないことに
+しているので、
+ixbase0 パッケージでは、ここに挙げた命令に限って、
+元の名前でも使えるようにしてある。
+</p>
+<ul>
+<li><code>\directlua{&lt;テキスト&gt;}</code>［LaTeX 命令］： 
+<code>&lt;テキスト&gt;</code> を Lua コードとして
+Lua インタプリタで実行する。
+（<a href="#elt-ref-1">参照</a>）
+</li>
+<li><code>\directlua name &lt;名前&gt; {&lt;テキスト&gt;}</code>［LaTeX 命令］： 
+<code>\directlua</code> でチャンクの名前（エラー表示等で使用される）
+を指定した形式。
+</li>
+<li><code>\latelua{&lt;テキスト&gt;}</code>［★LaTeX 命令］： 
+<code>&lt;テキスト&gt;</code> を Lua コードとして実行するが、
+<code>\directlua</code> と異なり、
+実行されるのは次にページ出力が行われた時であるる。
+<code>name &lt;名前&gt;</code> 指定も可能である。
+</li>
+<li><code>\detokenize{&lt;テキスト&gt;}</code>［LaTeX 命令］： 
+LaTeX の特殊文字や命令を含むテキストを、
+「それを表現する文字列」に展開する。
+（<a href="#elt-ref-3">参照</a>）
+</li>
+<li><p><code>\luaescapestring{&lt;文字列&gt;}</code>［★LaTeX 命令］： 
+文字列を Lua の文字列リテラルで必要なエスケープ
+を施したものに展開する。
+（<a href="#elt-ref-3">参照</a>）
+</li>
+<li><code>tex.print(&lt;文字列&gt; s, ...)</code>［Lua 関数］：
+引数の文字列を LaTeX の入力として渡す。
+（<a href="#elt-ref-1">参照</a>）
+</li>
+<li><code>tex.write(&lt;文字列&gt; s, ...)</code>［Lua 関数］：
+引数の文字列を「verbatim な状態」で LaTeX の入力として渡す。
+</li>
+</div>
+
+<div class="subsection" id="ssec-guide-ixbase0">
+<h3>ixbase0 パッケージの機能</h3>
+
+<ul>
+<li><code>\begin{execluacodeblock}[&lt;名前&gt;]&lt;テキスト&gt;\end{execluacodeblock}</code>
+ ［LaTeX 環境］： 
+中のテキストを「verbatim な状態」で読み取りそれを
+<code>\directlua</code> で実行する。
+（<a href="#elt-ref-2">参照</a>）
+<code>&lt;名前&gt;</code> は <code>\directlua</code> の <code>name</code>
+オプションの値。
+</li>
+<li><code>\begin{execluacodeblock*}[&lt;名前&gt;]&lt;テキスト&gt;\end{execluacodeblock*}</code>
+ ［LaTeX 環境］： 
+<code>\directlua</code> の代わりに <code>\latelua</code> で実行する
+ことを除いて <code>execluacodeblock</code> 環境と同じ。
+</li>
+<li><code>\execluacode[&lt;名前&gt;]{&lt;テキスト&gt;}</code>
+ ［LaTeX 命令］： 
+<code>execluacodeblock</code> の命令版として用意しているが、
+要するに、<code>\directlua name &lt;名前&gt; {&lt;テキスト&gt;}</code>
+を直接使うのと同じ（verbatim ではない）で、
+しかも完全展開可能(fully-expandable)でないという制限があるので、
+こちらはあまり有用でない。
+（オプション引数なしの <code>\execluacodeblock{...}</code>
+だけは完全展開可能である。）
+</li>
+<li><code>\execluacode*[&lt;名前&gt;]&lt;テキスト&gt;</code>
+ ［LaTeX 命令］： 
+<code>\execluacode</code> の <code>\latelua</codE> 版。
+</li>
+<li><code>\?\<u>*</u></code> （<code><u>*</u></code> は英数字でない ASCII 文字）
+ ［LaTeX 命令］：
+「非特殊」な文字 <code><u>*</u></code> に展開される。
+（<a href="#elt-ref-2">参照</a>）
+</li>
+<li><code>\??\<u>*</u></code> （<code><u>*</u></code> は英数字でない ASCII 文字）
+ ［LaTeX 命令］：
+「非特殊」な文字列 <code>\<u>*</u></code> に展開される。
+（<a href="#elt-ref-2">参照</a>）
+</li>
+<li><code>ixbase.print(&lt;文字列&gt; s,...)</code>
+ ［Lua 関数］： 
+引数の各文字列を改行文字毎に分割して <code>tex.print()</code>
+に渡す（文字列の末尾の改行は無視する）。
+（<a href="#elt-ref-4">参照</a>）
+</li>
+<li><code>\ixstring{&lt;テキスト&gt;}</code>
+ ［LaTeX 命令］：
+<code>&lt;テキスト&gt;</code> を Lua の文字列リテラル形式に
+変換したものに展開。
+例：<code>\ixstring{Lua{\TeX}}</code> → <code>"Lua\\TeX "</code>
+</li>
+<li><code>\ixescape{&lt;テキスト&gt;}</code>
+ ［LaTeX 命令］：
+引用符〈<code>""</code>〉を付加しないことを除いて
+<code>\ixstring</code> と同じ。
+例：<code>\ixstring{Lua{\TeX}}</code> → <code>Lua\\TeX&#x2423;</code>
+</li>
+<li><code>\ixnumber{&lt;テキスト&gt;}</code>
+ ［LaTeX 命令］：
+<code>&lt;テキスト&gt;</code> を Lua で数値として扱うコードに展開する。
+例えば、<code>\newcommand*{\valA}{2.0} \directlua{r = math.sqrt(\ixnumber\valA)</code>
+のように使う。
+単純に <code>math.sqrt(\valA)</code> とするのと異なり、
+<code>\valA</code> が数値の形式でない場合はエラーになる
+（つまり変な動作をしない）。
+</li>
+<li><code>\ixvcounter{&lt;カウンタ名&gt;}</code>
+ ［LaTeX 命令］：
+LaTeX カウンタの<u>現在の</u>値を Lua で数値として扱うコードに展開する。
+要するに <code>(\arabic{&lt;カウンタ名&gt;})</code> と同じ。
+</li>
+<li><code>\ixlength{&lt;長さ変数名&gt;}</code>
+ ［LaTeX 命令］：
+長さ変数の<u>現在の</u>値を Lua でグルー値（ユーザデータ型）
+として扱うコードに展開する。
+</li>
+<li><code>ixbase.counter.&lt;カウンタ名&gt;</code>
+［Lua 変数；読書可］：
+LaTeX のカウンタに Lua でアクセスする。
+</li>
+<li><code>ixbase.length.&lt;長さ変数名&gt;</code>
+［Lua 変数；読書可］：
+LaTeX の長さ変数に Lua でアクセスする。
+LaTeX のグルー値（A plus B minus C のように伸縮をもつ長さ）
+は Lua ではユーザデータ型の値として扱われ、
+インデクス <code>width</code> がそのグルーの自然長
+（sp 単位の整数値）を表す。
+</li>
+<li><code>ixbase.to_dimen(v)</code>
+［Lua 関数］：
+<code>v</code> が数値ならば <code>v</code> 自身を返す。
+<code>v</code> が文字列ならば、それを LaTeX の長さ表記
+（単位付き数値）として解釈して sp 単位の整数値を返す。
+</li>
+<li><code>ixbase.to_skip(v)</code>
+［Lua 関数］：
+<code>v</code> が数値の場合、
+自然長が <code>v</code> sp で伸縮がゼロのグルー値を返す。
+<code>v</code> が文字列の場合、それを LaTeX のグルー値表記
+として解釈して結果のグルー値を返す。
+</li>
+</ul>
+
+
+</div><!--sec-guide-->
+
+<div class="board hdn">
+（まだ続く…？）
+</div>
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">思わず Lua で LaTeX してみた</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010&#x2013;2011 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2011-05-28
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>
