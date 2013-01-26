@@ -65,6 +65,12 @@ pTeX に匹敵する品質を得ることを目指している。
 <div id="changelog">
 <div class="lbl">変更履歴</div>
 <ul>
+<li>2012/09/12： ZXjatype 0.6 版。
+xeCJK 3.x 版に対応した。
+ただし実装上の制限のため、
+日本語に特化した一部の調整を廃止しているので、
+以前のものと同じ結果にならない。
+</li>
 <li>2012/05/01： ZXjatype 0.5 版。
 「行頭禁則仮名 + 開き括弧」の間の空白が入らない不具合を修正した。
 </li>
@@ -79,25 +85,54 @@ xeCJK の新しい版での動作の違いの解説を加筆。
 <div class="section" id="sec-overview">
 <h2>概要</h2>
 
-<p>XeTeX には日本語の空白調整をマクロレベルで容易に行うための機能
+<p>XeTeX には日本語
+（および他の CJK 言語）
+の空白調整をマクロレベルで容易に行うための機能
 （文字間トークン自動挿入機能）が備わっている。
-これを用いたマクロパッケージを作れば JIS の規定に沿った高品質な
-日本語の段落の組版（<a href="xelatex.html#ssec-missing">「XeLaTeX で日本語する件について」での解説</a>を参照）
-ができるはずだが、残念ながら、
-実験的なものがいくつか公開されているのみで
-まだ実用のものがない。
+これを利用した CJK 言語の組版用のパッケージとしては、
+xeCJK パッケージ
+（作者は Sun Wenchang（孫文昌）氏；
+現在は ctex のチームによりメンテナンスされている）
+が有名である。
+zxjatype パッケージは、
+xeCJK パッケージの提供する機能を利用して日本語の組版に適した環境を実現する。
 </p>
-<p>CTAN に目を向けると Sun Wenchang（孫文昌）氏による xeCJK
-という中国語組版用のパッケージが公開されている。
-（名前を見ると CJK 言語のサポートを目標としていることが想像されるが、
-現状では中国語しか考慮されていない。）
-このパッケージでは、約物の前後の空きの調整法を
-「句読点スタイル（punctuation style）」と呼んでいて、
-複数のスタイルの中から選択できるようになっている。
-zxjatype パッケージでは、
-このパッケージが提供する枠組を利用して
-新たに日本語の段落組に適したスタイルを追加している。
+<div class="alert"><p><span class="lbl">注意：</span>
+xeCJK の 2.x → 3.x 版の改訂において、
+コードが全面的に書き直された。
+（新しいコードは expl3 の言語で書かれている。）
+これにより、xeCJK の内部構造に依存している zxjatpye も書き直す必要が生じたが、
+zxjatype の改訂（0.6 版）にあたっては、
+xeCJK の内部コードに依存しないような実装を行う方針に転換した
+（但し xeCJK の内部<u>ロジック</u>には依存する部分がある）。
+この実装上の制限のため、
+従来（0.5 版まで）行ってきた日本語用の調整の一部が改訂後は廃止されている。
+その一番大きな点として
+「句読点スタイル」
+がある。
+従来版では日本語用に特別に調整した句読点スタイル
+「quasijis」
+を新たに実装してこれを用いていたが、
+この実装には xeCJK の内部コードへのパッチを必要とするので改訂版では実装されず、
+代わりに xeCJK の本来の句読点スタイルの一つである
+「fullwidth（全角式）」
+を採用している。
+（このため、
+約物が並んだ箇所での空き量が
+JIS X 4051 の理想とする値からずれることがある。
+差は小さいのであまり目立たないと思われるが。）
 </p>
+<p>また、
+<em>zxjatype の 0.6 版以降を xeCJK の 2.x 版とともに用いた場合は
+zxjatype は 0.5 版の動作になる</em>ことに注意されたい。
+これは、
+新しい zxjatype の実装は旧来の 2.x 版の xeCJK では動作しないので、
+zxjatype において従来の 0.5 版のコードもそのまま残していて、
+必要に応じてそちらを用いるように切替を行っているからである。
+</p>
+</div>
+<p class="notice">以下の説明では、xeCJK 3.x 版／zxjatype 0.6 版以降のことを<em>「新版」</em>、xeCJK 2.x 版／zxjatype 0.5 版のことを<em>「旧版」</em>と呼ぶ。</p>
+
 <h4>構成パッケージ一覧</h4>
 <ul>
 <li>zxjatype パッケージ: 本体
@@ -108,7 +143,7 @@ zxjatype パッケージでは、
 <h3>対応環境</h3>
 
 <ul>
-<li>TeX 処理系： XeLaTeX（XeTeX 0.997 版以降；非 oldxetex モードは 0.9995 版以降）
+<li>TeX 処理系： XeLaTeX （XeTeX 0.9995 版 [2009/06/28] 以降）
 </li>
 <li>前提パッケージ： xeCJK<br>
 zxjatype パッケージは xeCJK の内部構造に深く依存しているので、
@@ -120,26 +155,22 @@ xeCJK の版によって正常動作しない可能性がある。
 <li>xeCJK 2.3.10 版 [2009/09/30] ― zxjatype 0.3, 0.4 版</li>
 <li>xeCJK 2.3.15 版 [2010/05/31] ― zxjatype 0.3, 0.4 版</li>
 <li>xeCJK 2.3.19 版 [2011/05/01] ― zxjatype 0.4 版</li>
-<li>xeCJK 2.4.4 版 [2011/09/17] ― zxjatype 0.4, 0.5 版</li>
-</ul>
-ただし、<a href="#">後述</a>するように、
-xeCJK の 2.3.10 版以降と 2.3.5 版では組版結果が異なる場合がある。
-将来の xeCJK の版の上では動かない可能性があるので、
-2.3.5 版と 2.3.15 版をこのサイトに置いておく。
-</p>
-<ul>
-<li><a href="data/xecjk_2.3.5.zip">xecjk_2.3.5.zip</a>（246KB）
-<span class="mdate">[2009/10/19]</span><br>
-<a href="data/xecjk_2.3.15.zip">xecjk_2.3.15.zip</a>（266KB）
-<span class="mdate">[2010/08/11]</span><br>
-<em>このパッケージのライセンスは LPPL（v1.3以降）である。</em><br>
-※ xecjk_2.3.15.zip では、xeCJK.sty を得るために xeCJK.dtx からの抽出を
-行う必要がある。
-手順については、<a href="note.html#sssec-dtx-4">「.dtx に立ち向かう方策」の「流儀 4」</a>を参照。
-</li>
+<li>xeCJK 2.4.4 版 [2011/09/17] ― zxjatype 0.4, 0.5, 0.6 版</li>
+<li>xeCJK 2.4.5 版 [2012/01/31] ― zxjatype 0.5 版</li>
+<li>xeCJK 3.0.8 版 [2012/07/20] ― zxjatype 0.6 版</li>
 </ul>
 </li>
 </ul>
+<div class="bend"><span class="lbl">参考：</span>
+CTAN に過去に公開されたことのある xeCJK の旧版のアーカイブ
+（2.4.4 版以降）
+は <a href="http://ctanhg.scharrer-online.de/pkg/xecjk.html">CTAN-HG のサイト</a>で入手できる。
+ただし、xeCJK 自体に
+「xeCJK → fontspec → expl3」
+のような依存関係があるので、
+xeCJK だけ古い版に差し替えても正常に動作しない可能性が高い。
+（2012 年 7 月に expl3 の大きな改訂が行われているので、これより前に戻るのが難しい状況である。）
+</div>
 
 </div><!--ssec-environ-->
 
@@ -171,78 +202,123 @@ xeCJK の 2.3.10 版以降と 2.3.5 版では組版結果が異なる場合が�
 <p>を書くことで読み込む。
 この際に、xeCJK が未読込である場合は読み込む。
 （さらに、xeCJK は fontspec を読み込む。）
-オプションには次のものが指定できる。
+オプションについては<a href="#sec-advanced-option">後で</a>解説するが、
+標準的な使用法では指定しなくてよい。
 </p>
-<ul>
-<li><code>oldxetex</code> ：
-2.3 版の xeCJK は XeTeX の 0.9995 版 [2009/06/28] を必要とする。
-これはその版で導入された機能（グリフの bounding box 取得）
-を利用しているからであるが、
-日本語の句読点スタイルではこの機能は不要である。
-従って、日本語の句読点スタイルのみを用いる場合は、
-このオプションを付けることで、XeTeX のこれ以前の版
-（ただし 0.997 版以降）でも使えるようになる。
-（この状態で、xeCJK 本来の中国語用の句読点スタイルに切り替えると
-エラーになる。）
-</li>
-<li><code>noCJKchecksingle</code> ：
-xeCJK の文字ウィドウ抑制機能を無効にする。
-既定では文字ウィドウ抑制機能は有効である。
-</ul>
+<div class="bend"><span class="lbl">参考：</span>
+旧版で存在した、XeTeX の古い版に対応するための <code>oldxetex</code>
+オプションは新版では廃止された。
+（従って、新版は 0.9995 版以降の XeTeX の使用を必須とする。）
+</div>
 
 </div><!--ssec-preamble-->
 
 <div class="subsection" id="ssec-basic-cmd">
-<h3>命令の一覧</h3>
+<h3>xeCJK／zxjatype 機能一覧（新版）</h3>
 
-<p>0.4 版で一部の命令の名前が変更された。
-以下の一覧は 0.4 版以降に従ったものである。
+<p>xeCJK では「CJK 文字」と「それ以外の文字」で処理を分別するが、
+ここでは便宜的に、
+前者を「和文」、
+後者を「欧文」と呼ぶ。
 </p>
+<p>★ 印を付したものは zxjatype で追加された機能、
+☆ 印を付したものは zxjatype で動作に変更がある xeCJK の機能である。
+それ以外は xeCJK 単体と同じ動作になる。
+</p>
+<h4>基本</h4>
 <ul>
-<li><code>\setjamainfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code><br>
-<code>\setjasansfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code><br>
-<code>\setjamonofont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+<li>☆ <code>\setCJKmainfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code><br>
+☆ <code>\setCJKsansfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code><br>
+☆ <code>\setCJKmonofont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
 それぞれ、総称ファミリ <code>\rmfamily</code>、<code>\sffamily</code>、<code>\ttfamily</code>
-が指定されている場合の和文部分のフォントファミリを指定する。
-（zxjatype（というより xeCJK）では和文と欧文でフォントを自動的に切り替える。）
+が指定されている場合の和文フォントファミリを指定する。
 属性リストとファミリ名の指定は fontspec の <code>\setmainfont</code>
 等の命令と同じ。
+<em>zxjatype では <code>\setjafontscale</code> の指定が有効になる。</em>
 </li>
-<li><code>\setjafamilyfont{&lt;CJKファミリ名&gt;}[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
+<li>☆ <code>\setCJKfamilyfont{&lt;CJKファミリ名&gt;}[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ：
 総称ファミリ以外での和文用ファミリの定義。
 <code>&lt;CJKファミリ名&gt;</code> はユーザが自由に決める名前で、
-<code>\jafamily</code> 命令（または<code>\CJKfamily</code> 命令）で使用する。
+<code>\CJKfamily</code> 命令で使用する。
+<em>zxjatype では <code>\setjafontscale</code> の指定が有効になる。</em>
 </li>
-<li><code>\jafamily{&lt;CJKファミリ名&gt;}</code> ：
-<code>\setjafamilyfont</code>（あるいは xeCJK の <code>\setCJKfamilyfoont</code>）
+<li>★ <code>\setjamainfont</code>／<code>\setjasansfont</code>／<code>\setjamonofont</code>／<code>\setjafamilyfont</code> ：
+それぞれ対応の <code>\setCJK...font</code> 命令と同義。
+</li>
+<li><code>\CJKfamily{&lt;CJKファミリ名&gt;}</code> ：
+<code>\setCJKfamilyfont</code>
 で定義したファミリに、和文フォントを切り替える。
 なお、欧文部分のフォントの切り替えは従来どおり fontspec の命令を用いる。
 </li>
-<li><code>\setjafontscale{&lt;値&gt;}</code> ：
+<li>★ <code>\jafamily</code> ： <code>\CJKfamily</code> と同義。
+</li>
+<li>★ <code>\setjafontscale{&lt;値&gt;}</code> ：
 和文フォントに対するスケール（fontspec の属性 Scale）を指定する。
-既定値は 1 であるが、BXjscls の文書クラスを使っている場合は、
-そちらで設定するスケールが既定値に設定される。
+値を省略（空に）することもできて、この場合スケール設定は行われない。
 <div class="bend"><span class="lbl">参考：</span>
-<code>\setja...font</code> 命令はここで設定した値を <code>Scale</code> 属性
-に指定して xeCJK の <code>\setCJK...font</code> 命令を呼んでいる。
+「ファミリ定義命令のオプション指定」 →
+「<code>\setjafontscale</code> での指定」 →
+「<code>\defaultCJKfontfeatures</code> での指定」
+の順番に優先される。
 </div>
 </li>
-<li><code>\CJKsetecglue{&lt;LaTeXテキスト&gt;}</code>  ［xeCJK の命令］：
-和欧文間空白の設定。
-引数に書くのは <code>\hspace{0.2em plus 0.1em}</code> 等の LaTeX 命令である。
-<code>\CJKsetecglue{ }</code> で和欧文間空白が欧文空白と同じになる。
+<li><code>\xeCJKsetup{&lt;キー&gt;=&lt;値&gt;,...}</code>： 
+xeCJK のパラメタ設定。
+有効な設定項目の一部を以下に示す。
+（真理値は <code>true</code>／<code>false</code> で指定する。）
+<ul>
+<li><code>xeCJKactive = &lt;真理値&gt;</code> ：
+xeCJK の動作を有効にするか。
+false にすると xeCJK は
+（zxjatype も）
+全く作動しなくなり、
+結果的に入力文字が全て欧文として扱われる。
+既定値は true。
 </li>
-<li><code>\&gt;</code> ：
-和欧文間空白を出力する（数式中では LaTeX 本来の意味に戻る）。
+<li><code>CJKglue = &lt;LaTeXテキスト&gt;</code> ：
+和文間空白の設定。
+引数に書くのは <code>\hspace{0pt plus 0.1em}</code> 等の（空白を入れる為の）LaTeX 命令である。
+xeCJk での既定値は <code>\hspace{0pt plus 0.08\baselineskip}</code>。
+zxjatype での既定値は <code>\hspace{0pt plus 0.08\baselineskip minus 0.008\baselineskip}</code>。
+</li>
+<li><code>CJKecglue = &lt;LaTeXテキスト&gt;</code> ：
+和欧文間空白の設定。
+引数に書くのは（空白を入れる為の）LaTeX 命令である。
+xeCJk での既定値は <code>{ }</code> （欧文空白）。
+zxjatype での既定値は <code>\hspace{0.25em plus 0.15em minus 0.05em}</code>。
+</li>
+</ul>
+</li>
+<li>以下の命令が旧版との互換性のために残されている。
+<ul>
+<li><code>\makexeCJKactive</code> ： <code>\xeCJKsetup{xeCJKactive=true}</code> と同じ。
+</li>
+<li><code>\makexeCJKinactive</code> ： <code>\xeCJKsetup{xeCJKactive=false}</code> と同じ。
+</li>
+<li><code>\CJKsetecglue{&lt;テキスト&gt;}</code> ： <code>\xeCJKsetup{CJKecglue=&lt;テキスト&gt;}</code> と同じ。
+</li>
+</ul>
+</li>
+<li><code>\CJKecglue</code> ：
+和欧文間空白を出力する。
 通常、和文と欧文が隣接している場合には和欧文間空白が自動的に挿入されるが、
-これが働かない場合がある
-（例えば <code>\mbox</code> の前後や <code>\TeX</code> 等のロゴ命令の前後）。
+これが働かない場合がある。
+<!--（例えば <code>\mbox</code> の前後や <code>\TeX</code> 等のロゴ命令の前後）-->
 その場合にはこの命令を書く必要がある。
 </li>
-<li><code>\inhibitglue</code> （または <code>\&lt;</code>）：
-その箇所において和文文字間に自動的に入る空白を抑制する。
-<code>\&lt;</code> は同名の命令が他で定義されてない時にのみ使える。
+<li>★ <code>\&gt;</code> ：
+非数式モードでは <code>\CJKecglue</code> と同義になり、
+数式モードでは LaTeX 本来の意味になる。
+（他のパッケージによる再定義が行われていない場合に限り、
+再定義が行われる。）
 </li>
+<li>★ <code>\inhibitglue</code> ：
+その箇所において和文文字間に自動的に入る空白を抑制する。
+</li>
+<li>★ <code>\&lt;</code> ：
+<code>\inhibitglue</code> と同義。
+（他のパッケージによる定義が行われていない場合に限り、
+定義が行われる。）
 </ul>
 
 <h4>和文処理を無効化する</h4>
@@ -276,8 +352,24 @@ L’un l’autre / \textrawen{L’un l’autre} / \textrawja{L’un l’autre}
 <div class="imagebox" style="width:408px">
 <img src="sample/zxjatype-sample02.png" width="408" height="21">
 </div></div>
-
+<h3>xeCJK／zxjatype 機能一覧（旧版）</h3>
+<h4>新版との違い</h4>
+<ul>
+<li><code>\setjascale</code> の設定が有効になるのは、
+<code>\setja...font</code> で指定した場合に限り、
+xeCJK 本来の <code>\setCJK...font</code> での指定には効かない。
+</li>
+<li><code>\setjascale</code> で引数を空にする指定法がない。
+スケールの既定値（他で変更が行われない場合）は 1 である。
+</li>
+<li><code>\xeCJKsetup</code> 命令は存在しない。
+<code>\CJKsetecglue</code> 命令等を使う必要がある。
+なお、「和文間空白」の量を変更したい場合は、
+<code>\CJKglue</code> というマクロを <code>\renewcommand</code> で再定義する。
+</li>
+</ul>
 <h4>verbatim 出力の和欧文の切替</h4>
+<p>（旧版のみで利用可能な機能。）</p>
 <p>verbatim 出力（<code>\verb</code> や <code>verbatim</code> 環境）
 の中でも和文処理は無効になる。
 既定では verbatim 出力は和文フォントが使われるが、
@@ -313,6 +405,9 @@ L’un l’autre / \textrawen{L’un l’autre} / \textrawja{L’un l’autre}
 
 <div class="subsection" id="ssec-space">
 <h3>改行・空白文字の扱い</h3>
+
+<p class="notice">（この節の内容は古くなっている。）
+</p>
 
 <p>zxjatype での改行および空白文字（半角空白文字とタブ文字）
 の扱いは xeCJK のそれに従うが、
@@ -564,87 +659,164 @@ Unicode対応
 <div class="subsection" id="sec-advanced-option">
 <h3>パッケージオプション</h3>
 
-<p>既に解説したもの以外のオプション。
+<p>パッケージオプション、すなわち zxjatype の読込の
+<code>\usepackage</code> 命令のオプションに書くもの。
 </p>
+<h4>zxjatype のパッケージオプション</h4>
 <ul>
 <li><code>default</code> （既定）：
-日本語用の設定に切り替える。
-具体的には、次の設定を行う。
-<ul>
-<li>句読点スタイルを <code>quasijis</code> にする。
-（<code>\punctstyle{quasijis}</code>）
+パッケージ読込直後に日本語用の設定への切替を行う。
+すなわち <code>\zxjapanesestyle</code> を実行する。
 </li>
-<li>和欧文間空白と和文間空白を日本語に適した値にする。
-（<code>\zxusejapaneseparameters</code>）
-</li>
-<li>約物の間での行分割を許可する。
-（<code>\xeCJKallowbreakbetweenpuncts</code>）
-</li>
-</ul>
 <li><code>nodefault</code> ：
 <code>default</code> の否定。
 xeCJK の初期設定が保持される。
-既定の句読点スタイルは <code>quanjiao</code>（全角式）である。
+</li>
+<li><code>CJKchecksingle</code> （既定）： xeCJK の文字ウィドウ抑制機能を有効にする。
+</li>
+<li><code>noCJKchecksingle</code> ： xeCJK の文字ウィドウ抑制機能を無効にする。
+<div class="alert"><span class="lbl">注意：</span>
+xeCJK の既定ではウィドウ抑制機能は無効で、（xeCJK の）パッケージオプション
+<code>CJKchecksingle</code> でこの機能が有効になる。
+（新版では途中で設定を変更できる。）
+zxjatype では <code>CJKchecksingle</code> を既定としたため、
+否定のためのオプション <code>no～</code> を用意している。
+</div>
+</li>
+<li><code>adjustcharclass</code> （既定；新版のみ）：
+小書き仮名文字の属する xeCJK の文字クラスを
+「閉じ括弧類」
+から
+「通常 CJK 文字」
+に変更する。
+</li>
+<li><code>noadjustcharclass</code> （新版のみ）：
+<code>adjustcharclass</code> の否定。
+xeCJK の文字クラス設定を変更しない。
+<div class="alert"><span class="lbl">参考：</span>
+小書き仮名文字を「閉じ括弧類」にしているのは行頭禁則の対象とするためであるが、
+この扱いには副作用があって、
+直後に約物がある場合の空きが不正になる
+（約物が並んでいると解釈されるため）。
+旧版（0.5 版）では個別の処理を施してこの副作用を解消していた。
+しかし、新藩では実装の制限でそれができないので、
+通常の文字扱いに変えて
+（つまり行頭禁則も放棄して）
+不正な空きの問題を解消している。
+</div>
+</li>
+<li>上記以外で xeCJK の有効なオプションを指定すると、
+内部で xeCJK を読み込む時にそれが渡される。
+（xeCJK が未読込の場合に限る。）
+</li>
+</ul>
+
+<h4>xeCJK のパッケージオプション（抜粋）</h4>
+
+<ul>
+<li><code>CJKchecksingle</code> ： 文字ウィドウ抑制機能を有効にする。
+</li>
+<li><code>nospace</code> （既定）： 和文文字間の空白文字を無視する。
+</li>
+<li><code>space</code> ： 和文文字間の空白文字を保持する。
+</li>
+<li><code>fallback</code> ： 和文文字のフォールバック機能を有効にする。
+</li>
+<li>新版では、パッケージオプションにおいて
+<code>\xeCJKsetup</code> の引数の形式で設定を行うことができる。
+例えば、<code>CheckSingle = true</code> を指定すると、
+<codE>CJKchecksingle</code> と同義になる。
+互換性のために上掲のオプションも残されている。
+</li>
+<li>上記以外で fontspec の有効なオプションを指定すると、
+内部で fontspec を読み込む時にそれが渡される。
+（fontspec が未読込の場合に限る。）
 </li>
 </ul>
 
 </div><!--ssec-basic-option-->
 
 <div class="subsection" id="ssec-advanced-cmd">
-<h3>命令</h3>
+<h3>高度な命令</h3>
 
 <p>既に解説したもの以外の命令。
-xeCJK の命令の詳細については xeCJK のマニュアルを参照してほしい。
 </p>
+<h4>zxjatype の命令</h4>
 <ul>
-<li><code>\zxjapanesestyle</code>：
+<li><code>\zxjapanesestyle</code> ：
 日本語用の設定に切り替える。
-先述の <code>default</code> クラスオプションと同じ設定を局所的に行う。
+この命令はユーザによる再定義（<code>\renewcommand</code>）が可能で、
+既定の定義は以下の通り。
+<div>（新版）</div>
+<pre>
+\xeCJKsetup{
+  AllowBreakBetweenPuncts = true,
+  PunctStyle = fullwidth,
+}%
+\zxusejapaneseparameters
+</pre>
+<div>（旧版）</div>
+<pre>
+\punctstyle{quasijis}%
+\xeCJKallowbreakbetweenpuncts
+\zxusejapaneseparameters
+</pre>
 </li>
 <li><code>\zxusejapaneseparameters</code>：
-和欧文間空白と和文間空白を日本語に適した値にする。
-和欧文間空白は四分にしている。
-<div class="bend"><span class="lbl">参考：</span> 和文間空白は <code>\CJKglue</code>
-というマクロで出力されるので、変更したい場合はこのマクロを再定義すればよい。
-</div>
+和欧文間空白と和文間空白を日本語に適した値にする：<br>
+和欧文間空白(CJKecglue) = <code>0.25em plus 0.15em minus 0.05em</code><br>
+和文間空白(CJKglue) = <code>0pt plus .08\baselineskip minus .008\baselineskip</code><br>
 </li>
 <li><code>\zxuseoriginalparameters</code>：
 和欧文間空白と和文間空白を xeCJK の初期設定に戻す。
 </li>
-<li><code>\setCJKmainfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ［xeCJK の命令］<br>
-<code>\setCJKsansfont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ［xeCJK の命令］<br>
-<code>\setCJKmonofont[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code> ［xeCJK の命令］：
-総称ファミリ <code>\rmfamily</code>、<code>\sffamily</code>、<code>\ttfamily</code>
-が指定されている場合の和文（CJK）部分のフォントファミリを指定する xeCJK の命令。
+</ul>
+
+<h4>xeCJK の命令</h4>
+<ul>
+<li><code>\xeCJKsetup</code> で指定する設定項目（新版のみ）：
+<ul>
+<li><code>CJKspace=&lt;真理値&gt;</code> ：
+和文文字の間の空白文字を保持するか。
+既定は false。
 </li>
-<li><code>\setCJKfamilyfont{&lt;CJKファミリ名&gt;}[&lt;属性リスト&gt;]{&lt;ファミリ名&gt;}</code>
- ［xeCJK の命令］：
-総称ファミリ以外での和文用ファミリの定義を行う xeCJK の命令。
-詳しくは <code>\setjafamilyfont</code> の説明を参照。
-<code>\setja...family</code> は <code>\setjafontscale</code>
-で指定された値を Scale に指定して <code>\setCJK...family</code> を呼んでいる。
+<li><code>CheckSingle=&lt;真理値&gt;</code> ：
+文字ウィドウを抑止するか。
+既定は false だが、zxjatype では true である。
 </li>
-<li><code>\CJKfamily{&lt;CJKファミリ名&gt;}</code> ［xeCJK の命令］：
-<code>\jafamily</code> と同じ。
-こちらは xeCJK の命令で、zxjatype では命令名の一貫性のために <code>\jafamily</code>
-命令を用意した。
+<li><code>AutoFallBack=&lt;真理値&gt;</code> ：
+和文文字のフォールバック機能を有効にするか。
 </li>
-<li><code>\punctstyle{&lt;スタイル名&gt;}</code> ［xeCJK の命令］：
+<li><code>PunctStyle=&lt;スタイル名&gt;</code> ：
 句読点スタイルを設定する。
-zxjatype で新設された日本語用のスタイルの名前は <code>quasijis</code> である。
+zxjatype の旧版で新設された日本語用のスタイルの名前は <code>quasijis</code> である。
 xeCJK で用意されたスタイルには
 <code>fullwidth</code>（または <code>quanjiao</code>；全角式）、
 <code>halfwidth</code>（または <code>hanjiao</code>；半角式）、
 <code>mixedwidth</code>（または <code>kaiming</code>；開明式）、
 <code>marginkerning</code>（または <code>hangmobanjiao</code>；行末半角式）
 等がある。
+既定は fullwidth だが、zxjatype の旧版では quasijis である。
 </li>
-<li><code>\xeCJKallowbreakbetweenpuncts</code> ［xeCJK の命令］：
-約物の間の行分割を（禁則に該当する場合を除き）許可する。
+<li><code>AllowBreakBetweenPuncts=&lt;真理値&gt;</code> ：
+約物の間の行分割を許可するか。
+（もちろん禁則に該当する場合は常に禁止される。）
+既定は false（何故だろう？）だが、zxjatype では true である。
+</ul>
 </li>
-<li><code>\xeCJKnobreakbetweenpuncts</code> ［xeCJK の命令］：
-約物の間の行分割を全て禁止する。
-（xeCJK ではこちらが既定である。何故だろう？）
+<li><code>\CJKspace</code> ： <code>\punctstyle{CJKspace=true}</code> と同義。
+</li>
+<li><code>\CJKnospace</code> ： <code>\punctstyle{CJKspace=false}</code> と同義。
+</li>
+<li><code>\xeCJKenablefallback</code> ： <code>\punctstyle{AutoFallBack=true}</code> と同義。
+</li>
+<li><code>\xeCJKdisablefallback</code> ： <code>\punctstyle{AutoFallBack=false}</code> と同義。
+</li>
+<li><code>\punctstyle{&lt;スタイル名&gt;}</code> ： <code>\punctstyle{PunctStyle=&lt;スタイル名&gt;}</code> と同義。
+</li>
+<li><code>\xeCJKallowbreakbetweenpuncts</code> ： <code>\punctstyle{AllowBreakBetweenPuncts=true}</code> と同義。
+</li>
+<li><code>\xeCJKnobreakbetweenpuncts</code> ： <code>\punctstyle{AllowBreakBetweenPuncts=false}</code> と同義。
 </li>
 </ul>
 
@@ -676,7 +848,7 @@ Copyright &copy; 2009&#x2013;2012 ZR (Takayuki YATO)
 -->&#64;<span class="hdn">(at)</span>yaho<!--.or
 -->o.<span class="hdn">(dot)</span>co<!--.tokyo
 -->.<span class="hdn">(dot)</span>jp&gt;<br>
-Last updated: 2012-05-01
+Last updated: 2012-09-12
 </div>
 
 </div><!--footer-->

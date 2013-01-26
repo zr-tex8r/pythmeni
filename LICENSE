@@ -1,0 +1,7 @@
+LICENSE
+* As for files under lib/:
+  - jquery-1.3.2.min.js (ie. jQuery) is under MIT & GPL dual.
+  - The rest files are under the MIT License.
+* All the files elsewhere are under CC0 License.
+
+Takayuki YATO (aka. "ZR")
