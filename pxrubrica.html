@@ -3,7 +3,7 @@
 <html lang="ja">
 <head>
 <title>PXrubrica パッケージ ～美しい日本のルビ組版～ [電脳世界の奥底にて]</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <link rel="stylesheet" href="lib/zrmain.css" type="text/css">
@@ -58,9 +58,10 @@ JIS 規格「JIS X 4051」および W3C 技術ノート
 日本において一般的な様式に従ってルビを付ける機能を提供する。
 </div>
 
-<div id="changelog" class="hdn">
+<div id="changelog">
 <div class="lbl">変更履歴</div>
 <ul>
+<li>2015/10/25： 現在の状況に合わせて更新。</li>
 </ul>
 </div>
 
@@ -122,22 +123,37 @@ JIS 規格「JIS X 4051」および W3C 技術ノート
 <div class="subsection" id="ssec-install">
 <h3>インストール</h3>
 
-<p>アーカイブに同梱される README ファイルを参照。
+<p>TeX Live 2012 以降
+（あるいは比較的新しい W32TeX）
+であれば pxrubrica パッケージは標準で含まれている。
 </p>
-<p>（ がであることに注意。）
+<p>自分でインストールする場合は、
+アーカイブに同梱される README ファイルを参照。
 </p>
 
 </div><!--ssec-install-->
 
 </div><!--sec-overview-->
 
+<div class="section" id="sec-usage">
+<h2>使用法</h2>
+
+<p>基本的な使い方については、
+以下の記事で解説されている。</p>
+<ul>
+<li><a href="http://qiita.com/zr_tex8r/items/42466cbcbeb670a3a2dc">LaTeX 文書で“美しい日本の”ルビを使う ～pxrubrica パッケージ～</a> （Qiita）</li>
+</ul>
+
+<p>完全な説明についてはマニュアル文書
+pxrubrica.pdf を参照されたい。</p>
+
+</div><!--sec-usage-->
+
 <div class="section" id="sec-sample">
 <h2>サンプル</h2>
 
-<p>このパッケージに関するサンプルや使用法については、
+<p>このパッケージに関するサンプルについては、
 開発中に書いたブログ記事に割と詳しく記されているのでそちらを参照してほしい。
-なお、完全な説明についてはマニュアル文書
-pxrubrica.pdf に述べられている。
 </p>
 <ul>
 <li><a href="http://d.hatena.ne.jp/zrbabbler/20110723/1311427941">ルビはじめました（PXrubrica パッケージ）(1)</a>
@@ -176,12 +192,9 @@ pxrubrica.pdf に述べられている。
 <div id="footer">
 <div id="counter-mini"></div>
 <div id="copyright">
-Copyright &copy; 2012 ZR (Takayuki YATO)
-&lt;zrbabbler<!--@gmail
--->&#64;<span class="hdn">(at)</span>yaho<!--.or
--->o.<span class="hdn">(dot)</span>co<!--.tokyo
--->.<span class="hdn">(dot)</span>jp&gt;<br>
-Last updated: 2012-04-30
+Copyright &copy; 2012, 2015 ZR (Takayuki YATO)
+<br>
+Last updated: 2015-10-25
 </div>
 
 </div><!--footer-->

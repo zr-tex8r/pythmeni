@@ -1,0 +1,681 @@
+﻿
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/transitional.dtd">
+<html lang="ja">
+<head>
+<title>蛇足事項、その他 [電脳世界の奥底にて]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" href="lib/zrmain.css" type="text/css">
+<meta name="keywords" content="補足,TeX,LaTeX,pTeX,upTeX,XeTeX">
+<meta name="description" content="本サイトで配布されているLaTeXパッケージを使う上で知っておくことが望ましいTeX関係の知識を書いておく場所。">
+<style type="text/css"><!--
+ul.spec {
+  font-size: small;
+}
+ul.spec li {
+  margin-top: 0px; margin-bottom: 0px;
+}
+#tbl1 td {
+  font-family: 'MS UI Gothic',sans-serif;
+  text-align: center;
+}
+#tbl2 td {
+  text-align: center;
+}
+table .past {
+  color: #999999;
+}
+table .future {
+  color: #99FFEE;
+}
+tr.head {
+  text-align: center;
+}
+
+--></style>
+<script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="lib/zrmain.js"></script>
+<script type="text/javascript" defer src="cgiruby/zrcounter.cgi?name=note"></script>
+<script type="text/javascript"><!--
+//--></script>
+</head>
+<body>
+
+<div id="canvas"><!--************************************************-->
+<div id="main">
+
+<div id="header">
+<table id="site-title"><tr>
+<td id="site-title-g">
+<img src="image0/texno2.jpg" width="120" height="48"
+     alt="ΕΝ Τ&#x1ffc; ΠΥΘΜΕΝΙ ΤΗΣ ΤΕΧΝΟΠΟΛΕΩΣ">
+</td>
+<td id="site-title-t">
+<div id="title">
+<span class="lgc">En toi Pythmeni tes TeXnopoleos</span><br>
+<span class="ja">［電脳世界の奥底にて］</span>
+</div>
+</td>
+</tr></table>
+</div><!--header-->
+
+<div id="navibar">
+<span id="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">蛇足事項、その他</span>
+</div><!--navibar-->
+
+
+<div id="move-notice-mini">
+「インフォシーク isweb ライト」サービス終了に伴い、
+本サイトは以下のURLに移転することになりました。<br>
+現在のサイトは、<em>10月末</em>を以て終了となります。<br>
+<a href="http://zrbabbler.sp.land.to/note.html">http://zrbabbler.sp.land.to/note.html</a>
+</div>
+<div id="maintext">
+<h1>蛇足事項、その他</h1>
+
+<div class="abstract">
+本サイトで配布されているLaTeXパッケージを使う上で知っておくことが
+望ましいTeX関係の知識を書いておく場所。
+</div>
+
+<div id="table-contents"></div>
+
+<div class="section" id="sec-too-many-tex">
+<h2>TeX がいっぱいです</h2>
+
+<div style="margin: 12px 10%">
+<table class="std" id="tbl1">
+<col>
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<tr class="head">
+<th>エンジン</th>
+<th><nobr>TeX--</nobr><nobr>XeT</nobr></th>
+<th><nobr>e-TeX</nobr> <nobr>拡張</nobr></th>
+<th><nobr>pdfTeX</nobr> <nobr>拡張</nobr></th>
+<th><nobr>Omega</nobr> <nobr>拡張</nobr></th>
+<th><nobr>LuaTeX</nobr> <nobr>拡張</nobr></th>
+<th><nobr>XeTeX</nobr> <nobr>拡張</nobr></th>
+<th><nobr>pTeX</nobr> <nobr>拡張</nobr></th>
+<th><nobr>upTeX</nobr> <nobr>拡張</nobr></th>
+</tr>
+<tr>
+<th class="past">TeX</th>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="past">e-TeX</th>
+<td>◎</td><td>◎</td><td>×</td><td>×</td>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="now">pdfTeX</th>
+<td>◎</td><td>◎</td><td>◎</td><td>×</td>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="past">Omega</th>
+<td>◎</td><td>×</td><td>×</td><td>◎</td>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="past">Aleph</th>
+<td>◎</td><td>◎</td><td>×</td><td>◎</td>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="future">LuaTeX</th>
+<td>×</td><td>◎</td><td>○</td><td>△</td>
+<td>◎</td><td>×</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="future">XeTeX</th>
+<td>○</td><td>◎</td><td>×</td><td>×</td>
+<td>×</td><td>◎</td><td>×</td><td>×</td>
+</tr>
+<tr>
+<th class="now">pTeX</th>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+<td>×</td><td>×</td><td>◎</td><td>×</td>
+</tr>
+<tr>
+<th class="future">e-pTeX</th>
+<td>◎</td><td>◎</td><td>×</td><td>×</td>
+<td>×</td><td>×</td><td>◎</td><td>×</td>
+</tr>
+<tr>
+<th class="future">upTeX</th>
+<td>×</td><td>×</td><td>×</td><td>×</td>
+<td>×</td><td>×</td><td>○</td><td>◎</td>
+</tr>
+<tr>
+<th class="future">e-upTeX</th>
+<td>◎</td><td>◎</td><td>×</td><td>×</td>
+<td>×</td><td>×</td><td>○</td><td>◎</td>
+</tr>
+</table>
+</div>
+
+<ul class="spec">
+<li>◎： 完全サポート； 
+○： 変更が加えられている；
+△： 一部のみサポート；
+×： サポートなし。
+</li>
+<li>TeX--XeT 拡張： e-TeX の TeX に対する拡張のうち、
+右横書き言語処理に関するもの。
+</li>
+<li>e-TeX 拡張： e-TeX の TeX に対する拡張のうち、
+「TeX--XeT 拡張」でないもの。
+レジスタ数の増加（32768 個）等。
+</li>
+<li>pdfTeX 拡張： pdfTeX の e-TeX に対する拡張。
+PDF 直接出力と PDF 機能のサポート。
+</li>
+<li>Omega 拡張： Omega の TeX に対する拡張。
+符号空間の 16 ビットへの拡張、
+レジスタ数の増加（65536 個）、
+数式ファミリの増加（256 個）、
+多様な書字方向への対応、
+OTP 処理、等。
+</li>
+<li>LuaTeX 拡張： LuaTeX の Aleph + pdfTeX に対する拡張。
+Lua インタプリタの搭載とそれによる内部処理のカスタム拡張のサポート、
+符号空間の Unicode 全体への拡張、
+TrueType・OpenType フォントのサポート、
+他にも全般に及ぶ拡張が行われている。
+</li>
+<li>XeTeX 拡張： XeTeX の e-TeX に対する拡張。
+符号空間の Unicode 全体への拡張、
+数式ファミリの増加（256 個）、
+TrueType・OpenType フォントの広範なサポート、
+一部の言語特有処理のサポート、
+トークン自動挿入処理、等。
+</li>
+<li>pTeX 拡張： pTeX の TeX に対する拡張。
+説明は省略。
+</li>
+<li>upTeX 拡張： upTeX の pTeX に対する拡張。
+和文符号空間の Unicode 全体への拡張、
+入力文字の和文取扱に対する制御、等。
+</li>
+</ul>
+
+<div style="margin: 12px 10%">
+<table class="std" id="tbl2">
+<col>
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<tr class="head">
+<th>エンジン</th>
+<th>欧文符号空間</th>
+<th>和文符号空間</th>
+<th>出力形式</th>
+<th>レジスタ数</th>
+<th>数式fam数</th>
+</tr>
+<tr>
+<th class="past">TeX</th>
+<td>8ビット</td><td>×</td><td>DVI</td>
+<td>256</td><td>16</td>
+</tr>
+<tr>
+<th class="past">e-TeX</th>
+<td>8ビット</td><td>×</td><td>DVI</td>
+<td>32768</td><td>16</td>
+</tr>
+<tr>
+<th class="now">pdfTeX</th>
+<td>8ビット</td><td>×</td><td>DVI／PDF</td>
+<td>256</td><td>16</td>
+</tr>
+<tr>
+<th class="past">Omega</th>
+<td>Unicode BMP</td><td>×</td><td>DVI</td>
+<td>65536</td><td>256</td>
+</tr>
+<tr>
+<th class="past">Aleph</th>
+<td>Unicode BMP</td><td>×</td><td>DVI</td>
+<td>65536</td><td>256</td>
+</tr>
+<tr>
+<th class="future">LuaTeX</th>
+<td>Unicode</td><td>×</td><td>DVI／PDF</td>
+<td>65536</td><td>256</td>
+</tr>
+<tr>
+<th class="future">XeTeX</th>
+<td>Unicode</td><td>×</td><td>XDV</td>
+<td>32768</td><td>256</td>
+</tr>
+<tr>
+<th class="now">pTeX</th>
+<td>8ビット</td><td>JIS X 0208</td><td>DVI／縦書DVI</td>
+<td>256</td><td>16</td>
+</tr>
+<tr>
+<th class="future">e-pTeX</th>
+<td>8ビット</td><td>JIS X 0208</td><td>DVI／縦書DVI</td>
+<td>32768</td><td>16</td>
+</tr>
+<tr>
+<th class="future">upTeX</th>
+<td>8ビット</td><td>Unicode</td><td>DVI／縦書DVI</td>
+<td>256</td><td>16</td>
+</tr>
+<tr>
+<th class="future">e-upTeX</th>
+<td>8ビット</td><td>Unicode</td><td>DVI／縦書DVI</td>
+<td>32768</td><td>16</td>
+</tr>
+</table>
+</div>
+
+<ul class="spec">
+<li>Unicode BMP は 16 ビット（0～0xFFFF）、
+Unicode 全体は 21 ビットに収まる（0～0x10FFFF）。
+</li>
+<li>仕様上は pTeX の和文符号空間は「ISO 2022 の 94&sup2; 文字集合」
+であるが、実際には JIS X 0208 が用いられる。
+エンコーディング形式は、
+DVI 上では ISO-2022-JP 相当、内部処理では Shift_JIS または EUC-JP
+のいずれかである。
+なお、内部エンコーディングが Shift_JIS の場合は
+Shift_JIS 拡張領域も（実装仕様上は）扱える。
+</li>
+<li>XeTeX の出力形式は XDV と呼ばれる独自の拡張 DVI である
+（拡張子は .xdv）。
+しかし実際の XeTeX のコマンドは、
+内部で自動的に xdvipdfmx コマンドを起動して
+XDV → PDF の変換を行っている。
+</li>
+<li>pTeX で和文縦書きを用いる場合は縦書処理命令を含む独自拡張の DVI
+を出力する。
+横書きの和文のみを含む場合は通常の DVI の仕様に合致する DVI
+を出力する。
+</li>
+</ul>
+
+</div><!--sec-too-many-tex-->
+
+<div class="section" id="sec-package">
+<h2>「パッケージ」の意味</h2>
+
+<p>TeX のコミュニティで、「パッケージ」
+という用語は次の異なる 2 種類の意味で使われている。
+</p>
+<ul>
+<li>その 1（以降「パッケージ&sup1;」と記す）： 
+TeX（LaTeX も含む）に関連するある機能を実現するために提供される一連のファイルの集まり。
+TeX 言語で記述されたファイルの他に、
+DVI ウェアの設定ファイルや TFM ファイルや Type1 フォント等の、
+他の形式のファイルを含むことがある。
+</li>
+<li>その 2（以降「パッケージ&sup2;」と記す）： 
+LaTeX2e において機能拡張を提供する標準のファイル形式で、拡張子は <code>.sty</code>。
+（これは LaTeX 特有の用語である。）
+</li>
+</ul>
+<p>LaTeX2e 用のパッケージ&sup1;においては、
+パッケージ&sup1;とパッケージ&sup2;は同じ名前をもつことが一般的である。
+例えば、hyperref パッケージ&sup1;のメインとなるパッケージ&sup2;の名前は
+hyperref（ファイル名は <code>hyperref.sty</code>）である。
+しかし、少数ながら両者の名前が異なることもあり、
+例えば、unicode パッケージ&sup1;のメインのパッケージ&sup2;
+（直接読み込まれることは少ないが）の名前は ucs であり、
+unicode という名前のパッケージ&sup2;は存在しない。
+</p>
+<p>本サイトでは、便宜的に両者を区別したい場合には、
+「パッケージ&sup1;」のことを「（パッケージ）バンドル」
+と呼ぶことにしている
+（混同の恐れがない場合は「パッケージ」と呼ぶこともある）。
+この用語は、
+「無関係な複数の機能についての『提供するためのファイル』の集まり」
+を指すことが多いのであまり適当ではないと感じているが、
+今のところ通用されている他の用語が見当たらない。
+</p>
+
+</div><!--sec-package-->
+
+<div class="section" id="sec-alphacase">
+<h2>大文字 vs 小文字</h2>
+
+<div class="subsection" id="ssec-alphacase-bxpx">
+<h3>PXbase vs pxbase 等</h3>
+
+<p>拙作の TeX 関連ソフトウェアにおいては、
+「<a href="#sec-package">パッケージ&sup1;</a>」には BX～、PX～
+等の大文字から始まる名前を、
+「<a href="#sec-package">パッケージ&sup2;</a>」には bx～、px～
+等の小文字から始まる名前を慣習的に用いている。
+アーカイブファイル名は pxbase.zip のように
+「パッケージ&sup1;名を小文字に直したもの」にしている。
+</p>
+<div class="alert"><span class="lbl">注意：</span> 
+説明書等に記載されているインストール先パスの中で、
+パッケージ&sup1;名に相当する部分の大文字小文字が現状では統一されていないことが気になっている。
+別にどちらにしても動作には影響ないので、
+好みでどちらかに統一しても構わない。
+</div>
+
+</div><!--ssec-alphacase-tex-->
+
+<div class="subsection" id="ssec-alphacase-babel">
+<h3>Babel vs babel 等</h3>
+
+<p>拙作のパッケージ以外でも、
+「パッケージ&sup1;」と「パッケージ&sup2;」
+で大文字と小文字の使用が異なるものがある。
+例えば Babel パッケージ&sup1;の中核のパッケージ&sup2;の名前は
+babel であり、また、
+otf パッケージ&sup2;が含まれるパッケージ&sup1;の通称は
+「OTF パッケージ」である。
+</p>
+
+</div><!--ssec-alphacase-babel-->
+
+<div class="subsection" id="ssec-alphacase-tex">
+<h3>TeX vs tex 等</h3>
+
+<p>大文字交じりの「TeX」や「LaTeX」は「ソフトウェアの名称」であり、
+小文字の「tex」や「latex」は「コマンド名」である
+（前者は所謂「ロゴ」で書かれることもある）。
+例えば、LaTeX を起動するコマンドが latex であり、
+pLaTeX を起動するコマンドが platex である。
+この辺りは、基本的に「Perl と perl」、「Ruby と ruby」
+の関係と同じである。
+</p>
+<p>ただし、「tex」については少し注意が必要で、
+正確には「TeX のコマンド名が tex」ではなく
+「plain TeX のコマンド名が tex」というのが正しい。
+同じように、「plain pTeX のコマンド名が ptex」であり、
+また pdftex、xetex、luatex 等についても同様である。
+</p>
+<div class="bend"><span class="lbl">参考：</span>
+TeX は組版用言語（組版エンジン）の名であり、
+「実際に起動されるもの（ソフトウェア）」
+は「TeX を用いて組み立てられた組版ソフトウェア（LaTeX、plain TeX、等）」
+であると考えられる。
+このことを「LaTeX は TeX の一種である」と呼ぶのであれば
+（そうするのが通例）、
+tex も latex も「TeX の起動コマンド名」
+だということになる。
+</div>
+
+<p>なお、「Tex」や「TEX」等の他の組み合わせは、
+（誤記でない限りは）TeX とは無関係なものを指す
+（<a href="http://en.wikipedia.org/wiki/TEX">参照：Wikipedia</a>）。
+</p>
+
+
+
+</div><!--ssec-alphacase-tex-->
+
+
+</div><!--sec-alphacase-->
+
+<div class="section" id="sec-dtx">
+<h2>.dtx に立ち向かう方策</h2>
+
+<p>例えば、foo という名前の
+「<a href="#sec-package">パッケージ&sup2;</a>」
+（foo.sty ファイル）
+が必要になり、インストールされていないことが判明したので、
+Web から foo.sty があると思しき
+「<a href="#sec-package">パッケージ&sup1;</a>（アーカイブ）」である
+foo.zip （或いは foo.lzh とか foo-2.0.tar.gz といった名前のファイル）
+をダウンロードしてきたとする。
+</p>
+<div class="bend"><span class="lbl">参考：</span> 
+ちなみに、foo.sty がインストールされているかを調べるには、
+「<code>kpsewhich foo.sty</code>」というコマンドを実行すればよい。
+何かパス名が表示された場合は、foo.sty
+はそこに存在していて使用可能のはずである。
+何も表示されない場合は、foo.sty はインストールされていない。
+</div>
+<p>ところが、それを展開（解凍）すると、確かに foo.sty の解説文書
+（テキストや PDF ファイル）があるが、肝心の foo.sty が入ってなくて、
+foo.dtx というファイルがある、というケースがある。
+この dtx 形式（DocStrip 文書形式）のファイルは、簡単に言うと
+「パッケージ&sup2;本体（foo.sty）と解説文書が 1 つのファイルにまとめたもの」
+であり、これを TeX エンジンで処理することで、
+パッケージ&sup2;のファイルや解説文書（DVI 文書か PDF 文書）
+を得ることができる。
+</p>
+<p>ところが困ったことに、この「ファイルを取り出す方法」
+に幾つかの「流儀」があり、これがユーザを混乱させる原因になっている。
+CTAN では「ファイルを取り出す方法を、.dtx の中身以外の場所
+（例えば別にプレーンテキストの README ファイルを用意する、等）
+に記述しておく」ことを要請しているが、
+何故か判らないがこれも守られないことが多い。
+</p>
+<p>ここでは、現在行われている幾つかの方法について解説する。
+以下では、DocStrip ファイルの名前を foo.dtx とし、
+パッケージ&sup1;を構成するファイルを foo.sty の 1 つだけとする
+（複数の場合もありうる）。
+この場合、解説文書のファイル名は foo.dvi
+（もし PDF 形式に変換したのならば foo.pdf）となる。
+</p>
+
+
+<div class="subsection" id="ssec-dtx">
+<h3>ファイル抽出の「流儀」の数々</h3>
+
+<p>本節の例では、ファイル抽出に用いる TeX エンジンは
+8 ビット欧文 TeX（tex／latex）としたが、
+例えば、対象が「pLaTeX 用のパッケージ」であるなら、
+pTeX（ptex／platex）を用いるのが正しいかも知れない
+（XeLaTeX 等の場合も同じ）。
+
+<h4 id="sssec-dtx-1">流儀 1： dtx + drv + ins の 3 点セット</h4>
+
+<p>foo.dtx（DocStrip 本体）の他に、foo.drv（ドライバファイル）
+と foo.ins（インストーラファイル）がある場合は、
+ほぼ間違いなくこの流儀に従っている。
+DocStrip が用いられた最初期に用いられた方法。
+</p>
+<ul>
+<li>foo.sty を得るには「<code>latex foo.ins</code>」とする。
+</li>
+<li>foo.dvi を得るには「<code>latex foo.drv</code>」とする。
+</li>
+</ul>
+
+<h4 id="sssec-dtx-2">流儀 2： dtx + ins の 2 点セット</h4>
+
+<p>foo.dtx と foo.ins があるが、foo.drv
+はないという場合はこの流儀に従っていると思われる。
+恐らく最も一般的に用いられている方法。
+</p>
+<ul>
+<li>foo.sty を得るには「<code>latex foo.ins</code>」とする。
+</li>
+<li>foo.dvi を得るには「<code>latex foo.dtx</code>」とする。
+</li>
+</ul>
+
+<h4 id="sssec-dtx-3">流儀 3： dtx のみで plain と LaTeX で処理分別</h4>
+
+<p>foo.dtx しかない、という場合の可能性の 1 つ。
+ただし「説明されないと絶対に判らない方法」なので、
+この方法を採る場合は必ずどこかに説明があるはずである。
+</p>
+<ul>
+<li>foo.sty を得るには「<code>tex foo.ins</code>」とする。
+つまり、plain TeX で処理する。
+</li>
+<li>foo.dvi を得るには「<code>latex foo.dtx</code>」とする。
+こちらは LaTeX で処理する。
+</li>
+</ul>
+<p>恐らくファイルを 1 つだけにするために考え出された方法であるが、
+欠点として、「説明されても判らない」危険性を伴うということがある。
+例えば、「plain TeX で処理してね」などという説明だと
+「plain TeX て何ですか？」ということになりかねないだろう。
+</p>
+
+<h4 id="sssec-dtx-4">流儀 4： dtx のみで一括処理</h4>
+
+<p>foo.dtx しかない、
+という場合のもう 1 つの可能性。
+最近流行している方法である。
+</p>
+<ul>
+<li>全ての処理を
+「<code>latex foo.dtx</code>」
+で行う。
+つまり、
+まず foo.sty が生成され、
+その後に foo.dvi の組版が行われる。
+</li>
+</ul>
+<p>ファイルを 1 つにする方法として、
+前の
+「流儀 3」
+よりもこちらの方が合理的である。
+なぜなら、
+foo.sty の抽出と解説文書の組版の処理を分ける必然性は一見してないように思えるし、
+またこの方法だと foo.dvi の組版に foo.sty
+自身を利用することが可能になるからである。
+しかしこの方法には次のような欠点が存在する。
+</p>
+<blockquote>
+実際の foo.sty の動作には必要がなく、
+解説文書 foo.dvi の組版には必要であるパッケージ
+（例えば文書で用いているフォントのパッケージ等）
+が存在したとする。
+この場合、
+「foo.sty」
+の取得のみを行いたいのに、
+全体の処理を通すために追加のパッケージをインストールしなければならない、
+という事態が発生する。
+</blockquote>
+<p>解説文書を自力で組版する必要がない
+（「foo.sty」
+だけ入手できればよい）
+という状態はごく普通に発生する。
+CTAN ではパッケージ
+（アーカイブ）
+中に解説文書を組版・変換した PDF 文書を含めることを要請している
+（Web 上での解説文書の閲覧を可能にするため）
+からである。
+「W32TeX」
+のように必要最低限のパッケージで構成されているシステムでは、
+「実際には不要な解説文書組版処理のために大量の前提パッケージを要する」
+という事態はできれば避けたい。
+</p>
+<p>実は、
+この
+「流儀」
+が採られている場合であっても、
+パッケージ本体（foo.sty）の生成のみを行うことは可能である。
+次のようにすればよい。
+</p>
+<blockquote>
+「流儀 3」
+と全く同じように、
+dtx ファイルを plain TeX で処理する
+（つまり
+「<code>tex foo.dtx</code>」）。
+「流儀 4」
+の場合は解説文書
+（当然これは plain でなく LaTeX で書かれている）
+の組版処理が始まったところでエラーが出る
+（恐らく
+「<code>\documentclass</code> が未定義である」といわれる）。
+そこで、
+エラープロンプトに対して「x」を入力する等の方法で、
+LaTeX の処理を中止する。
+</blockquote>
+<p>つまり、解説文書の組版が行われるのは、本体ファイル抽出の後なので、
+そこで処理を諦めて中止したとしても、
+目的のファイル foo.sty の生成は正常に完了しているのである。
+もし本当にファイルの生成が正常に完了したかを確かめたい場合は、
+画面表示を調べて、
+以下に示すような感じでファイル生成のメッセージがあることを確認すればよい。
+</p>
+<pre>
+This is TeX, Version 3.1415926 (TeX Live 2012/dev/W32TeX)
+ encTeX v. Jun. 2004, reencoding enabled.
+
+……(中略)……
+
+********************************************************
+* No Configuration file found, using default settings. *
+********************************************************
+
+)
+
+Generating file(s) ./foo.sty
+
+Processing file foo.dtx (foo) -> foo.sty        + ← この表示がある
+File foo.dtx ended by \endinput.                +  ならば foo.sty
+Lines  processed: 10112                         +  は正常に生成
+Comments removed: 10086                         +  されている
+Comments  passed: 0                             +
+Codelines passed: 3                             +
+
+! Undefined control sequence.                   + ← 組版が始まった
+l.40 \documentclass                             +  ところでエラー
+                   {ltxdoc}
+? x                                             + ← x 入力で処理中止
+No pages of output.
+Transcript written on foo.log.
+</pre>
+
+
+</div><!--ssec-dtx-->
+
+</div><!--sec-sample-->
+
+</div><!--maintext-->
+
+<div id="navibar-sub">
+<div class="rightpart">
+<a href="#canvas">先頭へ</a>
+</div>
+<div class="leftpart">
+<span class="navilang">
+| <span class="na">en</span>
+| <span class="here">ja</span> |
+</span>&nbsp;
+<a href="./index.html">トップ</a> &gt;
+<span class="here">蛇足事項、その他</span>
+<div class="clearright"></div>
+</div>
+</div><!--navibar-sub-->
+<div id="footer">
+<div id="counter-mini"></div>
+<div id="copyright">
+Copyright &copy; 2010 ZR (Takayuki YATO)
+&lt;zrbabbler<!--@gmail
+-->&#64;<span class="hdn">(at)</span>yaho<!--.or
+-->o.<span class="hdn">(dot)</span>co<!--.tokyo
+-->.<span class="hdn">(dot)</span>jp&gt;<br>
+Last updated: 2010-08-21
+</div>
+
+</div><!--footer-->
+
+</div><!--main-->
+</div><!--***********************************************************-->
+</body>
+</html>
