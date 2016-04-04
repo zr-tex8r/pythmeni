@@ -153,11 +153,12 @@ A:active {
 }
 
 #table-contents ul {
-  margin: 0px; padding: 0px 2em;
+  margin: 2px 0px; padding: 0px 2em;
 }
 
 #table-contents li {
-  margin: 2px 0px;
+  margin: 1px 0px;
+  padding: 2px 0px 0px;
 }
 
 #table-contents a:link, #table-contents a:visited {
@@ -177,7 +178,8 @@ div.abstract {
 }
 h1 {
   /*width: 100%;*/
-  border: 5px double #99FF99; border-width: 5px;
+  background: #004433;
+  border: 1px solid #448866; border-width: 1px 0px;
   margin: 0em 0em 0.5em 0em; padding: 4px 4px;
   text-align: center;
   font: bold 170% 'MS PGothic', sans-serif;

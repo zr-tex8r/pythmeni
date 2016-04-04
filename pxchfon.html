@@ -65,13 +65,6 @@ table.flst td {
 <span class="here">PXchfon パッケージ</span>
 </div><!--navibar-->
 
-
-<div id="move-notice-mini">
-「インフォシーク isweb ライト」サービス終了に伴い、
-本サイトは以下のURLに移転することになりました。<br>
-現在のサイトは、<em>10月末</em>を以て終了となります。<br>
-<a href="http://zrbabbler.sp.land.to/pxchfon.html">http://zrbabbler.sp.land.to/pxchfon.html</a>
-</div>
 <div id="maintext">
 <h1>PXchfon パッケージ<br>
 <span class="subtitle">～pLaTeX文書のフォントを簡単に変更～</span></h1>
@@ -85,6 +78,8 @@ PXchfon パッケージは、pLaTeX／upLaTeX の文書の標準和文フォン�
 <div id="changelog">
 <div class="lbl">変更履歴</div>
 <ul>
+<li>2016/04/03：ダウンロードのリンク先を GitHub に変更した。
+</li>
 <li>2010/05/16：0.5 版で PXjafont パッケージと統合したのに伴い、
 PXjafont のページにあったプリセット指定の説明をこちらに移動。
 その他、色々と説明を追加。
@@ -122,20 +117,13 @@ UTF / OTF パッケージにも対応している。
 
 <div class="subsection" id="ssec-download">
 <h3>ダウンロード</h3>
+<p>github のページから ZIP アーカイブをダウンロードできる。
+（「Download ZIP」のボタンを押す。）
+</p>
 <ul>
-<li id="elt-lite"><a href="data/pxchfon-lite.zip"><!--
--->Lite 版圧縮ファイル pxchfon-lite.zip (v0.5)のダウンロード（12KB）</a>
-<span class="mdate">[2010/05/15]</span>
-</li>
-<li><a href="data/pxchfon.zip"><!--
--->Full 版圧縮ファイル pxchfon.zip (v0.5)のダウンロード（80KB）</a>
-<span class="mdate">[2010/05/15]</span>
+<li><a href="https://github.com/zr-tex8r/PXchfon">zr-tex8r/PXchfon</a>
 </li>
 </ul>
-<p>和文フォントのみを置き換える場合は Lite 版で十分である
-（インストール方法は後述）。
-欧文フォントも置き換えたい場合は Full 版を使う必要がある。
-</p>
 </div><!--ssec-download-->
 
 <div class="subsection" id="ssec-related">
@@ -170,9 +158,8 @@ UTF / OTF パッケージにも対応している。
 <h3>インストール</h3>
 
 <p>この利用法の場合、
-<a href="#elt-lite">Lite版</a>のインストールで十分である。
-このパッケージに含まれるファイルは実質的に pxchfon.sty
-1 つだけである。
+アーカイブにあるファイルを全てインストールする必要はなく、
+pxchfon.sty だけがインストールされていれば十分である。
 これを TeX システム中の適切なディレクトリに移動すればよい。
 フォント関連のパッケージはインストール・設定が非常に煩雑で
 あることが多いので、このパッケージではできるだけ単純に
@@ -191,22 +178,9 @@ UTF / OTF パッケージにも対応している。
 同じ場所に置いてもよい。
 </p>
 <div class="bend">
-<span class="lbl">参考：</span> Full 版のアーカイブをダウンロード
-してその中の pxchfon.sty だけをインストールしてもよい。
-また、Full 版を完全にインストールした場合も、この節に示されて
-いる使用法は可能である。
-</div>
-<div class="alert">
-<span class="lbl">注意：</span> 既に Full 版をインストールして
-ある（すなわち「Full 版または 0.4a 版以前について全部のファイル
-をインストールしてある」）場合に更新するには、バージョンの不整合を防ぐため、
-必ず Full 版を使うか、古いバージョンをアンインストールしてから
-Lite 版を入れる必要がある。
-</div>
-<div class="alert">
-<span class="lbl">注意：</span> 以前のこのページでは PXcjk0.sfd
-も必要であると書いていたが、実際には和文での使用にはこのファイルは
-不要であったので訂正した。
+<span class="lbl">参考：</span> もちろん、
+完全にインストールした場合も、
+この節に示されている使用法は可能である。
 </div>
 
 </div><!--ssec-install-->
@@ -782,12 +756,8 @@ dvipdfmx を実行した場合は、
 <div id="footer">
 <div id="counter-mini"></div>
 <div id="copyright">
-Copyright &copy; 2009-2010 ZR (Takayuki YATO)
-&lt;zrbabbler<!--@gmail
--->&#64;<span class="hdn">(at)</span>yaho<!--.or
--->o.<span class="hdn">(dot)</span>co<!--.tokyo
--->.<span class="hdn">(dot)</span>jp&gt;<br>
-Last updated: 2010-05-15
+Copyright &copy; 2009, 2016 ZR (Takayuki YATO)<br>
+Last updated: 2016-04-03
 </div>
 
 </div><!--footer-->

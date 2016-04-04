@@ -75,6 +75,102 @@
 <em>MIT ライセンス</em>（X11 ライセンス）の下で配布されているものとします。
 </p>
 
+<div class="subsection" id="ssec-bx">
+<h3>BX シリーズ</h3>
+
+<p>基本的に、どのエンジンでも使えるもの。
+ただし厳密には「PX でも ZX でもないもの」であるので、
+pdfTeX や LuaTeX 専用のものも BX になる。
+</p>
+
+<ul>
+<li id="elt-bxjscls"><a href="bxjscls.html">BXjscls パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxjscls">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXjscls">（github）</a><br>
+奥村晴彦氏製作の
+「pLaTeX2e新ドキュメントクラス」
+を pLaTeX 以外の
+「日本語が通るLaTeX」
+―例えば XeLaTeX、LuaLaTeX―で使えるように改造したもの。
+</li>
+<li id="elt-bxcjkjatype"><a name="bxcjkjatype.html">BXcjkjatype パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxcjkjatype">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXcjkjatype">（github）</a><br>
+日本語組版に適した CJK パッケージの設定を提供する。
+その上で、pLaTeX ユーザにとって CJK パッケージの使用が容易にするために、
+pLaTeX カーネルや pLaTeX 用パッケージのものに類似した命令を提供する。</li>
+<li id="elt-bxdpx-beamer"><a name="bxdpx-beamer.html">bxdpx-beamer パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxdpx-beamer">(CTAN)</a>
+  <a href="https://gist.github.com/zr-tex8r/4980892">（gist）</a><br>
+Beamer クラスを dvipdfmx
+との組み合わせて用いた場合に起こる不具合を解消する。
+</li>
+<li id="elt-bxpict2e"><a href="bxeepic.html">BXeepic パッケージ</a>（旧 BXpict2e パッケージ）
+  <a href="https://www.ctan.org/pkg/bxeepic">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXeepic">（github）</a><br>
+epic+eepic パッケージの picture 拡張機能（楕円や破線など）を
+pict2e の枠組の上で実現する。
+</li>
+<li id="elt-bxptool"><a href="bxptool.html">BXptool パッケージ</a>
+  <a href="https://github.com/zr-tex8r/BXptool">（github）</a><br>
+ascmac とか jsverb とかを欧文 LaTeX／XeLaTeX
+でも使えるようにしようという話。
+</li>
+<li id="elt-bxpapersize"><a name="bxpapersize.html">BXpapersize パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxpapersize">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXpapersize">（github）</a><br>
+LaTeX の出力（DVI／PDF）の用紙サイズを、
+レイアウト用の用紙サイズ（クラスオプションで指定するもの）
+に一致させる。
+</li>
+<li id="elt-bxpdfver"><a name="bxpdfver.html">BXpdfver パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxpdfver">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXpdfver">（github）</a><br>
+出力 PDF 文書の PDF バージョン（“1.4”とか）を文書中で指定する。
+pdfTeX を使用する場合は、さらにストリームの圧縮の有無を指定できる。
+</li>
+<li id="elt-bxenclose"><a name="bxenclose.html">BXenclose パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxenclose">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXenclose">（github）</a><br>
+「文書本体の前後に指定したテキスト（命令）を追記する」
+ことをプレアンブルで指定する。
+</li>
+<li id="elt-pxfltsrc"><a href="pxfltsrc.html">BXfltsrc パッケージ</a>（旧 PXflrsrc パッケージ）
+  <a href="data/BXfltsrc.zip">（v0.5; ダウンロード 40KB）</a>
+  <span class="mdate">[2011/03/01]</span><br>
+LaTeX において、（shell escape の機能を用いて）
+組版時に自動的に入力ファイルにある種の変換フィルタが施されるようにする。
+日本語コード変換（JIS X 0213 対応；自動判別可能）、
+ギリシャ・キリル文字の「欧文化」、
+外部フィルタ呼び出し等が利用できる。
+内蔵のスクリプトを単体でフィルタとして用いることも可能。
+（Perl が必要。）
+</li>
+<li id="elt-bxsuika"><a href="bxsuika.html">BXsuika パッケージ</a>
+  <a href="data/bxsuika.zip">（v0.3; ダウンロード 207KB）</a>
+  <span class="mdate">[2010/05/16]</span><br>
+W32TeX の topdftex フィルタと併用して、pdfLaTeX で日本語を使えるようにする。
+topdftex は元々 ums パッケージ(稲垣淳 氏製作)と併用する
+前提で作られているので、ums の改良版といえる。主な改良点は DVI 出力の場合
+も同じ出力ができるようにしたことである。
+残念ながら、和文組版品質は元の ums と同じであまり良くない。
+</li>
+<li id="elt-bxbase"><a href="pxbase.html">BXbase パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxbase">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXbase">（github）</a><br>
+欧文 LaTeX2e における多言語文書およびそれに関わるマクロパッケージの
+作成を支援する基本的な機能を提供する。
+</li>
+<li id="elt-bxdvidriver"><a name="bxdvidriver.html">BXdvidriver パッケージ</a>
+  <a href="https://www.ctan.org/pkg/bxdvidriver">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/BXdvidriver">（github）</a><br>
+「DVI 出力の時だけ有効になるドライバオプション指定」
+という変なモノ。
+</li>
+</ul>
+
+</div><!--ssec-bx-->
+
 <div class="subsection" id="ssec-px">
 <h3>PX シリーズ （pTeX 用）</h3>
 <p>実行に pTeX（またはその派生の e-pTeX／upTeX／e-upTeX）を必要とするもの。
@@ -82,6 +178,7 @@
 
 <ul>
 <li id="elt-pxrubrica"><a href="pxrubrica.html">PXrubrica パッケージ</a>
+  <a href="https://www.ctan.org/pkg/pxrubica">(CTAN)</a>
   <a href="https://github.com/zr-tex8r/PXrubrica">（github）</a><br>
 JIS 規格
 「JIS X 4051」
@@ -91,6 +188,7 @@ JIS 規格
 日本において一般的な様式に従ってルビを付ける機能を提供する。
 </li>
 <li id="elt-pxchfon"><a href="pxchfon.html">PXchfon パッケージ</a>
+  <a href="https://www.ctan.org/pkg/pxchfon">(CTAN)</a>
   <a href="https://github.com/zr-tex8r/PXchfon">（github）</a><br>
 pLaTeX／upLaTeX
 の標準の和文フォントを簡単に変更できるようにする。
@@ -103,16 +201,21 @@ LaTeX の文書中で使うフォントを指定できる。
 パッケージの機能がこのパッケージに取り込まれた
 （PXjafont は廃止）。
 </li>
-<li id="elt-pxbase"><a href="pxbase.html">PXbase パッケージ</a>
-  <a href="https://github.com/zr-tex8r/PXbase">（github）</a><br>
-pLaTeX／upLaTeX
-における日本語文書の作成を支援する基本的な機能を提供する。
-例えば、Unicode のコード値による文字入力、
-PDF の文書情報に日本語を使用する設定の自動化、
-upLaTeX の和文文字カテゴリ（kcatcode）の変更が含まれる。
-CJK 間のフォント切替の支援等の
-CJK 言語の為の機能も含まれる。
-また PX シリーズの他のパッケージでこれを必要とするものがある。
+<li id="elt-pxcjkcat"><a name="pxcjkcat.html">PXcjkcat パッケージ</a>
+  <a href="https://www.ctan.org/pkg/pxcjkcat">(CTAN)</a>
+  <!--<a href="https://github.com/zr-tex8r/PXcjkcat">（github）</a>--><br>
+upLaTeX において、Unicode 文字の和文・欧文の扱いを変更する。
+</li>
+<li id="elt-pxpgfmark"><a name="pxpgfmark.html">pxpgfmark パッケージ</a>
+  <a href="https://www.ctan.org/pkg/pxpgfmark">(CTAN)</a>
+  <a href="https://gist.github.com/zr-tex8r/4977151">(gist)</a><br>
+PGF/Tikz の“図画間結合”の機能を e-(u)pTeX エンジンで使えるようにする。
+</li>
+<li id="elt-pxmonja"><a href="pxmonja.html">PXmonja パッケージ</a>
+  <a href="https://github.com/zr-tex8r/PXmonja">（github）</a><br>
+端末表示を模したいわゆる「等幅」出力、すなわち
+「欧文を和文の半分の幅にしてベタ組」する機能を提供する。
+Verbatim 出力でもそれ以外でも使用可能である。
 </li>
 <li id="elt-pxgtfont"><a href="pxgtfont.html">PXgtfont パッケージ</a>
   <a href="data/pxgtfont.zip">（v0.3; ダウンロード 2.32MB）</a>
@@ -124,11 +227,38 @@ GT 番号で指定できるのは 69263 番までである。
 dviout、dvips、dvipdfmx に対応している。
 </p>
 </li>
-<li id="elt-pxmonja"><a href="pxmonja.html">PXmonja パッケージ</a>
-  <a href="https://github.com/zr-tex8r/PXmonja">（github）</a><br>
-端末表示を模したいわゆる「等幅」出力、すなわち
-「欧文を和文の半分の幅にしてベタ組」する機能を提供する。
-Verbatim 出力でもそれ以外でも使用可能である。
+<li id="elt-pxbase"><a href="pxbase.html">PXbase パッケージ</a>
+  <a href="https://www.ctan.org/pkg/pxbase">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/PXbase">（github）</a><br>
+pLaTeX／upLaTeX
+における日本語文書の作成を支援する基本的な機能を提供する。
+例えば、Unicode のコード値による文字入力、
+PDF の文書情報に日本語を使用する設定の自動化、
+upLaTeX の和文文字カテゴリ（kcatcode）の変更が含まれる。
+CJK 間のフォント切替の支援等の
+CJK 言語の為の機能も含まれる。
+また PX シリーズの他のパッケージでこれを必要とするものがある。
+</li>
+<li id="elt-pxcopyfont"><a href="pxcopyfont.html">PXcopyfont パッケージ</a>
+  <a href="data/pxcopyfont.zip">（v0.7.1; ダウンロード 9KB）</a>
+  <span class="mdate">[2010/06/07]</span><br>
+TeX の仮想フォント（TFM と VF の組；和文・欧文ともに可）を、
+その参照関係を保ったままで、別名でコピーする。
+Perl 版の他に Lua 版（W32TeX の標準インストールだけで動作可能）
+が用意されている。
+</li>
+<li id="elt-pxutil"><a href="pxutil.html">PXutil パッケージ</a>
+  <a href="https://github.com/zr-tex8r/PXutil">（github）</a><br>
+和文の仮想フォント（VF と JFM の組）を VPL 類似のテキスト形式で
+ある「ZVP 形式」に変換/逆変換するツール。
+VF ファイルのみをテキスト形式に変換する機能もある。
+実行には Perl および <a href="#elt-zrtextor">ZRTeXtor モジュール</a>が必要。
+</li>
+<li id="elt-pxacid"><a href="pxacid.html">PXacid パッケージ</a>
+  <a href="data/PXacid.zip">（v0.2.3; ダウンロード 16KB）</a>
+  <span class="mdate">[2011/02/19]</span><br>
+昔々、或る所に、Adobe-Japan1 の CID 対応の OpenType フォントの
+従属欧文を使う、なんて話がありました。
 </li>
 <li id="elt-pxmika"><a href="pxmika.html">PXmika パッケージ</a>
   <a href="data/pxmika.zip">（v0.2; ダウンロード 392KB）</a>
@@ -162,28 +292,6 @@ W32TeX において、pTeX／upTeX
 いくつかの妥当な設定例を記述したもの。
 （このパッケージはパブリックドメインの扱いとする。）
 </li>
-<li id="elt-pxcopyfont"><a href="pxcopyfont.html">PXcopyfont パッケージ</a>
-  <a href="data/pxcopyfont.zip">（v0.7.1; ダウンロード 9KB）</a>
-  <span class="mdate">[2010/06/07]</span><br>
-TeX の仮想フォント（TFM と VF の組；和文・欧文ともに可）を、
-その参照関係を保ったままで、別名でコピーする。
-Perl 版の他に Lua 版（W32TeX の標準インストールだけで動作可能）
-が用意されている。
-</li>
-<li id="elt-pxutil"><a href="pxutil.html">PXutil パッケージ</a>
-  <a href="data/pxutil.zip">（v0.6.2; ダウンロード 10KB）</a>
-  <span class="mdate">[2010/06/06]</span><br>
-和文の仮想フォント（VF と JFM の組）を VPL 類似のテキスト形式で
-ある「ZVP 形式」に変換/逆変換するツール。
-VF ファイルのみをテキスト形式に変換する機能もある。
-実行には Perl および <a href="#elt-zrtextor">ZRTeXtor モジュール</a>が必要。
-</li>
-<li id="elt-pxacid"><a href="pxacid.html">PXacid パッケージ</a>
-  <a href="data/PXacid.zip">（v0.2.3; ダウンロード 16KB）</a>
-  <span class="mdate">[2011/02/19]</span><br>
-昔々、或る所に、Adobe-Japan1 の CID 対応の OpenType フォントの
-従属欧文を使う、なんて話がありました。
-</li>
 </ul>
 
 </div><!--ssec-px-->
@@ -195,12 +303,14 @@ VF ファイルのみをテキスト形式に変換する機能もある。
 
 <ul>
 <li id="elt-zxjatype"><a href="zxjatype.html">ZXjatype パッケージ</a>
+  <a href="https://www.ctan.org/pkg/zxjatype">(CTAN)</a>
   <a href="https://github.com/zr-tex8r/ZXjatype">（github）</a><br>
 XeLaTeX で日本語の標準的な組版を行うためのパッケージであり、
 pTeX に匹敵する品質を得ることを目指している。
 中国語用の xeCJK パッケージを土台にしているので、こちらのインストールも必要。 
 </li>
 <li id="elt-zxjafont"><a href="zxjafont.html">ZXjafont パッケージ</a>
+  <a href="https://www.ctan.org/pkg/zxjafont">(CTAN)</a>
   <a href="https://github.com/zr-tex8r/ZXjafont">（github）</a><br>
 pLaTeX で一般的に行われている和文フォント設定を
 XeLaTeX + fontspec の環境で簡単に行えるようにしたもの。
@@ -226,65 +336,17 @@ XeLaTeX で CID 番号によるグリフ出力を可能にする。
 
 </div><!--ssec-zx-->
 
-<div class="subsection" id="ssec-bx">
-<h3>BX シリーズ（エンジン不問）</h3>
-
-<ul>
-<li id="elt-pxfltsrc"><a href="pxfltsrc.html">BXfltsrc パッケージ</a>（旧 PXflrsrc パッケージ）
-  <a href="data/BXfltsrc.zip">（v0.5; ダウンロード 40KB）</a>
-  <span class="mdate">[2011/03/01]</span><br>
-LaTeX において、（shell escape の機能を用いて）
-組版時に自動的に入力ファイルにある種の変換フィルタが施されるようにする。
-日本語コード変換（JIS X 0213 対応；自動判別可能）、
-ギリシャ・キリル文字の「欧文化」、
-外部フィルタ呼び出し等が利用できる。
-内蔵のスクリプトを単体でフィルタとして用いることも可能。
-（Perl が必要。）
-</li>
-<li id="elt-bxjscls"><a href="bxjscls.html">BXjscls パッケージ</a>
-  <a href="https://github.com/zr-tex8r/BXjscls">（github）</a><br>
-奥村晴彦氏製作の
-「pLaTeX2e新ドキュメントクラス」
-を pLaTeX 以外の
-「日本語が通るLaTeX」
-―例えば XeLaTeX―で使えるように改造したもの。
-</li>
-<li id="elt-bxpict2e"><a href="bxpict2e.html">BXeepic パッケージ</a>
-  <a href="https://github.com/zr-tex8r/BXeepic">（github）</a><br>
-epic+eepic パッケージの picture 拡張機能（楕円や破線など）を
-pict2e の枠組の上で実現する。
-</li>
-<li id="elt-bxptool"><a href="bxptool.html">BXptool パッケージ</a>
-  <a href="https://github.com/zr-tex8r/BXptool">（github）</a><br>
-ascmac とか jsverb とかを欧文 LaTeX／XeLaTeX
-でも使えるようにしようという話。
-</li>
-<li id="elt-bxsuika"><a href="bxsuika.html">BXsuika パッケージ</a>
-  <a href="data/bxsuika.zip">（v0.3; ダウンロード 207KB）</a>
-  <span class="mdate">[2010/05/16]</span><br>
-W32TeX の topdftex フィルタと併用して、pdfLaTeX で日本語を使えるようにする。
-topdftex は元々 ums パッケージ(稲垣淳 氏製作)と併用する
-前提で作られているので、ums の改良版といえる。主な改良点は DVI 出力の場合
-も同じ出力ができるようにしたことである。
-残念ながら、和文組版品質は元の ums と同じであまり良くない。
-</li>
-<li id="elt-bxbase"><a href="pxbase.html">BXbase パッケージ</a>
-  <a href="https://github.com/zr-tex8r/BXbase">（github）</a><br>
-欧文 LaTeX2e における多言語文書およびそれに関わるマクロパッケージの
-作成を支援する基本的な機能を提供する。
-</li>
-</ul>
-
-</div><!--ssec-bx-->
-
 <div class="subsection" id="ssec-perl">
 <h3>Perl モジュール</h3>
 
 <ul>
 <li id="elt-zrtextor">ZRTeXtor パッケージ
-  <a href="data/zrtextor.zip">（v1.3.0; ダウンロード 32KB）</a>
-  <span class="mdate">[2010/05/05]</span><br>
+  <a href="https://github.com/zr-tex8r/ZXTeXtor">（github）</a><br>
 拙作の一部の Perl プログラムを実行するのに必要な Perl モジュール。
+</li>
+<li id="elt-zrtessera">ZRTessera パッケージ
+  <a href="https://github.com/zr-tex8r/ZXTessera">（github）</a><br>
+何やら怪しげな Perl モジュール。
 </li>
 </ul>
 
@@ -294,14 +356,18 @@ topdftex は元々 ums パッケージ(稲垣淳 氏製作)と併用する
 <h3>その他</h3>
 
 <ul>
-<li id="elt-jxempt">JXempt パッケージ
-  <a href="data/jxempt.zip">（v0.2b; ダウンロード 72KB）</a>
-  <span class="mdate">[2008/07/04]</span><br>
-pLaTeX2e の新文書クラス（jsarticle／jsbook）の文書を
-NTT jTeX で組版できるようにする。
-これにより、新文書クラスの文書をほぼそのままの体裁で、dvipng
-で画像に変換することが可能。
-（PXtosb が使用可能ならそれの方がよい。）
+<li id="elt-1tex">1TeX
+  <a href="https://github.com/zr-tex8r/1TeX">（github）</a>
+<span class="mdate">[2011/11/11]</span><br>
+「1」だけで文書が作成可能という、極めて画期的な TeX フォーマット。<br>
+参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111111/1321022257">1 から始める TeX ～1TeXの紹介～</a>
+</li>
+<li id="elt-ipaex-type1"><a name="ipaex-type1.html">ipaex-type1 パッケージ</a>
+  <a href="https://www.ctan.org/pkg/ipaex-type1">(CTAN)</a>
+  <a href="https://github.com/zr-tex8r/ipaex-type1">（github）</a><br>
+<a href="http://ipafont.ipa.go.jp/">「IPAex フォント」</a>を
+pdfLaTeX + CJK パッケージで使えるように、
+Unicode サブフォント形式の Type1 フォント群に変換したもの。
 </li>
 <li id="elt-rcfonts">RC Fonts パッケージ
   <a href="data/rcfonts.zip">（v0.1: ダウンロード 1.26MB）</a>
@@ -314,6 +380,15 @@ Concrete Roman （OT1 エンコーディング）および Concrete Math
 公開してみた。;-) ）</small><br>
 ※ 2010/01/10 の版は作業ミスのため肝心のフォントが壊れていました。
 手数ですが更新をお願いします。
+</li>
+<li id="elt-jxempt">JXempt パッケージ
+  <a href="data/jxempt.zip">（v0.2b; ダウンロード 72KB）</a>
+  <span class="mdate">[2008/07/04]</span><br>
+pLaTeX2e の新文書クラス（jsarticle／jsbook）の文書を
+NTT jTeX で組版できるようにする。
+これにより、新文書クラスの文書をほぼそのままの体裁で、dvipng
+で画像に変換することが可能。
+（PXtosb が使用可能ならそれの方がよい。）
 </li>
 </ul> 
 
@@ -357,11 +432,6 @@ LuaLaTeX で bm パッケージを使うには、代わりにこのパッケー�
 <span class="mdate">[2012/02/09]</span><br>
 「証明型環境」について amsthm と同じ感じで自分でスタイルを定義したい。<br>
 参照： <a href="http://d.hatena.ne.jp/zrbabbler/20120109/1326115861">例の proof 環境のアレ</a>
-</li>
-<li id="elt-1tex"><a href="data/1tex.zip">1tex.zip （ダウンロード 5KB）</a>
-<span class="mdate">[2011/11/11]</span><br>
-「1」だけで文書が作成可能な画期的な TeX フォーマット「1TeX」。<br>
-参照： <a href="http://d.hatena.ne.jp/zrbabbler/20111111/1321022257">1 から始める TeX ～1TeXの紹介～</a>
 </li>
 <li id="elt-aencdviout"><a href="data/aencdviout.zip">aencdviout.zip （ダウンロード 9KB）</a>
 <span class="mdate">[2011/11/07]</span><br>
@@ -430,12 +500,6 @@ PDF にメールアドレスを書く時に、スパム除けのために「読�
 <span class="mdate">[2011/03/20]</span><br>
 dvipdfmx 用の暗号化設定を文書中で行う。パスワードをファイルから読むことも可能。<br>
 参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110320/1300620094">dvipdfmx の暗号化指定を文書内で行う（BXpdfcrypt パッケージ）</a>
-</li>
-<li id="elt-zxjafbfont"><a href="data/ZXjafbfont.zip">ZXjafbfont.zip （ダウンロード 3KB）</a>
-<span class="mdate">[2011/02/20]</span><br>
-xeCJK（または ZXjatype）使用の文書で、
-現在のフォントにない文字を別のフォントで自動的に代替できるようにするというお話。<br>
-参照： <a href="http://d.hatena.ne.jp/zrbabbler/20110220/1298209702">フォントにない文字を別のフォントで補う～xeCJKの場合～</a>
 </li>
 <li id="elt-bxopcjk"><a href="data/BXopcjk.tar.xz">BXopcjk.tar.xz （ダウンロード 35KB）</a>
 <span class="mdate">[2011/02/20]</span><br>

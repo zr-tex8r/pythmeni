@@ -2,14 +2,14 @@
   "http://www.w3.org/TR/html4/transitional.dtd">
 <html lang="ja">
 <head>
-<title>BXpict2e パッケージ ～pict2e で eepic な世界～ [電脳世界の奥底にて]</title>
+<title>BXeepic パッケージ ～pict2e で eepic な世界～ [電脳世界の奥底にて]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <link rel="stylesheet" href="lib/zrmain.css" type="text/css">
 <meta name="keywords" content="epic,eepic,pict2e,dvipdfmx,p2e-dvipdfmx,pdfTeX,pdfLaTeX">
 <meta name="description"
- content="pict2eをdvipdfmxに対応させるモジュールbxdpxp2eとepic+eepicの機能をpict2eの機能で実現するパッケージbxeepicの紹介。">
+ content="epic+eepicの機能をpict2eの機能で実現するパッケージbxeepicの紹介。">
 <style type="text/css"><!--
 --></style>
 <script type="text/javascript" src="lib/jquery-1.3.2.min.js"></script>
@@ -44,39 +44,29 @@
 | <span class="here">ja</span> |
 </span>&nbsp;
 <a href="./index.html">トップ</a> &gt;
-<span class="here">BXpict2e パッケージ</span>
+<span class="here">BXeepic パッケージ</span>
 </div><!--navibar-->
 
 <div id="maintext">
-<h1>BXpict2e パッケージ<br>
+<h1>BXeepic パッケージ<br>
 <span class="subtitle">～pict2e で eepic な世界～</span></h1>
 
 <div class="abstract">
-pict2e パッケージを dvipdfmx に完全に対応させるための
-bxdpxp2e モジュールと、
 epic+eepic パッケージの picture 拡張機能（楕円や破線など）を
 pict2e の枠組の上で実現する（従って tpic 未対応の pdfTeX でも使用可能になる）
-ための bxeepic パッケージの詰め合わせ。
+ための bxeepic パッケージの紹介。
 </div>
 
 <div id="changelog" class="hdn">
 <div class="lbl">変更履歴</div>
 <ul>
+<li>2016/04/03： BXpict2e のページから bxeepic
+に関する内容を分離して作成。
+</li>
 </ul>
 </div>
 
 <div id="table-contents"></div>
-
-<div class="alert"><span class="lbl">注意：</span> 
-ここで紹介されている BXpict2e は旧式であり、
-現在では代わりに
-<a href="bxeepic.html">BXeepic パッケージ</a>
-を用いるべきである。
-現在の版の pict2e は dvipdfmx に完全に対応している。
-このため bxdpxp2e モジュールは不要となり、
-残りの bxeepic パッケージを単体でバンドルにしたのが
-BXeepic パッケージ（バンドル）である。
-</div>
 
 <div class="section" id="sec-overview">
 <h2>概要</h2>
@@ -182,125 +172,17 @@ tpic 拡張の欠点は以下の通り：
 
 <div class="subsection" id="ssec-download">
 <h3>ダウンロード</h3>
-<p class="notice">BXpict2e は旧式であり、
-現在では代わりに
-<a href="bxeepic.html">BXeepic パッケージ</a>
-を用いるべきである。
+<p>github のページから ZIP アーカイブがダウンロードできる。
+（メニューにある「Download ZIP」のボタンを押す。）
 </p>
-
 <ul>
-<li><a href="data/bxpict2e.zip"><!--
--->圧縮ファイル bxpict2e.zip (v0.1)のダウンロード</a>
+<li><a href="https://github.com/zr-tex8r/BXeepic">zr-tex8r/BXeepic</a>
 </li>
 </ul>
 
 </div><!--ssec-download-->
 
-<div class="subsection" id="ssec-install">
-<h3>インストール</h3>
-
-<p>TDS 1.1 準拠 TeX システムの場合、以下の場所にファイルを移動。
-</p>
-<ul>
-<li>*.def, *.sty → $TEXMF/tex/latex/bxpict2e/
-</li>
-</ul>
-<p>例えば、W32TeX
-を <u>C:\usr\local</u> にインストールした場合は以下の通り。
-</p>
-<ul>
-<li>*.def, *.sty → <u>C:\usr\local</u>\share\texmf-local\tex\latex\bxpict2e\
-</li>
-</ul>
-
-<h4 id="sssec-config">pict2e 設定ファイルの編集（bxdpxp2e モジュール利用の場合）</h4>
-<p><a href="#sec-bxdpxp2e">bxdpxp2e モジュール</a>を使うためには
-pict2e の設定が必要である。
-（bxeepic パッケージについてはこの作業は不要。）
-</p>
-<ul>
-<li>pict2e パッケージの設定ファイル pict2e.cfg 
-を（kpsewhich コマンド等で）探す。
-もし存在すれば、そのファイルの最初のほうに以下の行を加える。
-<pre>
-\input{bxdpxp2e.def}
-</pre>
-</li>
-<li>もし存在しない場合は、LaTeX が見える場所に、
-前項に示した行のみからなるファイル pict2e.cfg を新たに作る。<br>
-※ W32TeX の場合、pict2e.cfg は普通はない。
-W32TeX のインストール場所を <u>C:\usr\local</u> とすると、
-pict2e.cfg を
-<u>C:\usr\local</u>\share\texmf-local\tex\latex\pict2e
-に作成する。
-</li>
-<li>必要に応じて mktexlsr を実行する。
-</li>
-</ul>
-
-<div class="alert"><span class="lbl">注意：</span> 
-bxeepic パッケージを dvipdfmx のドライバ指定で読み込んでいる場合は、
-pict2e 「dvipdfmx のドライバ指定」
-（bxdpxp2e 提供のものと同一）で動作する。
-だから、ここに挙げた導入手順がよく解らないという場合は、
-「pict2e を dvipdfmx で使う場合は常に代わりに bxeepic を読み込む」
-という方法を採ることもできる。
-</div>
-
-</div><!--ssec-install-->
-
 </div><!--sec-overview-->
-
-<div class="section" id="sec-bxdpxp2e">
-<h2>bxdpxp2e モジュール</h2>
-
-<p>前述の通り、pict2e パッケージは graphicx パッケージと同様に用いる DVI
-ウェアを「ドライバ指定」のパッケージオプションとして指定するのであるが、
-現状（2010年8月）では、
-pict2e パッケージは dvipdfmx オプションに対応していない。
-dvipdfmx 自身は古い dvipdfm の設定も許容するので、
-このこと自体は代わりに dvipdfm を指定することで解決できる。
-しかし、実はこの方法には
-「graphicx および color のドライバ指定まで dvipdfm に変えられてしまう」
-という副作用がある。
-</p>
-<pre>
-\documentclass[a4paper]{article}
-\usepackage[dvipdfmx]{graphicx,color}
-\usepackage[dvipdfm]{pict2e}
-% 上の設定をすると、\includegraphics 等の graphicx パッケージの
-% 命令が dvipdfmx ではなく dvipdfm 用の動作をするようになる
-</pre>
-<p>無論、先に述べた理由でこれでも正常に動作するはずであるが、
-とにかくドライバ依存のパッケージはトラブルが起こり易いので、
-設定がいつもと変わるという事態は可能な限り避けたい。
-（ただし、これも pict2e を先に読み込むことで逃げられるようである。）
-</p>
-<p>そこで、bxdpxp2e モジュールでは
-「pict2e に dvipdfmx オプションを追加する」
-という作業を行う。
-<a href="#sssec-config">先述の導入手順</a>を行った後、
-以下のように pict2e に dvipdfmx オプションを
-指定することができるようになる。
-</p>
-<pre>
-\documentclass[a4paper]{article}
-%\usepackage[dvipdfmx]{graphicx,color} % 有りも無しも可能
-\usepackage[dvipdfmx]{pict2e}
-</pre>
-<p>dvipdfmx 指定時の動作は以下の通り：
-dvipdfmx 用の graphicx ドライバファイルを未読込であれば読み込み、
-pict2e 自身の機能については dvipdfm 設定と同じ動作を行う。
-</p>
-<div class="alert"><span class="lbl">注意：</span> 
-最新版の pict2e には「dvipdfm ドライバ使用時に <code>\circle</code>
-等の一部の命令を実行するとエラーになる」というバグがある。
-bxdpxp2e で提供される dvipdfmx ドライバではこの点は修正されている。
-こんな大きな（かつ単純な）バグが残っていることからも、
-海外における dvipdfm(x) の知名度の低さが推し量れると思う…。
-</div>
-
-</div><!--sec-bxdpxp2e-->
 
 <div class="section" id="sec-bxeepic">
 <h2>bxeepic パッケージ</h2>
@@ -449,7 +331,7 @@ join や miter 指定を正しく反映するため）ので、
 | <span class="here">ja</span> |
 </span>&nbsp;
 <a href="./index.html">トップ</a> &gt;
-<span class="here">BXpict2e パッケージ</span>
+<span class="here">BXeepic パッケージ</span>
 <div class="clearright"></div>
 </div>
 </div><!--navibar-sub-->
