@@ -67,6 +67,8 @@ OT1・T1・LY1・TS1 エンコーディングに対応、
 <div id="changelog">
 <div class="lbl">変更履歴</div>
 <ul>
+<li>2017/04/22：ダウンロードのリンク先を GitHub に変更（0.3.1 版）。
+</li>
 <li>2011/02/19：0.2.3 版を公開。
 ovp2ovf の 2.0 版でエラーになるというバグを修正。
 </li>
@@ -113,9 +115,11 @@ Omega の配布物に含まれる（W32TeX では aleph-w32.tar.xz）
 
 <div class="subsection" id="ssec-download">
 <h3>ダウンロード</h3>
+<p>github のページから ZIP アーカイブをダウンロードできる。
+（「Download ZIP」のボタンを押す。）
+</p>
 <ul>
-<li><a href="data/PXacid.zip"><!--
--->圧縮ファイル PXacid.zip (v0.2.3)のダウンロード（16KB）</a>
+<li><a href="https://github.com/zr-tex8r/PXacid">zr-tex8r/PXacid</a>
 </li>
 </ul>
 </div><!--ssec-download-->
@@ -127,9 +131,12 @@ Omega の配布物に含まれる（W32TeX では aleph-w32.tar.xz）
 のみである。
 Perl と XeTeX がインストールされていれば動作するはずである。
 </p>
-<p>以下の解説では、このスクリプトが pxacid のコマンド名で実行される
-ことを想定する。
-W32TeX でそれを実現するためには
+<p>以下の解説では、このスクリプトが pxacid
+のコマンド名で実行されることを想定する。
+（これは必須ではなく、単純に
+「perl pxacid.pl」等で起動しても問題ない。）
+</p>
+<p>※W32TeX でそれを実現する一つの方法としては、
 $TEXMF/bin/runscr.exe を pxacid.exe の名前でコピーし、
 実行パスの通ったフォルダに置いた後、
 pxacid.pl を同じフォルダに置く。
@@ -357,7 +364,7 @@ Copyright &copy; 2010&#x2013;2011 ZR (Takayuki YATO)
 -->&#64;<span class="hdn">(at)</span>yaho<!--.or
 -->o.<span class="hdn">(dot)</span>co<!--.tokyo
 -->.<span class="hdn">(dot)</span>jp&gt;<br>
-Last updated: 2011-02-20
+Last updated: 2017-04-22
 </div>
 
 </div><!--footer-->
