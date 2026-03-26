@@ -71,9 +71,6 @@ A:active {
 #site-title-t {
   padding-left: 10px;
 }
-#site-title-a {
-  text-align: right;
-}
 #title {
   font-size: 24px;
   color: #99CCFF;
@@ -371,9 +368,6 @@ del {
 }
 .pre-in {
   color: #FFFF66;
-}
-#move-notice-mini {
-  display:none;
 }
 
 table.centered {
