@@ -1,0 +1,368 @@
+%
+% ixbase.sty
+%
+
+%%%% package declaration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ixbase0}[2010/07/24 v0.1b]
+
+%%%% preparation
+\def\ixbb@pkgname{ixbase0}
+\def\ixbb@error{\PackageError\ixbb@pkgname}
+\newif\ifixbb@ok
+
+%%------------------ adjustment for environment
+
+%% Tests if \luatexversion primitive is available by this name;
+%% in ordinary LuaLaTeX setting it must be true.
+\begingroup\expandafter\expandafter\expandafter\endgroup
+\expandafter\ifx\csname luatexversion\endcsname\relax
+  \ixbb@error{This is not LuaLaTeX!}\@eha
+\expandafter\endinput\fi
+
+%% Here it is assumed that all pdfTeX primitives are available
+%% by their normal names.
+
+%% Ensure the standard settings, where non-pdfTeX primitives
+%% are available with prefix 'luatex'.
+\directlua{
+  tex.enableprimitives('luatex', 
+    tex.extraprimitives('core', 'omega', 'aleph', 'luatex'))
+}
+
+%% Makes \latelua available by that name when it is activated
+%% by the name prefixed with 'luatex-'.
+\ifcsname latelua\endcsname\else
+  \let\latelua\luatexlatelua
+\fi
+
+%% Same for \luaescapestring.
+\ifcsname luaescapestring\endcsname\else
+  \let\luaescapestring\luatexluaescapestring
+\fi
+
+%%------------------ additional subprocedures
+
+%% \ixbb@ltr
+% \ixbb@ltr\* (where * is an arbitrary non-letter) expands
+% to the letter *.
+\def\ixbb@ltr{\expandafter\@gobble\string}
+
+%% \ixbb@Z : singleton token
+\def\ixbb@Z{\noexpand\ixbb@Z}
+\let\ixbb@end\relax
+
+%% \ixbb@make@ckid{<text>}
+% Converts the chunk name parameter <text> used in \execluacode into
+% the form used in \directlua. The result is stored in \ixbb@ckid.
+\def\ixbb@make@ckid#1{%
+  \ifx\ixbb@Z#1\ixbb@Z \let\ixbb@ckid\@empty
+  \else
+    {\afterassignment\ixbb@make@ckid@a\count@=0#1\ixbb@end}%
+    \ifx\ixbb@g@ckid\relax \def\ixbb@ckid{name{#1}}%
+    \else \let\ixbb@ckid\ixbb@g@ckid \fi
+  \fi}
+\def\ixbb@make@ckid@a#1\ixbb@end{%
+  \ifx\ixbb@Z#1\ixbb@Z \xdef\ixbb@g@ckid{\the\count@\space}%
+  \else \global\let\ixbb@g@ckid\relax \fi}
+
+%%------------------ 'thin' wrapper for lua code executor
+
+%%<*> \execluacode[*][<id>]{<text>}
+% \execluacode[<id>] executes: if <id> is missing then \directlua; if
+% <id> is a number then \directlua<id>; otherwise \directlua name{<id>}.
+% \execluacode*[<num>] is the same except that \latelua is used instead
+% of \directlua. The form with no options, \execluacode{<text>}, is
+% fully expandable.
+\def\execluacode{\expandafter\ixbb@execluacd@a\string}
+\def\ixbb@execluacd@a#1{\csname ixbb@execluacd+#1\endcsname}
+\@namedef{ixbb@execluacd+\ixbb@ltr\{}{\directlua\bgroup}
+\@namedef{ixbb@execluacd+*}{\ixbb@execluacd@b\latelua}
+\@namedef{ixbb@execluacd+[}{\ixbb@execluacd@b\directlua[}
+\def\ixbb@execluacd@b{%
+  \ifx\protect\@typeset@protect \expandafter\ixbb@execluacd@c
+  \else \expandafter\ixbb@execluacd@err \fi}
+\def\ixbb@execluacd@c#1{\@ifnextchar[%]
+  {\ixbb@execluacd@d#1}{\ixbb@execluacd@d#1[]}}
+\def\ixbb@execluacd@d#1[#2]{\ixbb@make@ckid{#2}#1\ixbb@ckid}
+\begingroup \catcode`\!=11
+\gdef\ixbb@execluacd@err#1#{\ixbb@!}
+\xdef\ixbb@!#1{\expandafter\unexpanded\expandafter{\csname
+ ! Misplaced \string\execluacode\space with options!\endcsname}}
+\endgroup
+
+%%<+> \ixQEscape
+% Does the following conversion; here \? equals \ixQEscape
+% (so assigned later), 'a' denotes a letter or digit, '*' denotes
+% any other character.
+% (1) \?\*    -->  *
+% (2) \?a     -->  \a                    [#] conversion
+% (3) \?*     -->  (* with [#] applied)  from:  + / | - ( ) *
+% (4) \??     -->  (print \ and do \?)     to:    # % \ ~ { } ^
+\def\ixQEscape#1{\csname ixbb@?/\string#1\endcsname}
+\begingroup
+\def\ixbb@foreachchar#1#2#3{\@tempcnta=#1%
+  \loop\lccode`\?=\@tempcnta \lowercase{#3?}%
+  \advance\@tempcnta\@ne \ifnum\@tempcnta<#2\repeat}
+\edef\ixbb@ltrbs{\ixbb@ltr\\}
+\def\ixbb@define#1{\expandafter\xdef\csname ixbb@?/#1\endcsname}
+\def\ixbb@do@s#1{\ixbb@define{\ixbb@ltrbs#1}{#1}\ixbb@define{#1}{#1}}
+\def\ixbb@do@l#1{\ixbb@define{#1}{\ixbb@ltrbs#1}}
+\ixbb@foreachchar{33}{65}\ixbb@do@s
+\ixbb@foreachchar{91}{97}\ixbb@do@s
+\ixbb@foreachchar{123}{127}\ixbb@do@s
+\ixbb@foreachchar{48}{58}\ixbb@do@l
+\ixbb@foreachchar{97}{123}\ixbb@do@l
+\def\do#1#2{\ixbb@define{#1}{\ixbb@ltr#2}}
+\do+\#\do/\%\do|\\\do-\~\do(\{\do)\}\do*\^
+\ixbb@define{?}{\ixbb@ltrbs\noexpand\ixQEscape}
+\endgroup
+
+%%<*> \usebacktickescape/\nousebacktickescape
+% Makes <`> act as \? / act as usual.
+\begingroup \catcode96=13
+\gdef\usebacktickescape{\catcode96=13 \let`\ixQEscape}
+\gdef\nousebacktickescape{\catcode96=12 }
+\endgroup
+
+
+%%------------------ TeX-verbatim Lua code blocks
+
+%% \ixbb@cctbother
+% Is the id of a catcode-table where all characters have catcode 12.
+\ifcsname CatcodeTableOther\endcsname
+  % \CatcodeTableOther is provided by currently distributed packages
+  % for managing catcode-tables, such as luatex and luatexbase-cctb.
+  \let\ixbb@cctbother\CatcodeTableOther
+\else
+  % if \CatcodeTableOther does not exist, then it is assumed no catcode-
+  % table management is employed and a fixed value is assigned.
+  \chardef\ixbb@cctbother=1
+  \@firstofone{{%
+    \@tempcnta=0\loop \catcode\@tempcnta=12
+    \advance\@tempcnta\@ne \ifnum\@tempcnta<256 \repeat
+    \luatexsavecatcodetable\ixbb@cctbother}}
+\fi
+
+%%<*> \begin{execluacodeblock[*]}[<num>]<text>\end{...}
+% Executes lua code <text>. The *-variant and <num> mean the same as
+% \execluacode. The body <text> is read verbatim in view of LaTeX;
+% all characters (including space) has catcode 12. As a result,
+% the user can write lua code text just in the same way as external
+% text files. The lua code is then executed in the same catcode
+% setting as outside the (pseudo-)environment.
+% NB. when reading <text> \endlinechar is 13 (and \catcode13 is 12);
+% however, since the lua engine conflates newline sequences to LF,
+% it sees a newline in the code as a LF character ("\n").
+\def\execluacodeblock{\ixbb@execluacdblk@a\ixbb@xlcb@direct}
+\@namedef{execluacodeblock*}{\ixbb@execluacdblk\ixbb@xlcb@late}
+\def\ixbb@execluacdblk@a#1{\endgroup\@ifnextchar[%
+  {\ixbb@execluacdblk@b#1}{\ixbb@execluacdblk@b#1[]}}
+\def\ixbb@execluacdblk@b#1[#2]{%
+  \ixbb@make@ckid{#2}%
+  \expandafter\ixbb@execluacdblk@c#1}
+\def\ixbb@execluacdblk@c#1#2{% \[...lua]{<term>}
+  \edef\ixbb@resetcctb{\noexpand
+    \luatexcatcodetable\the\luatexcatcodetable}%
+  \begingroup \luatexcatcodetable=\ixbb@cctbother\endlinechar=13\relax
+    \aftergroup\ixbb@resetcctb
+    \long\def\ixbb@xlcb@nxt##1#2{\endgroup #1\ixbb@ckid{##1}\relax}%
+    \ixbb@xlcb@nxt}
+\begingroup \lccode`\|=`\\%\lccode`\[=`\{\lccode`\]=`\}
+  \lowercase{\def\ixbb@nxt#1#2{\noexpand#1{\detokenize{|end{#2}}}}}
+  \xdef\ixbb@xlcb@direct{\ixbb@nxt\directlua{execluacodeblock}}
+  \xdef\ixbb@xlcb@late{\ixbb@nxt\latelua{execluacodeblock*}}
+\endgroup
+
+%%------------------ start up
+
+%%<*> \ixstring{<text>} / \ixescape{<text>}
+\def\ixstring#1{"\luatexluaescapestring{\detokenize{#1}}"}
+\def\ixescape#1{\luatexluaescapestring{\detokenize{#1}}}
+
+%%<*> \ixnumber{<text>}
+\def\ixnumber#1{tonumber("\luatexluaescapestring{\detokenize{#1}}")}
+
+%%<*> \ixvcoutner{<counter>}
+\def\ixvcounter#1{(\expandafter\number\csname c@#1\endcsname)}
+
+%%<*> \ixvlength{\LENGTH}
+\def\ixvlength#1{(ixbase.to_skip("\the#1"))}
+
+%% equalize \? with \ixQEscape
+\let\?\ixQEscape
+%\usebacktickescape
+
+%%------------------ Library 'ixbase'
+
+\begin{execluacodeblock}[ixbase]
+-- Package ixbase
+
+--- Extension to tex.print(). Each argument string may contain
+-- newline characters, in which case the string is output (to
+-- TeX input stream) as multiple lines.
+-- @param ... string to output (string)
+local function ix_print(...) -- to avoid overriding print...
+  local arg = {...}; local lines = {}
+  if type(arg[1]) == "number" then
+    table.insert(lines, arg[1]); table.remove(arg, 1)
+  end
+  for _, cnk in ipairs(arg) do
+    local ls = cnk:explode("\n")
+    if ls[#ls] == "" then table.remove(ls, #ls) end
+    for _, l in ipairs(ls) do table.insert(lines, l) end
+  end
+  return tex.print(unpack(lines))
+end
+
+local glue_spec_id = node.id("glue_spec")
+
+local function copy_skip(s1, s2)
+  if not s1 then s1 = node.new(glue_spec_id) end
+  s1.width = s2.width or 0
+  s1.stretch = s2.stretch or 0
+  s1.stretch_order = s2.stretch_order or 0
+  s1.shrink = s2.shrink or 0
+  s1.shrink_order = s2.shrink_order or 0
+  return s1
+end
+
+local in_sp = tex.sp
+if not in_sp then
+  function in_sp(val) -- val is string
+    local old = tex.dimen[0]; tex.dimen[0] = val
+    val = tex.dimen[0]; tex.dimen[0] = old
+    return val
+  end
+end
+
+local function to_dimen(val)
+  if val == nil then return 0
+  elseif type(val) == "number" then return val
+  else return in_sp(tostring(val)) end
+end
+
+local function parse_dimen(val)
+  val = tostring(val):lower()
+  local r, fil = val:match("([-.%d]+)fi(l*)")
+  if r then val, fil = r.."pt", fil:len() + 1
+  else fil = 0 end
+  return in_sp(val), fil
+end
+
+local function to_skip(val)
+  if type(val) == "userdata" then return val end
+  local res = node.new(glue_spec_id)
+  if val == nil then res.width = 0
+  elseif type(val) == "number" then res.width = val
+  elseif type(val) == "table" then copy_skip(res, val)
+  else local t = tostring(val):lower():explode()
+    local w, p, m = t[1], t[3], t[5]
+    if t[2] == "minus" then p, m = nil, t[3] end
+    res.width = in_sp(t[1])
+    if t[3] then res.stretch, res.stretch_order = parse_dimen(t[3]) end
+    if t[5] then res.shrink, res.shrink_order = parse_dimen(t[5]) end
+  end
+  return res
+end
+
+function dump_skip(s)
+  print(("%s+%s<%s>-%s<%s>"):format(
+    s.width or 0, s.stretch or 0, s.stretch_order or 0,
+    s.shrink or 0, s.shrink_order or 0))
+end
+
+local length = {}
+local mt_length = {}; setmetatable(length, mt_length)
+function mt_length.__index(tbl, key)
+  return tex.skip[key]
+end
+function mt_length.__newindex(tbl, key, val)
+  tex.skip[key] = to_skip(val)
+end
+
+local counter = {}
+local mt_counter = {}; setmetatable(counter, mt_counter)
+function mt_counter.__index(tbl, key)
+  return tex.count['c@'..key]
+end
+function mt_counter.__newindex(tbl, key, val)
+  tex.count['c@'..key] = val
+end
+
+-- export
+ixbase = {
+  print = ix_print;
+  length = length; to_dimen = to_dimen; to_skip = to_skip;
+  counter = counter;
+--  _copy = copy_skip; _sp = in_sp;
+}
+\end{execluacodeblock}
+
+%% 'tangle' library
+
+\begin{execluacodeblock}
+
+tangle = {
+  _DONE = 0, _TEX = 1, _STOP = 2
+}
+function tangle.execute(func, ...)
+  if tangle._current_co then
+    error("tangle is going now")
+  end
+  local args = { ... }
+  local co = coroutine.create(function()
+    return tangle._DONE, { func(unpack(args)) }
+  end)
+  tangle._current_co = co
+  tangle._interrupted = false
+  return tangle._check(coroutine.resume(co, ...))
+end
+
+function tangle.resume()
+  return tangle._resume(false)
+end
+
+function tangle.interrupt()
+  return tangle._resume(true)
+end
+
+function tangle.run_tex()
+  coroutine.yield(tangle._TEX, {})
+end
+
+function tangle.suspend(...)
+  local intr = coroutine.yield(tangle._STOP, { ... })
+  if intr then
+    tangle._interrupted = true; error("*INTR*")
+  end
+end
+
+function tangle._resume(intr)
+  if not tangle._current_co then
+    error("tangle is not going")
+  end
+  local co = tangle._current_co
+  return tangle._check(coroutine.resume(co, intr))
+end
+
+function tangle._check(costat, tstat, extra)
+  if not costat then  -- error in coroutine
+    tangle._current_co = nil
+    if tangle._interrupted then return end
+    error(tstat)
+  elseif tstat == tangle._DONE then
+    tangle._current_co = nil
+  elseif tstat == tangle._TEX then
+    tex.print("\\directlua{tangle.resume()}\\relax")
+  end
+  return unpack(extra)
+end
+
+\end{execluacodeblock}
+
+\let\lua\directlua
+\lua{ix=ixbase}
+%%------------------ all done
+\endinput
+%% EOF
